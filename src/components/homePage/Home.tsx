@@ -1,4 +1,6 @@
 import React from "react";
+import TodoForm from "../ui/TodoForm";
+import TodoList from "../ui/TodoList";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
@@ -9,18 +11,8 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	return (
 		<main className='flex flex-col items-center w-screen h-screen pt-8'>
 			<h1>TODO nextJS</h1>
-			<form action=''>
-				<input
-					type='text'
-					placeholder='add todo'
-				/>
-				<button>ADD</button>
-			</form>
-			<ul>
-				{allTasks.map((task) => (
-					<li key={task._id}> {task.name}</li>
-				))}
-			</ul>
+			<TodoForm />
+			<TodoList allTasks={allTasks} />
 		</main>
 	);
 };
