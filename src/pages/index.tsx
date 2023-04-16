@@ -27,6 +27,7 @@ const HomePage: React.FC<propsType> = ({ allTasks }) => {
 
 export async function getStaticProps(context) {
 	const allTodos = getAllTasks();
+
 	return {
 		props: { allTasks: allTodos }, // will be passed to the page component as props
 	};
