@@ -14,7 +14,6 @@ const Summary: React.FC<propsTypes> = ({
 	onDeleteDone,
 }) => {
 	const clickTabHandler = (e: React.MouseEvent<HTMLLIElement>) => {
-		console.log(e.currentTarget.id);
 		onUpdateTab(e.currentTarget.id);
 	};
 	let classAll = selectedTab === "all" ? "bg-[#E3E9FF]" : "";

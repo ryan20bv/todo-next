@@ -26,6 +26,7 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 		setAllTodos((prevState) => {
 			return prevState.concat(newTodo);
 		});
+		updateFilterTab("all");
 	};
 	const setToDoneHandler = (id: string) => {
 		const copyOfTodos = [...allTodos];
