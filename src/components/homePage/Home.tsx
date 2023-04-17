@@ -33,6 +33,12 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 
 		setAllTodos(copyOfTodos);
 	};
+
+	const deleteTodoHandler = (id: string) => {
+		const copyOfTodos = [...allTodos];
+		const filteredTodo = copyOfTodos.filter((todo) => todo._id !== id);
+		setAllTodos(filteredTodo);
+	};
 	return (
 		<main className='flex flex-col items-center w-screen h-screen pt-8'>
 			<h1>TODO nextJS</h1>
@@ -40,6 +46,7 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			<TodoList
 				allTasks={allTodos}
 				onSetToDone={setToDoneHandler}
+				onDeleteTodo={deleteTodoHandler}
 			/>
 		</main>
 	);

@@ -1,5 +1,5 @@
 import React, { FormEvent, useRef } from "react";
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
 interface propsTypes {
 	onAddTodo: (newTodo: string) => void;
@@ -32,7 +32,9 @@ const TodoForm: React.FC<propsTypes> = ({ onAddTodo }) => {
 				required
 				ref={inputRef}
 			/>
-			<button>ADD</button>
+			<button>
+				<PlusCircleIcon className='text-green-600 h-8' />
+			</button>
 		</form>
 	);
 };
