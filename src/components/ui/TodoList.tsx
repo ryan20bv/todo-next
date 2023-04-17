@@ -15,7 +15,7 @@ const TodoList: React.FC<propsType> = ({
 	onEditTodo,
 }) => {
 	return (
-		<ul>
+		<ul className='border border-black bg-white w-[90%] h-4/6  overflow-y-scroll'>
 			{allTasks.map((task) => (
 				<TodoItem
 					key={task._id}

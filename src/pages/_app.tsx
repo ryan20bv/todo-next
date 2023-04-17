@@ -1,11 +1,12 @@
 import { Fragment } from "react";
+import Layout from "@/components/layout/Layout";
 import Head from "next/head";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
 	return (
-		<Fragment>
+		<Layout>
 			<Head>
 				<title>TODO NEXT</title>
 				<meta
@@ -22,6 +23,6 @@ export default function App({ Component, pageProps }: AppProps) {
 				/>
 			</Head>
 			<Component {...pageProps} />
-		</Fragment>
+		</Layout>
 	);
 }
