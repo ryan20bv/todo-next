@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import TodoForm from "../ui/TodoForm";
+import TodoAddForm from "../ui/TodoAddForm";
+import TodoEditForm from "../ui/TodoEditForm";
 import TodoList from "../ui/TodoList";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
@@ -10,6 +11,8 @@ interface propsType {
 
 const Home: React.FC<propsType> = ({ allTasks }) => {
 	const [allTodos, setAllTodos] = useState<ITask[]>(allTasks);
+	const [isEditing, setIsEditing] = useState<boolean>(false);
+	const [todoToEdit, setTodoToEdit] = useState<ITask>({} as ITask);
 
 	const addNewTodo = (todo: string) => {
 		const newTodo: ITask = {
@@ -39,14 +42,49 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 		const filteredTodo = copyOfTodos.filter((todo) => todo._id !== id);
 		setAllTodos(filteredTodo);
 	};
+
+	const selectTodoToEditHandler = (todo: ITask) => {
+		console.log(todo);
+		setIsEditing(true);
+		setTodoToEdit(todo);
+	};
+
+	const cancelTodoEditHandler = () => {
+		setIsEditing(false);
+		setTodoToEdit({} as ITask);
+	};
+
+	const confirmEditTodoHandler = (editedTodoName: string) => {
+		console.log(editedTodoName);
+		const copyOfTodos = [...allTodos];
+		const foundTodoIndex = copyOfTodos.findIndex(
+			(todo) => todo._id === todoToEdit._id
+		);
+		console.log(foundTodoIndex);
+		copyOfTodos[foundTodoIndex] = {
+			...copyOfTodos[foundTodoIndex],
+			name: editedTodoName,
+		};
+		setAllTodos(copyOfTodos);
+		cancelTodoEditHandler();
+	};
+
 	return (
 		<main className='flex flex-col items-center w-screen h-screen pt-8'>
 			<h1>TODO nextJS</h1>
-			<TodoForm onAddTodo={addNewTodo} />
+			{!isEditing && <TodoAddForm onAddTodo={addNewTodo} />}
+			{isEditing && (
+				<TodoEditForm
+					onCancelEditTodo={cancelTodoEditHandler}
+					todoToEdit={todoToEdit}
+					onConfirmEdit={confirmEditTodoHandler}
+				/>
+			)}
 			<TodoList
 				allTasks={allTodos}
 				onSetToDone={setToDoneHandler}
 				onDeleteTodo={deleteTodoHandler}
+				onEditTodo={selectTodoToEditHandler}
 			/>
 		</main>
 	);

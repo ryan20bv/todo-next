@@ -1,14 +1,15 @@
-import React, { FormEvent, useRef } from "react";
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import React, { FormEvent, useRef, useState } from "react";
+import { PlusCircleIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { ITask } from "@/DUMMY_DATA/MODEL";
 
 interface propsTypes {
 	onAddTodo: (newTodo: string) => void;
 }
 
-const TodoForm: React.FC<propsTypes> = ({ onAddTodo }) => {
+const TodoAddForm: React.FC<propsTypes> = ({ onAddTodo }) => {
 	const inputRef = useRef<HTMLInputElement>(null);
 
-	const submitTodoHandler = (e: FormEvent<HTMLFormElement>) => {
+	const submitTodoHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const enteredInput = inputRef.current?.value;
 
@@ -32,6 +33,7 @@ const TodoForm: React.FC<propsTypes> = ({ onAddTodo }) => {
 				required
 				ref={inputRef}
 			/>
+
 			<button>
 				<PlusCircleIcon className='text-green-600 h-8' />
 			</button>
@@ -39,4 +41,4 @@ const TodoForm: React.FC<propsTypes> = ({ onAddTodo }) => {
 	);
 };
 
-export default TodoForm;
+export default TodoAddForm;

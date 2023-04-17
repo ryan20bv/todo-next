@@ -6,9 +6,15 @@ interface propsType {
 	task: ITask;
 	onSetToDone: () => void;
 	onDeleteTodo: () => void;
+	onEditTodo: () => void;
 }
 
-const TodoItem: React.FC<propsType> = ({ task, onSetToDone, onDeleteTodo }) => {
+const TodoItem: React.FC<propsType> = ({
+	task,
+	onSetToDone,
+	onDeleteTodo,
+	onEditTodo,
+}) => {
 	const setClass: string = task.isDone ? "line-through" : "";
 	return (
 		<li key={task._id}>
@@ -18,10 +24,11 @@ const TodoItem: React.FC<propsType> = ({ task, onSetToDone, onDeleteTodo }) => {
 			>
 				{task.name}
 			</h3>
-
-			<button>
-				<PencilSquareIcon className='text-blue-600 h-6' />
-			</button>
+			{!task.isDone && (
+				<button onClick={onEditTodo}>
+					<PencilSquareIcon className='text-blue-600 h-6' />
+				</button>
+			)}
 			<button onClick={onDeleteTodo}>
 				<TrashIcon className='text-red-600 h-6' />
 			</button>

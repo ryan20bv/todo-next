@@ -6,11 +6,13 @@ interface propsType {
 	allTasks: ITask[];
 	onSetToDone: (id: string) => void;
 	onDeleteTodo: (id: string) => void;
+	onEditTodo: (todo: ITask) => void;
 }
 const TodoList: React.FC<propsType> = ({
 	allTasks,
 	onSetToDone,
 	onDeleteTodo,
+	onEditTodo,
 }) => {
 	return (
 		<ul>
@@ -20,6 +22,7 @@ const TodoList: React.FC<propsType> = ({
 					task={task}
 					onSetToDone={() => onSetToDone(task._id)}
 					onDeleteTodo={() => onDeleteTodo(task._id)}
+					onEditTodo={() => onEditTodo(task)}
 				/>
 			))}
 		</ul>
