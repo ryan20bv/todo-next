@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import TodoAddForm from "../ui/TodoAddForm";
 import TodoEditForm from "../ui/TodoEditForm";
 import TodoList from "../ui/TodoList";
+import Summary from "../ui/Summary";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
@@ -44,7 +45,6 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	};
 
 	const selectTodoToEditHandler = (todo: ITask) => {
-		console.log(todo);
 		setIsEditing(true);
 		setTodoToEdit(todo);
 	};
@@ -55,12 +55,11 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	};
 
 	const confirmEditTodoHandler = (editedTodoName: string) => {
-		console.log(editedTodoName);
 		const copyOfTodos = [...allTodos];
 		const foundTodoIndex = copyOfTodos.findIndex(
 			(todo) => todo._id === todoToEdit._id
 		);
-		console.log(foundTodoIndex);
+
 		copyOfTodos[foundTodoIndex] = {
 			...copyOfTodos[foundTodoIndex],
 			name: editedTodoName,
@@ -71,7 +70,10 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 
 	return (
 		<main className='flex flex-col items-center w-screen h-screen pt-8'>
-			<h1>TODO nextJS</h1>
+			<section className='bg-[#AF7EEB] w-[90%] py-2 px-3 text-white'>
+				<h1>TODO nextJS</h1>
+			</section>
+
 			{!isEditing && <TodoAddForm onAddTodo={addNewTodo} />}
 			{isEditing && (
 				<TodoEditForm
@@ -80,12 +82,14 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 					onConfirmEdit={confirmEditTodoHandler}
 				/>
 			)}
+
 			<TodoList
 				allTasks={allTodos}
 				onSetToDone={setToDoneHandler}
 				onDeleteTodo={deleteTodoHandler}
 				onEditTodo={selectTodoToEditHandler}
 			/>
+			<Summary />
 		</main>
 	);
 };

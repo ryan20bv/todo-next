@@ -26,12 +26,14 @@ const TodoAddForm: React.FC<propsTypes> = ({ onAddTodo }) => {
 		<form
 			action=''
 			onSubmit={submitTodoHandler}
+			className='border border-black my-6 w-[90%] flex bg-white justify-between px-2'
 		>
 			<input
 				type='text'
 				placeholder='add todo'
 				required
 				ref={inputRef}
+				className='py-2 focus:outline-none'
 			/>
 
 			<button>
