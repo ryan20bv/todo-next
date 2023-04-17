@@ -1,25 +1,31 @@
 import React, { useState } from "react";
 
-const Summary = () => {
-	const [selectedTab, setSelectedTab] = useState<string>("all");
+interface propsTypes {
+	selectedTab: string;
+	onUpdateTab: (info: string) => void;
+	todoLength: number;
+	onDeleteDone: () => void;
+}
+
+const Summary: React.FC<propsTypes> = ({
+	selectedTab,
+	onUpdateTab,
+	todoLength,
+	onDeleteDone,
+}) => {
 	const clickTabHandler = (e: React.MouseEvent<HTMLLIElement>) => {
 		console.log(e.currentTarget.id);
-		setSelectedTab(e.currentTarget.id);
+		onUpdateTab(e.currentTarget.id);
 	};
-	let classAll = "";
-	let classActive = "";
-	let classDone = "";
-	if (selectedTab === "all") {
-		classAll = "bg-[#E3E9FF]";
-	} else if (selectedTab === "active") {
-		classActive = "bg-[#E3E9FF]";
-	} else {
-		classDone = "bg-[#E3E9FF]";
-	}
+	let classAll = selectedTab === "all" ? "bg-[#E3E9FF]" : "";
+	let classActive = selectedTab === "active" ? "bg-[#E3E9FF]" : "";
+	let classDone = selectedTab === "done" ? "bg-[#E3E9FF]" : "";
 
 	return (
 		<main className='flex text-[10px] w-[90%] justify-between bg-white  '>
-			<section className='border border-black p-2'>10 task/s</section>
+			<section className='border border-black p-2'>
+				{todoLength} {todoLength > 1 ? "tasks" : "task"}
+			</section>
 			<ul className='flex '>
 				<li
 					className={`border border-black p-2 ${classAll}`}
@@ -44,7 +50,12 @@ const Summary = () => {
 				</li>
 			</ul>
 
-			<button className='border border-black p-2'>Delete All Done</button>
+			<button
+				className='border border-black p-2'
+				onClick={onDeleteDone}
+			>
+				Delete All Done
+			</button>
 		</main>
 	);
 };

@@ -14,6 +14,7 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	const [allTodos, setAllTodos] = useState<ITask[]>(allTasks);
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [todoToEdit, setTodoToEdit] = useState<ITask>({} as ITask);
+	const [selectedTab, setSelectedTab] = useState<string>("all");
 
 	const addNewTodo = (todo: string) => {
 		const newTodo: ITask = {
@@ -67,6 +68,24 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 		setAllTodos(copyOfTodos);
 		cancelTodoEditHandler();
 	};
+	const deleteAllDoneTodos = () => {
+		console.log("deleteAllDoneTodos");
+		let copyOfTodos = allTodos;
+		copyOfTodos = copyOfTodos.filter((todo) => todo.isDone === false);
+		setAllTodos(copyOfTodos);
+	};
+
+	const updateFilterTab = (info: string) => {
+		setSelectedTab(info);
+	};
+
+	let filteredTodos = allTodos;
+	if (selectedTab === "active") {
+		filteredTodos = allTodos.filter((todo) => todo.isDone === false);
+	} else if (selectedTab === "done") {
+		filteredTodos = allTodos.filter((todo) => todo.isDone === true);
+	}
+	let todoLength = filteredTodos.length;
 
 	return (
 		<main className='flex flex-col items-center w-screen h-screen pt-8'>
@@ -84,12 +103,17 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			)}
 
 			<TodoList
-				allTasks={allTodos}
+				allTasks={filteredTodos}
 				onSetToDone={setToDoneHandler}
 				onDeleteTodo={deleteTodoHandler}
 				onEditTodo={selectTodoToEditHandler}
 			/>
-			<Summary />
+			<Summary
+				selectedTab={selectedTab}
+				onUpdateTab={updateFilterTab}
+				todoLength={todoLength}
+				onDeleteDone={deleteAllDoneTodos}
+			/>
 		</main>
 	);
 };

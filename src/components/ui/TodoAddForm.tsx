@@ -20,6 +20,7 @@ const TodoAddForm: React.FC<propsTypes> = ({ onAddTodo }) => {
 
 		console.log(enteredInput);
 		onAddTodo(enteredInput);
+		inputRef.current.value = "";
 	};
 
 	return (

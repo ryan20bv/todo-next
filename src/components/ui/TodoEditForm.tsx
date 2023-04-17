@@ -26,6 +26,7 @@ const TodoEditForm: React.FC<propsTypes> = ({
 
 		// console.log(enteredInput);
 		onConfirmEdit(enteredInput);
+		inputRef.current.value = "";
 	};
 	return (
 		<form
