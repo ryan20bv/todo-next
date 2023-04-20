@@ -1,20 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
+
+import {
+	updateFilteredTodoListAction,
+	deleteAllDoneAction,
+} from "@/reduxToolkit/todo/todo-action/todoAction";
 
 interface propsTypes {
-	selectedTab: string;
-	onUpdateTab: (info: string) => void;
 	todoLength: number;
-	onDeleteDone: () => void;
 }
 
-const Summary: React.FC<propsTypes> = ({
-	selectedTab,
-	onUpdateTab,
-	todoLength,
-	onDeleteDone,
-}) => {
+const Summary: React.FC<propsTypes> = ({ todoLength }) => {
+	const dispatch = useAppDispatch();
+	const { selectedTab } = useAppSelector(
+		(state: RootState) => state.todoReducer
+	);
+
+	const deleteAllDoneHandler = () => {
+		dispatch(deleteAllDoneAction());
+	};
+
 	const clickTabHandler = (e: React.MouseEvent<HTMLLIElement>) => {
-		onUpdateTab(e.currentTarget.id);
+		const tabName = e.currentTarget.id;
+
+		dispatch(updateFilteredTodoListAction(tabName));
 	};
 	let classAll = selectedTab === "all" ? "bg-[#E3E9FF]" : "";
 	let classActive = selectedTab === "active" ? "bg-[#E3E9FF]" : "";
@@ -51,7 +64,7 @@ const Summary: React.FC<propsTypes> = ({
 
 			<button
 				className='border border-black p-2'
-				onClick={onDeleteDone}
+				onClick={deleteAllDoneHandler}
 			>
 				Delete All Done
 			</button>
