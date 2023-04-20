@@ -1,18 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
+import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
+import {
+	confirmEditAction,
+	cancelEditTodoAction,
+} from "@/reduxToolkit/todo/todo-action/todoAction";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 import { CheckIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 interface propsTypes {
-	onCancelEditTodo: () => void;
 	todoToEdit: ITask;
-	onConfirmEdit: (todoName: string) => void;
 }
 
-const TodoEditForm: React.FC<propsTypes> = ({
-	onCancelEditTodo,
-	todoToEdit,
-	onConfirmEdit,
-}) => {
+const TodoEditForm: React.FC<propsTypes> = ({ todoToEdit }) => {
+	const dispatcher = useAppDispatch();
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const submitTodoEditHandler = (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,30 +23,37 @@ const TodoEditForm: React.FC<propsTypes> = ({
 			console.log("no value");
 			return;
 		}
+		dispatcher(confirmEditAction(enteredInput));
+		inputRef.current.value = "";
+	};
 
-		// console.log(enteredInput);
-		onConfirmEdit(enteredInput);
+	const cancelEditHandler = () => {
+		dispatcher(cancelEditTodoAction());
 	};
 	return (
-		<form
-			action=''
-			onSubmit={submitTodoEditHandler}
-		>
-			<input
-				type='text'
-				placeholder='add todo'
-				required
-				defaultValue={todoToEdit.name}
-				ref={inputRef}
-			/>
-			<button onClick={onCancelEditTodo}>
-				<XCircleIcon className='text-red-600 h-8' />
-			</button>
+		<section className=' my-4  w-[90%] flex '>
+			<form
+				action=''
+				onSubmit={submitTodoEditHandler}
+				className=' w-full flex justify-between '
+			>
+				<input
+					type='text'
+					placeholder='edit todo'
+					required
+					defaultValue={todoToEdit.name}
+					ref={inputRef}
+					className='py-2 px-2 focus:outline-none w-[85%] border border-black '
+				/>
 
-			<button>
-				<CheckIcon className='text-green-600 h-8' />
+				<button>
+					<CheckIcon className='text-green-600 h-8' />
+				</button>
+			</form>
+			<button onClick={cancelEditHandler}>
+				<XCircleIcon className='text-red-600 h-8 mx-2' />
 			</button>
-		</form>
+		</section>
 	);
 };
 

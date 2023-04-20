@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
+import { getAllTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
 import TodoAddForm from "../ui/TodoAddForm";
 import TodoEditForm from "../ui/TodoEditForm";
 import TodoList from "../ui/TodoList";
+import Summary from "../ui/Summary";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
@@ -10,82 +17,35 @@ interface propsType {
 }
 
 const Home: React.FC<propsType> = ({ allTasks }) => {
-	const [allTodos, setAllTodos] = useState<ITask[]>(allTasks);
-	const [isEditing, setIsEditing] = useState<boolean>(false);
-	const [todoToEdit, setTodoToEdit] = useState<ITask>({} as ITask);
+	const dispatch = useAppDispatch();
+	const { filteredTodoList, firstLoad, isEditing, todoToEdit } = useAppSelector(
+		(state: RootState) => state.todoReducer
+	);
+	// const [allTodos, setAllTodos] = useState<ITask[]>(allTasks);
+	// const [isEditing, setIsEditing] = useState<boolean>(false);
+	// const [todoToEdit, setTodoToEdit] = useState<ITask>({} as ITask);
+	// const [selectedTab, setSelectedTab] = useState<string>("all");
 
-	const addNewTodo = (todo: string) => {
-		const newTodo: ITask = {
-			_id: uuidv4(),
-			name: todo,
-			isDone: false,
-		};
+	useEffect(() => {
+		dispatch(getAllTodoAction());
+	}, [dispatch]);
 
-		setAllTodos((prevState) => {
-			return prevState.concat(newTodo);
-		});
-	};
-	const setToDoneHandler = (id: string) => {
-		const copyOfTodos = [...allTodos];
-		const selectedTodoIndex = copyOfTodos.findIndex((todo) => todo._id === id);
-
-		copyOfTodos[selectedTodoIndex] = {
-			...copyOfTodos[selectedTodoIndex],
-			isDone: !copyOfTodos[selectedTodoIndex].isDone,
-		};
-
-		setAllTodos(copyOfTodos);
-	};
-
-	const deleteTodoHandler = (id: string) => {
-		const copyOfTodos = [...allTodos];
-		const filteredTodo = copyOfTodos.filter((todo) => todo._id !== id);
-		setAllTodos(filteredTodo);
-	};
-
-	const selectTodoToEditHandler = (todo: ITask) => {
-		console.log(todo);
-		setIsEditing(true);
-		setTodoToEdit(todo);
-	};
-
-	const cancelTodoEditHandler = () => {
-		setIsEditing(false);
-		setTodoToEdit({} as ITask);
-	};
-
-	const confirmEditTodoHandler = (editedTodoName: string) => {
-		console.log(editedTodoName);
-		const copyOfTodos = [...allTodos];
-		const foundTodoIndex = copyOfTodos.findIndex(
-			(todo) => todo._id === todoToEdit._id
-		);
-		console.log(foundTodoIndex);
-		copyOfTodos[foundTodoIndex] = {
-			...copyOfTodos[foundTodoIndex],
-			name: editedTodoName,
-		};
-		setAllTodos(copyOfTodos);
-		cancelTodoEditHandler();
-	};
+	let todoLength: number = firstLoad ? allTasks.length : filteredTodoList.length;
 
 	return (
-		<main className='flex flex-col items-center w-screen h-screen pt-8'>
-			<h1>TODO nextJS</h1>
-			{!isEditing && <TodoAddForm onAddTodo={addNewTodo} />}
-			{isEditing && (
-				<TodoEditForm
-					onCancelEditTodo={cancelTodoEditHandler}
-					todoToEdit={todoToEdit}
-					onConfirmEdit={confirmEditTodoHandler}
-				/>
-			)}
-			<TodoList
-				allTasks={allTodos}
-				onSetToDone={setToDoneHandler}
-				onDeleteTodo={deleteTodoHandler}
-				onEditTodo={selectTodoToEditHandler}
-			/>
+		<main className='w-screen h-screen pt-8 pb-6 flex justify-center'>
+			<div className='flex flex-col items-center w-[90%] sm:w-96 border border-black'>
+				<section className='bg-[#AF7EEB] w-full py-2 px-3 text-white text-center'>
+					<h1>TODO nextJS</h1>
+				</section>
+
+				{!isEditing && <TodoAddForm />}
+				{isEditing && <TodoEditForm todoToEdit={todoToEdit} />}
+				{firstLoad && <TodoList allTasks={allTasks} />}
+				{!firstLoad && <TodoList allTasks={filteredTodoList} />}
+
+				<Summary todoLength={todoLength} />
+			</div>
 		</main>
 	);
 };
