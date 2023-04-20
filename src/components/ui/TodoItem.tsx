@@ -1,6 +1,9 @@
 import React from "react";
 import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
-import { updateTodoIsDoneAction } from "@/reduxToolkit/todo/todo-action/todoAction";
+import {
+	updateTodoIsDoneAction,
+	deleteTodoAction,
+} from "@/reduxToolkit/todo/todo-action/todoAction";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
@@ -27,6 +30,10 @@ const TodoItem: React.FC<propsType> = ({
 
 	const clickHandler = (id: string) => {
 		dispatch(updateTodoIsDoneAction(id));
+	};
+	const deleteHandler = (id: string) => {
+		dispatch(deleteTodoAction(id));
+		// onDeleteTodo();
 	};
 
 	let summaryName = task.name;
@@ -56,7 +63,7 @@ const TodoItem: React.FC<propsType> = ({
 						<PencilSquareIcon className='text-blue-600 h-6' />
 					</button>
 				)}
-				<button onClick={onDeleteTodo}>
+				<button onClick={() => deleteHandler(task._id)}>
 					<TrashIcon className='text-red-600 h-6' />
 				</button>
 			</section>

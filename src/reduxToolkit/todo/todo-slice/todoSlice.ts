@@ -42,6 +42,10 @@ const todoSlice = createSlice({
 			copyOfTodoList[indexOfTodo].isDone = !copyOfTodoList[indexOfTodo].isDone;
 			state.todoList = copyOfTodoList;
 		},
+		deleteTodoRed(state, action) {
+			state.todoList = action.payload.updatedTodoList;
+		},
+
 		// updateEditingStatusRed(state, action) {
 		// 	state.isEditing = action.payload.isEditingStatus;
 		// },
@@ -53,6 +57,7 @@ export const {
 	addNewTodoRed,
 	updateFilteredTodoListRed,
 	updateTodoDoneStatusRed,
+	deleteTodoRed,
 } = todoSlice.actions;
 export const todoInitialState = initialTodoState;
 

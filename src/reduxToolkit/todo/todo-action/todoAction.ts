@@ -5,6 +5,7 @@ import {
 	addNewTodoRed,
 	updateFilteredTodoListRed,
 	updateTodoDoneStatusRed,
+	deleteTodoRed,
 } from "../todo-slice/todoSlice";
 
 import { ITask } from "@/DUMMY_DATA/MODEL";
@@ -57,5 +58,13 @@ export const updateTodoIsDoneAction =
 	(id: string) => async (dispatch: any, getState: any) => {
 		const { selectedTab } = getState().todoReducer;
 		await dispatch(updateTodoDoneStatusRed({ id }));
+		dispatch(updateFilteredTodoListAction(selectedTab));
+	};
+
+export const deleteTodoAction =
+	(id: string) => async (dispatch: any, getState: any) => {
+		const { todoList, selectedTab } = getState().todoReducer;
+		const updatedTodoList = todoList.filter((todo: ITask) => todo._id !== id);
+		await dispatch(deleteTodoRed({ updatedTodoList }));
 		dispatch(updateFilteredTodoListAction(selectedTab));
 	};
