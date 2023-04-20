@@ -9,16 +9,10 @@ import { ITask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
 	task: ITask;
-	onDeleteTodo: () => void;
 	onEditTodo: () => void;
 }
 
-const TodoItem: React.FC<propsType> = ({
-	task,
-
-	onDeleteTodo,
-	onEditTodo,
-}) => {
+const TodoItem: React.FC<propsType> = ({ task, onEditTodo }) => {
 	const dispatch = useAppDispatch();
 	const setDone: string = task.isDone ? "line-through" : "";
 
@@ -33,7 +27,6 @@ const TodoItem: React.FC<propsType> = ({
 	};
 	const deleteHandler = (id: string) => {
 		dispatch(deleteTodoAction(id));
-		// onDeleteTodo();
 	};
 
 	let summaryName = task.name;

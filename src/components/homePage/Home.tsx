@@ -54,11 +54,11 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	// 	setAllTodos(copyOfTodos);
 	// };
 
-	const deleteTodoHandler = (id: string) => {
-		const copyOfTodos = [...allTodos];
-		const filteredTodo = copyOfTodos.filter((todo) => todo._id !== id);
-		setAllTodos(filteredTodo);
-	};
+	// const deleteTodoHandler = (id: string) => {
+	// 	const copyOfTodos = [...allTodos];
+	// 	const filteredTodo = copyOfTodos.filter((todo) => todo._id !== id);
+	// 	setAllTodos(filteredTodo);
+	// };
 
 	const selectTodoToEditHandler = (todo: ITask) => {
 		setIsEditing(true);
@@ -119,14 +119,12 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			{firstLoad && (
 				<TodoList
 					allTasks={allTasks}
-					onDeleteTodo={deleteTodoHandler}
 					onEditTodo={selectTodoToEditHandler}
 				/>
 			)}
 			{!firstLoad && (
 				<TodoList
 					allTasks={filteredTodoList}
-					onDeleteTodo={deleteTodoHandler}
 					onEditTodo={selectTodoToEditHandler}
 				/>
 			)}

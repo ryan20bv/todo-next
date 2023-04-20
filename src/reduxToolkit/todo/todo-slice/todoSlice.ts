@@ -36,13 +36,12 @@ const todoSlice = createSlice({
 		},
 
 		updateTodoDoneStatusRed(state, action) {
-			const id = action.payload.id;
-			const copyOfTodoList = [...state.todoList];
-			const indexOfTodo = copyOfTodoList.findIndex((todo) => todo._id === id);
-			copyOfTodoList[indexOfTodo].isDone = !copyOfTodoList[indexOfTodo].isDone;
-			state.todoList = copyOfTodoList;
+			state.todoList = action.payload.updatedTodoList;
 		},
 		deleteTodoRed(state, action) {
+			state.todoList = action.payload.updatedTodoList;
+		},
+		deleteAllDoneRed(state, action) {
 			state.todoList = action.payload.updatedTodoList;
 		},
 
@@ -58,6 +57,7 @@ export const {
 	updateFilteredTodoListRed,
 	updateTodoDoneStatusRed,
 	deleteTodoRed,
+	deleteAllDoneRed,
 } = todoSlice.actions;
 export const todoInitialState = initialTodoState;
 

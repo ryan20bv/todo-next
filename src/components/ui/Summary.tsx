@@ -5,7 +5,10 @@ import {
 	RootState,
 } from "@/reduxToolkit/indexStore/indexStore";
 
-import { updateFilteredTodoListAction } from "@/reduxToolkit/todo/todo-action/todoAction";
+import {
+	updateFilteredTodoListAction,
+	deleteAllDoneAction,
+} from "@/reduxToolkit/todo/todo-action/todoAction";
 
 interface propsTypes {
 	todoLength: number;
@@ -17,6 +20,11 @@ const Summary: React.FC<propsTypes> = ({ onDeleteDone, todoLength }) => {
 	const { selectedTab } = useAppSelector(
 		(state: RootState) => state.todoReducer
 	);
+
+	const deleteAllDoneHandler = () => {
+		dispatch(deleteAllDoneAction());
+		// onDeleteDone;
+	};
 
 	const clickTabHandler = (e: React.MouseEvent<HTMLLIElement>) => {
 		const tabName = e.currentTarget.id;
@@ -58,7 +66,7 @@ const Summary: React.FC<propsTypes> = ({ onDeleteDone, todoLength }) => {
 
 			<button
 				className='border border-black p-2'
-				onClick={onDeleteDone}
+				onClick={deleteAllDoneHandler}
 			>
 				Delete All Done
 			</button>

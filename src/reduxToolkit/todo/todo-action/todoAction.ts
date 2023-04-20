@@ -6,6 +6,7 @@ import {
 	updateFilteredTodoListRed,
 	updateTodoDoneStatusRed,
 	deleteTodoRed,
+	deleteAllDoneRed,
 } from "../todo-slice/todoSlice";
 
 import { ITask } from "@/DUMMY_DATA/MODEL";
@@ -14,7 +15,6 @@ import { v4 as uuidv4 } from "uuid";
 export const getAllTodoAction = () => async (dispatch: any) => {
 	dispatch(updateFirstLoadRed({ firstLoad: true }));
 	const allTodos = getAllTasks();
-	console.log(allTodos);
 	await dispatch(getAllTodoRed({ allTodos }));
 	await dispatch(updateFirstLoadRed({ firstLoad: false }));
 	dispatch(updateFilteredTodoListAction("all"));
@@ -56,8 +56,16 @@ export const updateFilteredTodoListAction =
 
 export const updateTodoIsDoneAction =
 	(id: string) => async (dispatch: any, getState: any) => {
-		const { selectedTab } = getState().todoReducer;
-		await dispatch(updateTodoDoneStatusRed({ id }));
+		const { todoList, selectedTab } = getState().todoReducer;
+		const todoIndex = todoList.findIndex((todo: ITask) => todo._id === id);
+		let copyOfTodoList = [...todoList];
+
+		copyOfTodoList[todoIndex] = {
+			...copyOfTodoList[todoIndex],
+			isDone: !copyOfTodoList[todoIndex].isDone,
+		};
+		await dispatch(updateTodoDoneStatusRed({ updatedTodoList: copyOfTodoList }));
+
 		dispatch(updateFilteredTodoListAction(selectedTab));
 	};
 
@@ -66,5 +74,15 @@ export const deleteTodoAction =
 		const { todoList, selectedTab } = getState().todoReducer;
 		const updatedTodoList = todoList.filter((todo: ITask) => todo._id !== id);
 		await dispatch(deleteTodoRed({ updatedTodoList }));
+		dispatch(updateFilteredTodoListAction(selectedTab));
+	};
+
+export const deleteAllDoneAction =
+	() => async (dispatch: any, getState: any) => {
+		const { todoList, selectedTab } = getState().todoReducer;
+		const updatedTodoList = todoList.filter(
+			(todo: ITask) => todo.isDone === false
+		);
+		await dispatch(deleteAllDoneRed({ updatedTodoList }));
 		dispatch(updateFilteredTodoListAction(selectedTab));
 	};
