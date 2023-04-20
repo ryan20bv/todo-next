@@ -1,12 +1,12 @@
-import React, { FormEvent, useRef, useState } from "react";
-import { PlusCircleIcon, CheckIcon } from "@heroicons/react/24/outline";
+import React, { useRef } from "react";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
+import { addNewTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
+
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
-interface propsTypes {
-	onAddTodo: (newTodo: string) => void;
-}
-
-const TodoAddForm: React.FC<propsTypes> = ({ onAddTodo }) => {
+const TodoAddForm: React.FC<propsTypes> = () => {
+	const dispatch = useAppDispatch();
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const submitTodoHandler = (e: React.FormEvent<HTMLFormElement>) => {
@@ -18,8 +18,8 @@ const TodoAddForm: React.FC<propsTypes> = ({ onAddTodo }) => {
 			return;
 		}
 
-		console.log(enteredInput);
-		onAddTodo(enteredInput);
+		// onAddTodo(enteredInput);
+		dispatch(addNewTodoAction(enteredInput));
 		inputRef.current.value = "";
 	};
 

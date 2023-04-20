@@ -1,5 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
+import { getAllTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
 import TodoAddForm from "../ui/TodoAddForm";
 import TodoEditForm from "../ui/TodoEditForm";
 import TodoList from "../ui/TodoList";
@@ -11,10 +17,18 @@ interface propsType {
 }
 
 const Home: React.FC<propsType> = ({ allTasks }) => {
+	const dispatch = useAppDispatch();
+	const { todoList, firstLoad } = useAppSelector(
+		(state: RootState) => state.todoReducer
+	);
 	const [allTodos, setAllTodos] = useState<ITask[]>(allTasks);
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [todoToEdit, setTodoToEdit] = useState<ITask>({} as ITask);
 	const [selectedTab, setSelectedTab] = useState<string>("all");
+
+	useEffect(() => {
+		dispatch(getAllTodoAction());
+	}, [dispatch]);
 
 	const addNewTodo = (todo: string) => {
 		const newTodo: ITask = {
@@ -94,7 +108,7 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 				<h1>TODO nextJS</h1>
 			</section>
 
-			{!isEditing && <TodoAddForm onAddTodo={addNewTodo} />}
+			{!isEditing && <TodoAddForm />}
 			{isEditing && (
 				<TodoEditForm
 					onCancelEditTodo={cancelTodoEditHandler}
@@ -102,13 +116,23 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 					onConfirmEdit={confirmEditTodoHandler}
 				/>
 			)}
+			{firstLoad && (
+				<TodoList
+					allTasks={filteredTodos}
+					onSetToDone={setToDoneHandler}
+					onDeleteTodo={deleteTodoHandler}
+					onEditTodo={selectTodoToEditHandler}
+				/>
+			)}
+			{!firstLoad && (
+				<TodoList
+					allTasks={todoList}
+					onSetToDone={setToDoneHandler}
+					onDeleteTodo={deleteTodoHandler}
+					onEditTodo={selectTodoToEditHandler}
+				/>
+			)}
 
-			<TodoList
-				allTasks={filteredTodos}
-				onSetToDone={setToDoneHandler}
-				onDeleteTodo={deleteTodoHandler}
-				onEditTodo={selectTodoToEditHandler}
-			/>
 			<Summary
 				selectedTab={selectedTab}
 				onUpdateTab={updateFilterTab}
