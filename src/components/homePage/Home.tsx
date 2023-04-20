@@ -18,7 +18,7 @@ interface propsType {
 
 const Home: React.FC<propsType> = ({ allTasks }) => {
 	const dispatch = useAppDispatch();
-	const { todoList, firstLoad } = useAppSelector(
+	const { filteredTodoList, firstLoad } = useAppSelector(
 		(state: RootState) => state.todoReducer
 	);
 	const [allTodos, setAllTodos] = useState<ITask[]>(allTasks);
@@ -126,19 +126,14 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			)}
 			{!firstLoad && (
 				<TodoList
-					allTasks={todoList}
+					allTasks={filteredTodoList}
 					onSetToDone={setToDoneHandler}
 					onDeleteTodo={deleteTodoHandler}
 					onEditTodo={selectTodoToEditHandler}
 				/>
 			)}
 
-			<Summary
-				selectedTab={selectedTab}
-				onUpdateTab={updateFilterTab}
-				todoLength={todoLength}
-				onDeleteDone={deleteAllDoneTodos}
-			/>
+			<Summary onDeleteDone={deleteAllDoneTodos} />
 		</main>
 	);
 };

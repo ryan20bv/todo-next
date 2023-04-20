@@ -4,11 +4,15 @@ import { ITask } from "@/DUMMY_DATA/MODEL";
 interface ITodoState {
 	todoList: ITask[];
 	firstLoad: boolean;
+	filteredTodoList: ITask[];
+	selectedTab: string;
 }
 
 const initialTodoState: ITodoState = {
 	todoList: [],
 	firstLoad: true,
+	filteredTodoList: [],
+	selectedTab: "all",
 };
 
 const todoSlice = createSlice({
@@ -24,10 +28,18 @@ const todoSlice = createSlice({
 		addNewTodoRed(state, action) {
 			state.todoList = action.payload.updatedTodos;
 		},
+		updateFilteredTodoListRed(state, action) {
+			state.selectedTab = action.payload.selectedTab;
+			state.filteredTodoList = action.payload.updatedFilteredTodoList;
+		},
 	},
 });
-export const { getAllTodoRed, updateFirstLoadRed, addNewTodoRed } =
-	todoSlice.actions;
+export const {
+	getAllTodoRed,
+	updateFirstLoadRed,
+	addNewTodoRed,
+	updateFilteredTodoListRed,
+} = todoSlice.actions;
 export const todoInitialState = initialTodoState;
 
 export default todoSlice;

@@ -1,20 +1,27 @@
 import React, { useState } from "react";
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
+
+import { updateFilteredTodoListAction } from "@/reduxToolkit/todo/todo-action/todoAction";
 
 interface propsTypes {
-	selectedTab: string;
-	onUpdateTab: (info: string) => void;
-	todoLength: number;
 	onDeleteDone: () => void;
 }
 
-const Summary: React.FC<propsTypes> = ({
-	selectedTab,
-	onUpdateTab,
-	todoLength,
-	onDeleteDone,
-}) => {
+const Summary: React.FC<propsTypes> = ({ onDeleteDone }) => {
+	const dispatch = useAppDispatch();
+	const { filteredTodoList, selectedTab } = useAppSelector(
+		(state: RootState) => state.todoReducer
+	);
+	let todoLength: number = filteredTodoList.length;
+
 	const clickTabHandler = (e: React.MouseEvent<HTMLLIElement>) => {
-		onUpdateTab(e.currentTarget.id);
+		const tabName = e.currentTarget.id;
+		// onUpdateTab(tabName);
+		dispatch(updateFilteredTodoListAction(tabName));
 	};
 	let classAll = selectedTab === "all" ? "bg-[#E3E9FF]" : "";
 	let classActive = selectedTab === "active" ? "bg-[#E3E9FF]" : "";
