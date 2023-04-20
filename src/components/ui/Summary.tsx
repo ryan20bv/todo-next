@@ -8,15 +8,15 @@ import {
 import { updateFilteredTodoListAction } from "@/reduxToolkit/todo/todo-action/todoAction";
 
 interface propsTypes {
+	todoLength: number;
 	onDeleteDone: () => void;
 }
 
-const Summary: React.FC<propsTypes> = ({ onDeleteDone }) => {
+const Summary: React.FC<propsTypes> = ({ onDeleteDone, todoLength }) => {
 	const dispatch = useAppDispatch();
-	const { filteredTodoList, selectedTab } = useAppSelector(
+	const { selectedTab } = useAppSelector(
 		(state: RootState) => state.todoReducer
 	);
-	let todoLength: number = filteredTodoList.length;
 
 	const clickTabHandler = (e: React.MouseEvent<HTMLLIElement>) => {
 		const tabName = e.currentTarget.id;

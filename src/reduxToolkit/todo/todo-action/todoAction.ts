@@ -4,6 +4,7 @@ import {
 	updateFirstLoadRed,
 	addNewTodoRed,
 	updateFilteredTodoListRed,
+	updateTodoDoneStatusRed,
 } from "../todo-slice/todoSlice";
 
 import { ITask } from "@/DUMMY_DATA/MODEL";
@@ -27,14 +28,15 @@ export const addNewTodoAction =
 		};
 
 		// console.log(getState().todoReducer);
-		const { todoList } = getState().todoReducer;
+		const { todoList, selectedTab } = getState().todoReducer;
 		const updatedTodos = [...todoList, newTodo];
-		dispatch(addNewTodoRed({ updatedTodos }));
+		await dispatch(addNewTodoRed({ updatedTodos }));
+		dispatch(updateFilteredTodoListAction(selectedTab));
 	};
 
 export const updateFilteredTodoListAction =
 	(tabName: string) => async (dispatch: any, getState: any) => {
-		console.log(tabName);
+		// console.log(tabName);
 		const { todoList } = getState().todoReducer;
 		let filteredTodoList = todoList;
 		if (tabName === "active") {
@@ -42,7 +44,6 @@ export const updateFilteredTodoListAction =
 		} else if (tabName === "done") {
 			filteredTodoList = todoList.filter((todo: ITask) => todo.isDone === true);
 		}
-		let todoLength = filteredTodoList.length;
 
 		dispatch(
 			updateFilteredTodoListRed({
@@ -50,4 +51,11 @@ export const updateFilteredTodoListAction =
 				updatedFilteredTodoList: filteredTodoList,
 			})
 		);
+	};
+
+export const updateTodoIsDoneAction =
+	(id: string) => async (dispatch: any, getState: any) => {
+		const { selectedTab } = getState().todoReducer;
+		await dispatch(updateTodoDoneStatusRed({ id }));
+		dispatch(updateFilteredTodoListAction(selectedTab));
 	};

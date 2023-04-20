@@ -6,6 +6,7 @@ interface ITodoState {
 	firstLoad: boolean;
 	filteredTodoList: ITask[];
 	selectedTab: string;
+	isEditing: boolean;
 }
 
 const initialTodoState: ITodoState = {
@@ -13,6 +14,7 @@ const initialTodoState: ITodoState = {
 	firstLoad: true,
 	filteredTodoList: [],
 	selectedTab: "all",
+	isEditing: false,
 };
 
 const todoSlice = createSlice({
@@ -32,6 +34,17 @@ const todoSlice = createSlice({
 			state.selectedTab = action.payload.selectedTab;
 			state.filteredTodoList = action.payload.updatedFilteredTodoList;
 		},
+
+		updateTodoDoneStatusRed(state, action) {
+			const id = action.payload.id;
+			const copyOfTodoList = [...state.todoList];
+			const indexOfTodo = copyOfTodoList.findIndex((todo) => todo._id === id);
+			copyOfTodoList[indexOfTodo].isDone = !copyOfTodoList[indexOfTodo].isDone;
+			state.todoList = copyOfTodoList;
+		},
+		// updateEditingStatusRed(state, action) {
+		// 	state.isEditing = action.payload.isEditingStatus;
+		// },
 	},
 });
 export const {
@@ -39,6 +52,7 @@ export const {
 	updateFirstLoadRed,
 	addNewTodoRed,
 	updateFilteredTodoListRed,
+	updateTodoDoneStatusRed,
 } = todoSlice.actions;
 export const todoInitialState = initialTodoState;
 

@@ -30,29 +30,29 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 		dispatch(getAllTodoAction());
 	}, [dispatch]);
 
-	const addNewTodo = (todo: string) => {
-		const newTodo: ITask = {
-			_id: uuidv4(),
-			name: todo,
-			isDone: false,
-		};
+	// const addNewTodo = (todo: string) => {
+	// 	const newTodo: ITask = {
+	// 		_id: uuidv4(),
+	// 		name: todo,
+	// 		isDone: false,
+	// 	};
 
-		setAllTodos((prevState) => {
-			return prevState.concat(newTodo);
-		});
-		updateFilterTab("all");
-	};
-	const setToDoneHandler = (id: string) => {
-		const copyOfTodos = [...allTodos];
-		const selectedTodoIndex = copyOfTodos.findIndex((todo) => todo._id === id);
+	// 	setAllTodos((prevState) => {
+	// 		return prevState.concat(newTodo);
+	// 	});
+	// 	updateFilterTab("all");
+	// };
+	// const setToDoneHandler = (id: string) => {
+	// 	const copyOfTodos = [...allTodos];
+	// 	const selectedTodoIndex = copyOfTodos.findIndex((todo) => todo._id === id);
 
-		copyOfTodos[selectedTodoIndex] = {
-			...copyOfTodos[selectedTodoIndex],
-			isDone: !copyOfTodos[selectedTodoIndex].isDone,
-		};
+	// 	copyOfTodos[selectedTodoIndex] = {
+	// 		...copyOfTodos[selectedTodoIndex],
+	// 		isDone: !copyOfTodos[selectedTodoIndex].isDone,
+	// 	};
 
-		setAllTodos(copyOfTodos);
-	};
+	// 	setAllTodos(copyOfTodos);
+	// };
 
 	const deleteTodoHandler = (id: string) => {
 		const copyOfTodos = [...allTodos];
@@ -90,17 +90,17 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 		setAllTodos(copyOfTodos);
 	};
 
-	const updateFilterTab = (info: string) => {
-		setSelectedTab(info);
-	};
+	// const updateFilterTab = (info: string) => {
+	// 	setSelectedTab(info);
+	// };
 
-	let filteredTodos = allTodos;
-	if (selectedTab === "active") {
-		filteredTodos = allTodos.filter((todo) => todo.isDone === false);
-	} else if (selectedTab === "done") {
-		filteredTodos = allTodos.filter((todo) => todo.isDone === true);
-	}
-	let todoLength = filteredTodos.length;
+	// let filteredTodos = allTodos;
+	// if (selectedTab === "active") {
+	// 	filteredTodos = allTodos.filter((todo) => todo.isDone === false);
+	// } else if (selectedTab === "done") {
+	// 	filteredTodos = allTodos.filter((todo) => todo.isDone === true);
+	// }
+	let todoLength: number = firstLoad ? allTasks.length : filteredTodoList.length;
 
 	return (
 		<main className='flex flex-col items-center w-screen h-screen pt-8'>
@@ -118,8 +118,7 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			)}
 			{firstLoad && (
 				<TodoList
-					allTasks={filteredTodos}
-					onSetToDone={setToDoneHandler}
+					allTasks={allTasks}
 					onDeleteTodo={deleteTodoHandler}
 					onEditTodo={selectTodoToEditHandler}
 				/>
@@ -127,13 +126,15 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			{!firstLoad && (
 				<TodoList
 					allTasks={filteredTodoList}
-					onSetToDone={setToDoneHandler}
 					onDeleteTodo={deleteTodoHandler}
 					onEditTodo={selectTodoToEditHandler}
 				/>
 			)}
 
-			<Summary onDeleteDone={deleteAllDoneTodos} />
+			<Summary
+				onDeleteDone={deleteAllDoneTodos}
+				todoLength={todoLength}
+			/>
 		</main>
 	);
 };
