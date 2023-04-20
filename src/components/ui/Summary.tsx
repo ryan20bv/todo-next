@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -22,12 +22,11 @@ const Summary: React.FC<propsTypes> = ({ todoLength }) => {
 
 	const deleteAllDoneHandler = () => {
 		dispatch(deleteAllDoneAction());
-		// onDeleteDone;
 	};
 
 	const clickTabHandler = (e: React.MouseEvent<HTMLLIElement>) => {
 		const tabName = e.currentTarget.id;
-		// onUpdateTab(tabName);
+
 		dispatch(updateFilteredTodoListAction(tabName));
 	};
 	let classAll = selectedTab === "all" ? "bg-[#E3E9FF]" : "";

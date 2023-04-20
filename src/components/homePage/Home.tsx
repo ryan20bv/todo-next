@@ -30,94 +30,22 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 		dispatch(getAllTodoAction());
 	}, [dispatch]);
 
-	// const addNewTodo = (todo: string) => {
-	// 	const newTodo: ITask = {
-	// 		_id: uuidv4(),
-	// 		name: todo,
-	// 		isDone: false,
-	// 	};
-
-	// 	setAllTodos((prevState) => {
-	// 		return prevState.concat(newTodo);
-	// 	});
-	// 	updateFilterTab("all");
-	// };
-	// const setToDoneHandler = (id: string) => {
-	// 	const copyOfTodos = [...allTodos];
-	// 	const selectedTodoIndex = copyOfTodos.findIndex((todo) => todo._id === id);
-
-	// 	copyOfTodos[selectedTodoIndex] = {
-	// 		...copyOfTodos[selectedTodoIndex],
-	// 		isDone: !copyOfTodos[selectedTodoIndex].isDone,
-	// 	};
-
-	// 	setAllTodos(copyOfTodos);
-	// };
-
-	// const deleteTodoHandler = (id: string) => {
-	// 	const copyOfTodos = [...allTodos];
-	// 	const filteredTodo = copyOfTodos.filter((todo) => todo._id !== id);
-	// 	setAllTodos(filteredTodo);
-	// };
-
-	const selectTodoToEditHandler = (todo: ITask) => {
-		// setIsEditing(true);
-		// setTodoToEdit(todo);
-	};
-
-	const cancelTodoEditHandler = () => {
-		// setIsEditing(false);
-		// setTodoToEdit({} as ITask);
-	};
-
-	/* const confirmEditTodoHandler = (editedTodoName: string) => {
-		// const copyOfTodos = [...allTodos];
-		// const foundTodoIndex = copyOfTodos.findIndex(
-		// 	(todo) => todo._id === todoToEdit._id
-		// );
-		// copyOfTodos[foundTodoIndex] = {
-		// 	...copyOfTodos[foundTodoIndex],
-		// 	name: editedTodoName,
-		// };
-		// setAllTodos(copyOfTodos);
-		// cancelTodoEditHandler();
-	}; */
-	// const deleteAllDoneTodos = () => {
-	// 	console.log("deleteAllDoneTodos");
-	// 	let copyOfTodos = allTodos;
-	// 	copyOfTodos = copyOfTodos.filter((todo) => todo.isDone === false);
-	// 	setAllTodos(copyOfTodos);
-	// };
-
-	// const updateFilterTab = (info: string) => {
-	// 	setSelectedTab(info);
-	// };
-
-	// let filteredTodos = allTodos;
-	// if (selectedTab === "active") {
-	// 	filteredTodos = allTodos.filter((todo) => todo.isDone === false);
-	// } else if (selectedTab === "done") {
-	// 	filteredTodos = allTodos.filter((todo) => todo.isDone === true);
-	// }
 	let todoLength: number = firstLoad ? allTasks.length : filteredTodoList.length;
 
 	return (
-		<main className='flex flex-col items-center w-screen h-screen pt-8'>
-			<section className='bg-[#AF7EEB] w-[90%] py-2 px-3 text-white'>
-				<h1>TODO nextJS</h1>
-			</section>
+		<main className='w-screen h-screen pt-8 pb-6 flex justify-center'>
+			<div className='flex flex-col items-center w-[90%] sm:w-96 border border-black'>
+				<section className='bg-[#AF7EEB] w-full py-2 px-3 text-white text-center'>
+					<h1>TODO nextJS</h1>
+				</section>
 
-			{!isEditing && <TodoAddForm />}
-			{isEditing && (
-				<TodoEditForm
-					onCancelEditTodo={cancelTodoEditHandler}
-					todoToEdit={todoToEdit}
-				/>
-			)}
-			{firstLoad && <TodoList allTasks={allTasks} />}
-			{!firstLoad && <TodoList allTasks={filteredTodoList} />}
+				{!isEditing && <TodoAddForm />}
+				{isEditing && <TodoEditForm todoToEdit={todoToEdit} />}
+				{firstLoad && <TodoList allTasks={allTasks} />}
+				{!firstLoad && <TodoList allTasks={filteredTodoList} />}
 
-			<Summary todoLength={todoLength} />
+				<Summary todoLength={todoLength} />
+			</div>
 		</main>
 	);
 };

@@ -16,18 +16,11 @@ const TodoItem: React.FC<propsType> = ({ task }) => {
 	const dispatch = useAppDispatch();
 	const setDone: string = task.isDone ? "line-through" : "";
 
-	// const checkboxHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-	// 	// const value = e.currentTarget.checked;
-
-	// 	onSetToDone();
-	// };
-
 	const setIsDoneHandler = (id: string) => {
 		dispatch(updateTodoIsDoneAction(id));
 	};
 	const setIsEditingHandler = (todo: ITask) => {
 		dispatch(selectTodoToEditAction(todo));
-		// onEditTodo();
 	};
 	const deleteHandler = (id: string) => {
 		dispatch(deleteTodoAction(id));

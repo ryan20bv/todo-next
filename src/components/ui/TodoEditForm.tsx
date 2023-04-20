@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
 import {
 	confirmEditAction,
@@ -8,14 +8,10 @@ import { ITask } from "@/DUMMY_DATA/MODEL";
 import { CheckIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 interface propsTypes {
-	onCancelEditTodo: () => void;
 	todoToEdit: ITask;
 }
 
-const TodoEditForm: React.FC<propsTypes> = ({
-	onCancelEditTodo,
-	todoToEdit,
-}) => {
+const TodoEditForm: React.FC<propsTypes> = ({ todoToEdit }) => {
 	const dispatcher = useAppDispatch();
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -28,8 +24,6 @@ const TodoEditForm: React.FC<propsTypes> = ({
 			return;
 		}
 		dispatcher(confirmEditAction(enteredInput));
-		// console.log(enteredInput);
-		// onConfirmEdit(enteredInput);
 		inputRef.current.value = "";
 	};
 
@@ -37,11 +31,11 @@ const TodoEditForm: React.FC<propsTypes> = ({
 		dispatcher(cancelEditTodoAction());
 	};
 	return (
-		<section>
+		<section className=' my-4  w-[90%] flex '>
 			<form
 				action=''
 				onSubmit={submitTodoEditHandler}
-				className='border border-black my-6 w-[90%] flex bg-white justify-between px-2'
+				className=' w-full flex justify-between '
 			>
 				<input
 					type='text'
@@ -49,7 +43,7 @@ const TodoEditForm: React.FC<propsTypes> = ({
 					required
 					defaultValue={todoToEdit.name}
 					ref={inputRef}
-					className='py-2 focus:outline-none'
+					className='py-2 px-2 focus:outline-none w-[85%] border border-black '
 				/>
 
 				<button>
@@ -57,7 +51,7 @@ const TodoEditForm: React.FC<propsTypes> = ({
 				</button>
 			</form>
 			<button onClick={cancelEditHandler}>
-				<XCircleIcon className='text-red-600 h-8' />
+				<XCircleIcon className='text-red-600 h-8 mx-2' />
 			</button>
 		</section>
 	);
