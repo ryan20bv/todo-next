@@ -3,16 +3,16 @@ import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
 import {
 	updateTodoIsDoneAction,
 	deleteTodoAction,
+	selectTodoToEditAction,
 } from "@/reduxToolkit/todo/todo-action/todoAction";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
 	task: ITask;
-	onEditTodo: () => void;
 }
 
-const TodoItem: React.FC<propsType> = ({ task, onEditTodo }) => {
+const TodoItem: React.FC<propsType> = ({ task }) => {
 	const dispatch = useAppDispatch();
 	const setDone: string = task.isDone ? "line-through" : "";
 
@@ -22,8 +22,12 @@ const TodoItem: React.FC<propsType> = ({ task, onEditTodo }) => {
 	// 	onSetToDone();
 	// };
 
-	const clickHandler = (id: string) => {
+	const setIsDoneHandler = (id: string) => {
 		dispatch(updateTodoIsDoneAction(id));
+	};
+	const setIsEditingHandler = (todo: ITask) => {
+		dispatch(selectTodoToEditAction(todo));
+		// onEditTodo();
 	};
 	const deleteHandler = (id: string) => {
 		dispatch(deleteTodoAction(id));
@@ -45,14 +49,14 @@ const TodoItem: React.FC<propsType> = ({ task, onEditTodo }) => {
 					name=''
 					id=''
 					checked={task.isDone ? true : false}
-					onChange={() => clickHandler(task._id)}
+					onChange={() => setIsDoneHandler(task._id)}
 				/>
 
 				<h3 className={`${setDone} px-2`}>{summaryName}</h3>
 			</section>
 			<section>
 				{!task.isDone && (
-					<button onClick={onEditTodo}>
+					<button onClick={() => setIsEditingHandler(task)}>
 						<PencilSquareIcon className='text-blue-600 h-6' />
 					</button>
 				)}

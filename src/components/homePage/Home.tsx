@@ -18,13 +18,13 @@ interface propsType {
 
 const Home: React.FC<propsType> = ({ allTasks }) => {
 	const dispatch = useAppDispatch();
-	const { filteredTodoList, firstLoad } = useAppSelector(
+	const { filteredTodoList, firstLoad, isEditing, todoToEdit } = useAppSelector(
 		(state: RootState) => state.todoReducer
 	);
-	const [allTodos, setAllTodos] = useState<ITask[]>(allTasks);
-	const [isEditing, setIsEditing] = useState<boolean>(false);
-	const [todoToEdit, setTodoToEdit] = useState<ITask>({} as ITask);
-	const [selectedTab, setSelectedTab] = useState<string>("all");
+	// const [allTodos, setAllTodos] = useState<ITask[]>(allTasks);
+	// const [isEditing, setIsEditing] = useState<boolean>(false);
+	// const [todoToEdit, setTodoToEdit] = useState<ITask>({} as ITask);
+	// const [selectedTab, setSelectedTab] = useState<string>("all");
 
 	useEffect(() => {
 		dispatch(getAllTodoAction());
@@ -61,34 +61,33 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	// };
 
 	const selectTodoToEditHandler = (todo: ITask) => {
-		setIsEditing(true);
-		setTodoToEdit(todo);
+		// setIsEditing(true);
+		// setTodoToEdit(todo);
 	};
 
 	const cancelTodoEditHandler = () => {
-		setIsEditing(false);
-		setTodoToEdit({} as ITask);
+		// setIsEditing(false);
+		// setTodoToEdit({} as ITask);
 	};
 
-	const confirmEditTodoHandler = (editedTodoName: string) => {
-		const copyOfTodos = [...allTodos];
-		const foundTodoIndex = copyOfTodos.findIndex(
-			(todo) => todo._id === todoToEdit._id
-		);
-
-		copyOfTodos[foundTodoIndex] = {
-			...copyOfTodos[foundTodoIndex],
-			name: editedTodoName,
-		};
-		setAllTodos(copyOfTodos);
-		cancelTodoEditHandler();
-	};
-	const deleteAllDoneTodos = () => {
-		console.log("deleteAllDoneTodos");
-		let copyOfTodos = allTodos;
-		copyOfTodos = copyOfTodos.filter((todo) => todo.isDone === false);
-		setAllTodos(copyOfTodos);
-	};
+	/* const confirmEditTodoHandler = (editedTodoName: string) => {
+		// const copyOfTodos = [...allTodos];
+		// const foundTodoIndex = copyOfTodos.findIndex(
+		// 	(todo) => todo._id === todoToEdit._id
+		// );
+		// copyOfTodos[foundTodoIndex] = {
+		// 	...copyOfTodos[foundTodoIndex],
+		// 	name: editedTodoName,
+		// };
+		// setAllTodos(copyOfTodos);
+		// cancelTodoEditHandler();
+	}; */
+	// const deleteAllDoneTodos = () => {
+	// 	console.log("deleteAllDoneTodos");
+	// 	let copyOfTodos = allTodos;
+	// 	copyOfTodos = copyOfTodos.filter((todo) => todo.isDone === false);
+	// 	setAllTodos(copyOfTodos);
+	// };
 
 	// const updateFilterTab = (info: string) => {
 	// 	setSelectedTab(info);
@@ -113,26 +112,12 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 				<TodoEditForm
 					onCancelEditTodo={cancelTodoEditHandler}
 					todoToEdit={todoToEdit}
-					onConfirmEdit={confirmEditTodoHandler}
 				/>
 			)}
-			{firstLoad && (
-				<TodoList
-					allTasks={allTasks}
-					onEditTodo={selectTodoToEditHandler}
-				/>
-			)}
-			{!firstLoad && (
-				<TodoList
-					allTasks={filteredTodoList}
-					onEditTodo={selectTodoToEditHandler}
-				/>
-			)}
+			{firstLoad && <TodoList allTasks={allTasks} />}
+			{!firstLoad && <TodoList allTasks={filteredTodoList} />}
 
-			<Summary
-				onDeleteDone={deleteAllDoneTodos}
-				todoLength={todoLength}
-			/>
+			<Summary todoLength={todoLength} />
 		</main>
 	);
 };

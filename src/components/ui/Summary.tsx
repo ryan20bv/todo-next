@@ -12,10 +12,9 @@ import {
 
 interface propsTypes {
 	todoLength: number;
-	onDeleteDone: () => void;
 }
 
-const Summary: React.FC<propsTypes> = ({ onDeleteDone, todoLength }) => {
+const Summary: React.FC<propsTypes> = ({ todoLength }) => {
 	const dispatch = useAppDispatch();
 	const { selectedTab } = useAppSelector(
 		(state: RootState) => state.todoReducer

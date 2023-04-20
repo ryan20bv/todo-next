@@ -7,6 +7,9 @@ import {
 	updateTodoDoneStatusRed,
 	deleteTodoRed,
 	deleteAllDoneRed,
+	updateEditingStatusRed,
+	updateTodoListAfterEditRed,
+	resetIsEditingRed,
 } from "../todo-slice/todoSlice";
 
 import { ITask } from "@/DUMMY_DATA/MODEL";
@@ -86,3 +89,28 @@ export const deleteAllDoneAction =
 		await dispatch(deleteAllDoneRed({ updatedTodoList }));
 		dispatch(updateFilteredTodoListAction(selectedTab));
 	};
+
+export const selectTodoToEditAction =
+	(todoToEdit: ITask) => async (dispatch: any) => {
+		dispatch(updateEditingStatusRed({ isEditingStatus: true, todoToEdit }));
+	};
+
+export const confirmEditAction =
+	(newTaskName: string) => async (dispatch: any, getState: any) => {
+		const { todoList, selectedTab, todoToEdit } = getState().todoReducer;
+		let indexToEdit = todoList.findIndex(
+			(todo: ITask) => todo._id === todoToEdit._id
+		);
+
+		let copyOfTodoList = [...todoList];
+		copyOfTodoList[indexToEdit] = {
+			...copyOfTodoList[indexToEdit],
+			name: newTaskName,
+		};
+		await dispatch(updateTodoListAfterEditRed({ todoList: copyOfTodoList }));
+		dispatch(updateFilteredTodoListAction(selectedTab));
+	};
+
+export const cancelEditTodoAction = () => async (dispatch: any) => {
+	dispatch(resetIsEditingRed({}));
+};

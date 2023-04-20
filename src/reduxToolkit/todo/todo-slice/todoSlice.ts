@@ -7,6 +7,7 @@ interface ITodoState {
 	filteredTodoList: ITask[];
 	selectedTab: string;
 	isEditing: boolean;
+	todoToEdit: ITask;
 }
 
 const initialTodoState: ITodoState = {
@@ -15,6 +16,7 @@ const initialTodoState: ITodoState = {
 	filteredTodoList: [],
 	selectedTab: "all",
 	isEditing: false,
+	todoToEdit: {} as ITask,
 };
 
 const todoSlice = createSlice({
@@ -34,7 +36,6 @@ const todoSlice = createSlice({
 			state.selectedTab = action.payload.selectedTab;
 			state.filteredTodoList = action.payload.updatedFilteredTodoList;
 		},
-
 		updateTodoDoneStatusRed(state, action) {
 			state.todoList = action.payload.updatedTodoList;
 		},
@@ -44,10 +45,19 @@ const todoSlice = createSlice({
 		deleteAllDoneRed(state, action) {
 			state.todoList = action.payload.updatedTodoList;
 		},
-
-		// updateEditingStatusRed(state, action) {
-		// 	state.isEditing = action.payload.isEditingStatus;
-		// },
+		updateEditingStatusRed(state, action) {
+			state.isEditing = action.payload.isEditingStatus;
+			state.todoToEdit = action.payload.todoToEdit;
+		},
+		updateTodoListAfterEditRed(state, action) {
+			state.isEditing = false;
+			state.todoToEdit = {} as ITask;
+			state.todoList = action.payload.todoList;
+		},
+		resetIsEditingRed(state, action) {
+			state.isEditing = false;
+			state.todoToEdit = {} as ITask;
+		},
 	},
 });
 export const {
@@ -58,6 +68,9 @@ export const {
 	updateTodoDoneStatusRed,
 	deleteTodoRed,
 	deleteAllDoneRed,
+	updateEditingStatusRed,
+	updateTodoListAfterEditRed,
+	resetIsEditingRed,
 } = todoSlice.actions;
 export const todoInitialState = initialTodoState;
 

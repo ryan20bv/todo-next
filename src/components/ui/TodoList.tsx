@@ -4,16 +4,14 @@ import { ITask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
 	allTasks: ITask[];
-	onEditTodo: (todo: ITask) => void;
 }
-const TodoList: React.FC<propsType> = ({ allTasks, onEditTodo }) => {
+const TodoList: React.FC<propsType> = ({ allTasks }) => {
 	return (
 		<ul className='border border-black bg-white w-[90%] h-4/6  overflow-y-scroll'>
 			{allTasks.map((task) => (
 				<TodoItem
 					key={task._id}
 					task={task}
-					onEditTodo={() => onEditTodo(task)}
 				/>
 			))}
 		</ul>
