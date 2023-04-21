@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
 import {
 	updateTodoIsDoneAction,
@@ -10,10 +11,12 @@ import { ITask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
 	task: ITask;
+	index: number;
 }
 
-const TodoItem: React.FC<propsType> = ({ task }) => {
+const TodoItem: React.FC<propsType> = ({ task, index }) => {
 	const dispatch = useAppDispatch();
+	const router = useRouter();
 	const setDone: string = task.isDone ? "line-through" : "";
 
 	const setIsDoneHandler = (id: string) => {
@@ -25,6 +28,10 @@ const TodoItem: React.FC<propsType> = ({ task }) => {
 	const deleteHandler = (id: string) => {
 		dispatch(deleteTodoAction(id));
 	};
+	const todoDetailHandler = (id: string) => {
+		console.log(id);
+		router.push(`/n/${id}`);
+	};
 
 	let summaryName = task.name;
 	if (task.name.length > 15) {
@@ -34,7 +41,7 @@ const TodoItem: React.FC<propsType> = ({ task }) => {
 	return (
 		<li
 			key={task._id}
-			className='flex py-2 px-4 w-full justify-between items-center'
+			className='flex py-2 px-4 w-full justify-between items-center '
 		>
 			<section className='flex items-center'>
 				<input
@@ -45,7 +52,13 @@ const TodoItem: React.FC<propsType> = ({ task }) => {
 					onChange={() => setIsDoneHandler(task._id)}
 				/>
 
-				<h3 className={`${setDone} px-2`}>{summaryName}</h3>
+				<h3
+					className={`${setDone} px-2`}
+					onClick={() => todoDetailHandler(task._id)}
+				>
+					<span>{index + 1 + ". "}</span>
+					{summaryName}
+				</h3>
 			</section>
 			<section>
 				{!task.isDone && (
