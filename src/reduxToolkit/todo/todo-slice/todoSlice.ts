@@ -8,6 +8,8 @@ interface ITodoState {
 	selectedTab: string;
 	isEditing: boolean;
 	todoToEdit: ITask;
+	isInDetails: boolean;
+	todoDetails: ITask;
 }
 
 const initialTodoState: ITodoState = {
@@ -17,6 +19,8 @@ const initialTodoState: ITodoState = {
 	selectedTab: "all",
 	isEditing: false,
 	todoToEdit: {} as ITask,
+	isInDetails: false,
+	todoDetails: {} as ITask,
 };
 
 const todoSlice = createSlice({

@@ -12,7 +12,7 @@ interface propsType {
 
 const TaskDetail: React.FC<propsType> = ({ selectedTodo }) => {
 	const { todoDetail, index } = selectedTodo;
-
+	console.log(todoDetail);
 	return (
 		<main className=' w-full  p-4'>
 			<header>
@@ -21,34 +21,19 @@ const TaskDetail: React.FC<propsType> = ({ selectedTodo }) => {
 			<section className=' bg-white w-full h-96 border border-black p-4 overflow-y-scroll'>
 				<h3>Details</h3>
 				<ul className='py-2 px-4 list-disc'>
-					<div>
-						<li className='pb-2'>
-							<p>
-								science books science books science books science books science books
-								science books science books science books
-							</p>
-						</li>
-						<button>
-							<PencilSquareIcon className='text-blue-600 h-6' />
-						</button>
-					</div>
-
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
-					<li>science books</li>
+					{todoDetail.details.map((detail) => (
+						<div key={detail._id}>
+							<li className='pb-2'>
+								<p>{detail.item}</p>
+							</li>
+							<button>
+								<PencilSquareIcon className='text-blue-600 h-6' />
+							</button>
+							<button>
+								<TrashIcon className='text-red-600 h-6' />
+							</button>
+						</div>
+					))}
 				</ul>
 			</section>
 			<form action=''>
