@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Card from "../ui/Card";
+
 import { v4 as uuidv4 } from "uuid";
 import {
 	useAppDispatch,
@@ -7,9 +7,12 @@ import {
 	RootState,
 } from "@/reduxToolkit/indexStore/indexStore";
 import { getAllTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
-import TodoAddForm from "../ui/TodoAddForm";
+import Card from "../ui/Card";
+import CardHeader from "../ui/CardHeader";
+import AddForm from "../ui/AddForm";
 import TodoEditForm from "../ui/TodoEditForm";
-import TodoList from "../ui/TodoList";
+import ListContainer from "../ui/ListContainer";
+import TodoList from "./TodoList";
 import Summary from "../ui/Summary";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
@@ -22,23 +25,23 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	const { filteredTodoList, firstLoad, isEditing, todoToEdit } = useAppSelector(
 		(state: RootState) => state.todoReducer
 	);
-	// const [allTodos, setAllTodos] = useState<ITask[]>(allTasks);
-	// const [isEditing, setIsEditing] = useState<boolean>(false);
-	// const [todoToEdit, setTodoToEdit] = useState<ITask>({} as ITask);
-	// const [selectedTab, setSelectedTab] = useState<string>("all");
 
 	useEffect(() => {
 		dispatch(getAllTodoAction());
 	}, [dispatch]);
 
 	let todoLength: number = firstLoad ? allTasks.length : filteredTodoList.length;
-
+	const title = <h1>TODO nextJS</h1>;
 	return (
 		<Card>
-			{!isEditing && <TodoAddForm />}
+			<CardHeader title={title} />
+			{!isEditing && <AddForm />}
 			{isEditing && <TodoEditForm todoToEdit={todoToEdit} />}
-			{firstLoad && <TodoList allTasks={allTasks} />}
-			{!firstLoad && <TodoList allTasks={filteredTodoList} />}
+			<ListContainer>
+				{firstLoad && <TodoList allTasks={allTasks} />}
+				{!firstLoad && <TodoList allTasks={filteredTodoList} />}
+			</ListContainer>
+
 			<Summary todoLength={todoLength} />
 		</Card>
 	);

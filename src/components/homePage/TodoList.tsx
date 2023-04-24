@@ -7,7 +7,7 @@ interface propsType {
 }
 const TodoList: React.FC<propsType> = ({ allTasks }) => {
 	return (
-		<ul className='border border-black bg-white w-[90%] h-96 overflow-y-scroll mb-4 '>
+		<ul>
 			{allTasks.map((task, index) => (
 				<TodoItem
 					key={task._id}

@@ -7,7 +7,7 @@
 // 	}
 // }
 
-interface ITodoDetails {
+export interface ITodoDetails {
 	_id: string;
 	item: string;
 }

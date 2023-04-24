@@ -3,7 +3,7 @@ import { PlusCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
 import { addNewTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
 
-const TodoAddForm = () => {
+const AddForm = () => {
 	const dispatch = useAppDispatch();
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -29,7 +29,7 @@ const TodoAddForm = () => {
 	};
 
 	return (
-		<section className=' my-4  w-[90%] flex '>
+		<section className=' my-4  w-[95%] flex '>
 			<form
 				action=''
 				onSubmit={submitTodoHandler}
@@ -54,4 +54,4 @@ const TodoAddForm = () => {
 	);
 };
 
-export default TodoAddForm;
+export default AddForm;

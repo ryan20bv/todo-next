@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
+import Card from "../ui/Card";
+import CardHeader from "../ui/CardHeader";
+import AddForm from "../ui/AddForm";
+import ListContainer from "../ui/ListContainer";
+import DetailsLists from "./DetailsLists";
+import Summary from "../ui/Summary";
 
+import { setTodoDetailAction } from "@/reduxToolkit/todo/todo-action/detailAction";
 import { ITask } from "@/DUMMY_DATA/MODEL";
-import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
 
 interface propsType {
 	selectedTodo: {
@@ -10,40 +23,50 @@ interface propsType {
 	};
 }
 
-const TaskDetail: React.FC<propsType> = ({ selectedTodo }) => {
-	const { todoDetail, index } = selectedTodo;
-	console.log(todoDetail);
+const TaskDetail: React.FC<propsType> = (props) => {
+	const dispatch = useAppDispatch();
+	const router = useRouter();
+	const { todoList } = useAppSelector((state: RootState) => state.todoReducer);
+	const { todoDetails, isLoading } = useAppSelector(
+		(state: RootState) => state.detailReducer
+	);
+
+	let { taskid } = router.query;
+
+	useEffect(() => {
+		if (!todoDetails._id && taskid) {
+			if (typeof taskid === "string") dispatch(setTodoDetailAction(taskid));
+		}
+		// console.log("effect");
+		// if (typeof taskid === "string") dispatch(setTodoDetailAction(taskid));
+	}, []);
+
+	let index: string | number = "";
+	let title = <div></div>;
+	if (todoDetails) {
+		index = todoList.findIndex((todo: ITask) => todo._id === todoDetails._id);
+		title = (
+			<h1>
+				<span>{index + 1 + ". "}</span> {todoDetails.name}
+			</h1>
+		);
+	}
+
+	let todoLength: number = 0;
+	if (!isLoading) {
+		todoLength = todoDetails?.details.length;
+	}
+
 	return (
-		<main className=' w-full  p-4'>
-			<header>
-				<span>{index + 1 + ". "}</span> {todoDetail.name}
-			</header>
-			<section className=' bg-white w-full h-96 border border-black p-4 overflow-y-scroll'>
-				<h3>Details</h3>
-				<ul className='py-2 px-4 list-disc'>
-					{todoDetail.details.map((detail) => (
-						<div key={detail._id}>
-							<li className='pb-2'>
-								<p>{detail.item}</p>
-							</li>
-							<button>
-								<PencilSquareIcon className='text-blue-600 h-6' />
-							</button>
-							<button>
-								<TrashIcon className='text-red-600 h-6' />
-							</button>
-						</div>
-					))}
-				</ul>
-			</section>
-			<form action=''>
-				<input
-					type='text'
-					placeholder='add new detail'
-				/>
-				<button>Add</button>
-			</form>
-		</main>
+		<Card>
+			<CardHeader title={title} />
+			<AddForm />
+			<ListContainer>
+				{isLoading && <h1>Loading...</h1>}
+				{!isLoading && <DetailsLists details={todoDetails?.details} />}
+			</ListContainer>
+			<Summary todoLength={todoLength} />
+		</Card>
 	);
 };
 

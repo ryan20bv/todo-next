@@ -6,6 +6,7 @@ import {
 	deleteTodoAction,
 	selectTodoToEditAction,
 } from "@/reduxToolkit/todo/todo-action/todoAction";
+import { setTodoDetailAction } from "@/reduxToolkit/todo/todo-action/detailAction";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
@@ -30,6 +31,7 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 	};
 	const todoDetailHandler = (id: string) => {
 		console.log(id);
+		dispatch(setTodoDetailAction(id));
 		router.push(`/n/${id}`);
 	};
 
@@ -41,7 +43,7 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 	return (
 		<li
 			key={task._id}
-			className='flex py-2 px-4 w-full justify-between items-center '
+			className='flex px-2 w-full justify-between items-center '
 		>
 			<section className='flex items-center'>
 				<input

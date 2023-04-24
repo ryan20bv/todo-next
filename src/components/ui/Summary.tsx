@@ -34,7 +34,7 @@ const Summary: React.FC<propsTypes> = ({ todoLength }) => {
 	let classDone = selectedTab === "done" ? "bg-[#E3E9FF]" : "";
 
 	return (
-		<main className='flex text-[10px] w-[90%] justify-between bg-white  '>
+		<main className='flex text-[10px] w-[95%] justify-between bg-white  '>
 			<section className='border border-black p-2'>
 				{todoLength} {todoLength > 1 ? "tasks" : "task"}
 			</section>

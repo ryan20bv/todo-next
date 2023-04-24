@@ -17,11 +17,7 @@ interface propsType {
 const TaskDetails: React.FC<propsType> = ({ selectedTodo }) => {
 	// const router = useRouter();
 
-	return (
-		<Card>
-			<TaskDetail selectedTodo={selectedTodo} />
-		</Card>
-	);
+	return <TaskDetail selectedTodo={selectedTodo} />;
 };
 
 export async function getStaticPaths() {

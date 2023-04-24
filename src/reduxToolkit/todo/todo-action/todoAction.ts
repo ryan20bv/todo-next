@@ -12,12 +12,14 @@ import {
 	resetIsEditingRed,
 } from "../todo-slice/todoSlice";
 
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { ITask, ITodoDetails } from "@/DUMMY_DATA/MODEL";
 import { v4 as uuidv4 } from "uuid";
 
 export const getAllTodoAction = () => async (dispatch: any) => {
 	dispatch(updateFirstLoadRed({ firstLoad: true }));
 	const allTodos = getAllTasks();
+	const allTodosAsString = JSON.stringify(allTodos);
+	window.localStorage.setItem("allTodos", allTodosAsString);
 	await dispatch(getAllTodoRed({ allTodos }));
 	await dispatch(updateFirstLoadRed({ firstLoad: false }));
 	dispatch(updateFilteredTodoListAction("all"));
@@ -29,6 +31,7 @@ export const addNewTodoAction =
 			_id: uuidv4(),
 			name: newTask,
 			isDone: false,
+			details: [],
 		};
 
 		// console.log(getState().todoReducer);
