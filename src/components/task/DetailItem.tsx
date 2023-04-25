@@ -1,6 +1,9 @@
 import React from "react";
 import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
-import { toggleDetailIsDoneAction } from "@/reduxToolkit/todo/todo-action/detailAction";
+import {
+	toggleDetailIsDoneAction,
+	deleteDetailAction,
+} from "@/reduxToolkit/todo/todo-action/detailAction";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { ITodoDetails } from "@/DUMMY_DATA/MODEL";
 
@@ -15,6 +18,9 @@ const DetailItem: React.FC<propsTypes> = ({ detail }) => {
 	const isDoneDetailHandler = (detail_id: string) => {
 		// console.log(detail_id);
 		dispatch(toggleDetailIsDoneAction(detail_id));
+	};
+	const deleteDetailHandler = (detail_id: string) => {
+		dispatch(deleteDetailAction(detail_id));
 	};
 	return (
 		<main
@@ -39,7 +45,7 @@ const DetailItem: React.FC<propsTypes> = ({ detail }) => {
 				<button>
 					<PencilSquareIcon className='text-blue-600 h-6' />
 				</button>
-				<button>
+				<button onClick={() => deleteDetailHandler(detail._id)}>
 					<TrashIcon className='text-red-600 h-6' />
 				</button>
 			</section>

@@ -5,6 +5,7 @@ import {
 	updateIsLoadingRed,
 	addNewDetailsRed,
 	toggleDetailIsDoneRed,
+	updateTodoDetailsRed,
 } from "../todo-slice/detailSlice";
 import { updateFirstLoadRed } from "../todo-slice/todoSlice";
 import {
@@ -43,35 +44,24 @@ export const resetIsInDetailsAction = () => async (dispatch: any) => {
 
 export const addNewDetailsAction =
 	(detail: string, taskid: string) => async (dispatch: any, getState: any) => {
-		let { todoList } = getState().todoReducer;
 		let { todoDetails } = getState().detailReducer;
 		const newDetail: ITodoDetails = {
 			_id: uuidv4(),
 			item: detail,
 			isDone: false,
 		};
-		// console.log(newDetail);
+
 		const copyOfTodoDetails = { ...todoDetails };
-		// console.log(copyOfTodoDetails.details);
+
 		copyOfTodoDetails.details = [...todoDetails.details, newDetail];
 
-		let foundTodoIndex = todoList.findIndex((todo: ITask) => todo._id === taskid);
-
-		let copyOfTodoList = [...todoList];
-		copyOfTodoList[foundTodoIndex] = copyOfTodoDetails;
-		dispatch(updateTodoListAction(copyOfTodoList));
 		dispatch(addNewDetailsRed({ updatedTodoDetails: copyOfTodoDetails }));
+		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
 	};
 
 export const toggleDetailIsDoneAction =
 	(detail_id: string) => async (dispatch: any, getState: any) => {
 		let { todoDetails } = getState().detailReducer;
-		let { todoList } = getState().todoReducer;
-		let copyOfTodoList = [...todoList];
-		const todoDetailsIndex = copyOfTodoList.findIndex(
-			(todo: ITask) => todo._id === todoDetails._id
-		);
-
 		let copyOfTodoDetails: ITask = { ...todoDetails };
 		let copyOfDetails: ITodoDetails[] = todoDetails.details.map(
 			(detail: ITodoDetails) => ({
@@ -81,13 +71,32 @@ export const toggleDetailIsDoneAction =
 		const foundDetailIndex = copyOfTodoDetails.details.findIndex(
 			(detail: ITodoDetails) => detail._id === detail_id
 		);
-		copyOfDetails[foundDetailIndex].isDone = true;
+		copyOfDetails[foundDetailIndex].isDone =
+			!copyOfDetails[foundDetailIndex].isDone;
 		copyOfTodoDetails.details = [...copyOfDetails];
-		// console.log(copyOfTodoDetails.details[foundDetailIndex].isDone);
-
 		dispatch(toggleDetailIsDoneRed({ updatedTodoDetails: copyOfTodoDetails }));
+		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
+	};
 
-		copyOfTodoList[todoDetailsIndex] = { ...copyOfTodoDetails };
-
+export const updateLisOfTodoAction =
+	(updatedTodo: ITask) => async (dispatch: any, getState: any) => {
+		let { todoList } = getState().todoReducer;
+		let copyOfTodoList = [...todoList];
+		const todoDetailsIndex = copyOfTodoList.findIndex(
+			(todo: ITask) => todo._id === updatedTodo._id
+		);
+		copyOfTodoList[todoDetailsIndex] = { ...updatedTodo };
 		dispatch(updateTodoListAction(copyOfTodoList));
+	};
+
+export const deleteDetailAction =
+	(detail_id: string) => async (dispatch: any, getState: any) => {
+		let { todoDetails } = getState().detailReducer;
+		let copyOfTodoDetails = { ...todoDetails };
+		let updatedTodoDetails = todoDetails.details.filter(
+			(detail: ITodoDetails) => detail._id !== detail_id
+		);
+		copyOfTodoDetails.details = [...updatedTodoDetails];
+		dispatch(updateTodoDetailsRed({ updatedTodoDetails: copyOfTodoDetails }));
+		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
 	};
