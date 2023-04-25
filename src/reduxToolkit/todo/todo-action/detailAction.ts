@@ -35,7 +35,6 @@ export const resetIsInDetailsAction = () => async (dispatch: any) => {
 
 export const addNewDetailsAction =
 	(detail: string, taskid: string) => async (dispatch: any, getState: any) => {
-		console.log("here");
 		let { todoList } = getState().todoReducer;
 		let { todoDetails } = getState().detailReducer;
 		const newDetail: ITodoDetails = {
@@ -48,7 +47,7 @@ export const addNewDetailsAction =
 		copyOfTodoDetails.details = [...todoDetails.details, newDetail];
 
 		let foundTodoIndex = todoList.findIndex((todo: ITask) => todo._id === taskid);
-		console.log(foundTodoIndex);
+
 		let copyOfTodoList = [...todoList];
 		copyOfTodoList[foundTodoIndex] = copyOfTodoDetails;
 		dispatch(updateTodoListAction(copyOfTodoList));

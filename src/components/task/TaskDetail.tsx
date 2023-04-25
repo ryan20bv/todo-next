@@ -66,6 +66,7 @@ const TaskDetail = () => {
 		// 	await dispatch(resetIsInDetailsAction());
 		// }
 		router.replace("/");
+		// router.reload();
 	};
 
 	return (

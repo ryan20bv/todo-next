@@ -28,8 +28,10 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	);
 
 	useEffect(() => {
-		dispatch(getAllTodoAction());
-	}, [dispatch]);
+		if (firstLoad) {
+			dispatch(getAllTodoAction());
+		}
+	}, [dispatch, firstLoad]);
 
 	let todoLength: number = firstLoad ? allTasks.length : filteredTodoList.length;
 	const title = <h1>TODO nextJS</h1>;

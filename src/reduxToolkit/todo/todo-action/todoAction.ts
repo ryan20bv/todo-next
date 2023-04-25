@@ -16,8 +16,7 @@ import {
 import { ITask, ITodoDetails } from "@/DUMMY_DATA/MODEL";
 import { v4 as uuidv4 } from "uuid";
 
-export const getAllTodoAction = () => async (dispatch: any) => {
-	dispatch(updateFirstLoadRed({ firstLoad: true }));
+export const getAllTodoAction = () => async (dispatch: any, getState: any) => {
 	const allTodos = getAllTasks();
 	dispatch(updateLocaleStorageAction(allTodos));
 	await dispatch(getAllTodoRed({ allTodos }));
@@ -27,7 +26,9 @@ export const getAllTodoAction = () => async (dispatch: any) => {
 export const updateTodoListAction =
 	(allTodos: ITask[]) => async (dispatch: any, getState: any) => {
 		// console.log(allTodos);
-		dispatch(updateTodoListRed({ updatedTodoList: allTodos }));
+		const { selectedTab } = getState().todoReducer;
+		await dispatch(updateTodoListRed({ updatedTodoList: allTodos }));
+		dispatch(updateFilteredTodoListAction(selectedTab));
 		dispatch(updateLocaleStorageAction(allTodos));
 	};
 

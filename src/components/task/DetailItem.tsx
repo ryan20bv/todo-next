@@ -8,13 +8,24 @@ interface propsTypes {
 
 const DetailItem: React.FC<propsTypes> = ({ detail }) => {
 	return (
-		<div
+		<main
 			key={detail._id}
-			className='flex px-4 w-full justify-between items-center '
+			className='flex px-2 w-full justify-between items-center '
 		>
-			<li className=''>
-				<p>{detail.item}</p>
-			</li>
+			<section className='flex'>
+				<input
+					className='mr-6'
+					type='checkbox'
+					name=''
+					id=''
+					// checked={task.isDone ? true : false}
+					// onChange={() => setIsDoneHandler(task._id)}
+				/>
+				<li className=''>
+					<p>{detail.item}</p>
+				</li>
+			</section>
+
 			<section>
 				<button>
 					<PencilSquareIcon className='text-blue-600 h-6' />
@@ -23,7 +34,7 @@ const DetailItem: React.FC<propsTypes> = ({ detail }) => {
 					<TrashIcon className='text-red-600 h-6' />
 				</button>
 			</section>
-		</div>
+		</main>
 	);
 };
 
