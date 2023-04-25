@@ -1,4 +1,6 @@
 import React from "react";
+import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
+import { toggleDetailIsDoneAction } from "@/reduxToolkit/todo/todo-action/detailAction";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { ITodoDetails } from "@/DUMMY_DATA/MODEL";
 
@@ -7,6 +9,13 @@ interface propsTypes {
 }
 
 const DetailItem: React.FC<propsTypes> = ({ detail }) => {
+	const dispatch = useAppDispatch();
+	const setDone: string = detail.isDone ? "line-through" : "";
+
+	const isDoneDetailHandler = (detail_id: string) => {
+		// console.log(detail_id);
+		dispatch(toggleDetailIsDoneAction(detail_id));
+	};
 	return (
 		<main
 			key={detail._id}
@@ -18,10 +27,10 @@ const DetailItem: React.FC<propsTypes> = ({ detail }) => {
 					type='checkbox'
 					name=''
 					id=''
-					// checked={task.isDone ? true : false}
-					// onChange={() => setIsDoneHandler(task._id)}
+					checked={detail.isDone ? true : false}
+					onChange={() => isDoneDetailHandler(detail._id)}
 				/>
-				<li className=''>
+				<li className={`${setDone} px-2`}>
 					<p>{detail.item}</p>
 				</li>
 			</section>

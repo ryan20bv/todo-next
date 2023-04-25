@@ -9,14 +9,17 @@ export const DUMMY_TODOS: ITask[] = [
 			{
 				_id: "s1",
 				item: "OOP Javascript",
+				isDone: false,
 			},
 			{
 				_id: "s2",
 				item: "Science Books",
+				isDone: false,
 			},
 			{
 				_id: "s3",
 				item: "English Language",
+				isDone: true,
 			},
 		],
 	},
@@ -28,14 +31,17 @@ export const DUMMY_TODOS: ITask[] = [
 			{
 				_id: "e1",
 				item: "Walk the dog",
+				isDone: true,
 			},
 			{
 				_id: "e2",
 				item: "Jogging",
+				isDone: false,
 			},
 			{
 				_id: "e3",
 				item: "Swim",
+				isDone: false,
 			},
 		],
 	},
@@ -47,14 +53,17 @@ export const DUMMY_TODOS: ITask[] = [
 			{
 				_id: "h1",
 				item: "Sweep the Room",
+				isDone: false,
 			},
 			{
 				_id: "h2",
 				item: "Wash the dishes",
+				isDone: true,
 			},
 			{
 				_id: "h3",
 				item: "Lawn the grass",
+				isDone: true,
 			},
 		],
 	},

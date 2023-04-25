@@ -18,7 +18,6 @@ interface propsType {
 const TodoItem: React.FC<propsType> = ({ task, index }) => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const setDone: string = task.isDone ? "line-through" : "";
 
 	const setIsDoneHandler = (id: string) => {
 		dispatch(updateTodoIsDoneAction(id));
@@ -39,7 +38,7 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 		summaryName = task.name.substring(0, 15) + "...";
 	}
 	let detailsTotal = task.details.length || 0;
-
+	const setDone: string = task.isDone ? "line-through" : "";
 	return (
 		<li
 			key={task._id}

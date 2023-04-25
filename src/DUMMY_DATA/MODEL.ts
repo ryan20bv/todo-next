@@ -10,6 +10,7 @@
 export interface ITodoDetails {
 	_id: string;
 	item: string;
+	isDone: boolean;
 }
 
 export interface ITask {

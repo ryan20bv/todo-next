@@ -32,6 +32,9 @@ const detailTodoSlice = createSlice({
 		addNewDetailsRed(state, action) {
 			state.todoDetails = action.payload.updatedTodoDetails;
 		},
+		toggleDetailIsDoneRed(state, action) {
+			state.todoDetails = action.payload.updatedTodoDetails;
+		},
 	},
 });
 
@@ -40,6 +43,7 @@ export const {
 	resetIsInDetailsRed,
 	updateIsLoadingRed,
 	addNewDetailsRed,
+	toggleDetailIsDoneRed,
 } = detailTodoSlice.actions;
 
 export const detailInitialState = initialDetailState;
