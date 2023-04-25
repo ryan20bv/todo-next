@@ -26,14 +26,21 @@ const detailTodoSlice = createSlice({
 		},
 		resetIsInDetailsRed(state, action) {
 			state.isInDetails = false;
-			state.todoDetails = {} as ITask;
-			state.isLoading = true;
+			// state.todoDetails = {} as ITask;
+			// state.isLoading = true;
+		},
+		addNewDetailsRed(state, action) {
+			state.todoDetails = action.payload.updatedTodoDetails;
 		},
 	},
 });
 
-export const { setTodoDetailRed, resetIsInDetailsRed, updateIsLoadingRed } =
-	detailTodoSlice.actions;
+export const {
+	setTodoDetailRed,
+	resetIsInDetailsRed,
+	updateIsLoadingRed,
+	addNewDetailsRed,
+} = detailTodoSlice.actions;
 
 export const detailInitialState = initialDetailState;
 export default detailTodoSlice;

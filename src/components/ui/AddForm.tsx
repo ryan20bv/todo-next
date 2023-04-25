@@ -3,7 +3,12 @@ import { PlusCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
 import { addNewTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
 
-const AddForm = () => {
+interface propsTypes {
+	onAddHandler: (newTask: string) => void;
+	placeHolder: string;
+}
+
+const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
 	const dispatch = useAppDispatch();
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -15,7 +20,7 @@ const AddForm = () => {
 			return;
 		}
 
-		dispatch(addNewTodoAction(enteredInput));
+		onAddHandler(enteredInput);
 		inputRef.current.value = "";
 	};
 
@@ -37,7 +42,7 @@ const AddForm = () => {
 			>
 				<input
 					type='text'
-					placeholder='add todo'
+					placeholder={placeHolder}
 					required
 					ref={inputRef}
 					className='py-2 px-2 focus:outline-none w-[85%] border border-black '

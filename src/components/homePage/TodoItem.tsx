@@ -30,7 +30,6 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 		dispatch(deleteTodoAction(id));
 	};
 	const todoDetailHandler = (id: string) => {
-		console.log(id);
 		dispatch(setTodoDetailAction(id));
 		router.push(`/n/${id}`);
 	};
@@ -39,6 +38,7 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 	if (task.name.length > 15) {
 		summaryName = task.name.substring(0, 15) + "...";
 	}
+	let detailsTotal = task.details.length || 0;
 
 	return (
 		<li
@@ -60,6 +60,7 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 				>
 					<span>{index + 1 + ". "}</span>
 					{summaryName}
+					<span>{`(${detailsTotal})`}</span>
 				</h3>
 			</section>
 			<section>

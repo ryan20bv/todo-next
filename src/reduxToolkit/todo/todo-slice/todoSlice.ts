@@ -30,6 +30,9 @@ const todoSlice = createSlice({
 		getAllTodoRed(state, action) {
 			state.todoList = action.payload.allTodos;
 		},
+		updateTodoListRed(state, action) {
+			state.todoList = action.payload.updatedTodoList;
+		},
 		updateFirstLoadRed(state, action) {
 			state.firstLoad = action.payload.firstLoad;
 		},
@@ -75,6 +78,7 @@ export const {
 	updateEditingStatusRed,
 	updateTodoListAfterEditRed,
 	resetIsEditingRed,
+	updateTodoListRed,
 } = todoSlice.actions;
 export const todoInitialState = initialTodoState;
 

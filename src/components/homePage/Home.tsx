@@ -14,6 +14,7 @@ import TodoEditForm from "../ui/TodoEditForm";
 import ListContainer from "../ui/ListContainer";
 import TodoList from "./TodoList";
 import Summary from "../ui/Summary";
+import { addNewTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
@@ -32,10 +33,28 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 
 	let todoLength: number = firstLoad ? allTasks.length : filteredTodoList.length;
 	const title = <h1>TODO nextJS</h1>;
+
+	const addHandler = (task: string) => {
+		dispatch(addNewTodoAction(task));
+	};
+
+	const burgerMenuHandler = () => {
+		console.log("burger menu");
+	};
+
 	return (
 		<Card>
-			<CardHeader title={title} />
-			{!isEditing && <AddForm />}
+			<CardHeader
+				title={title}
+				onIconHandler={burgerMenuHandler}
+				isInDetails={false}
+			/>
+			{!isEditing && (
+				<AddForm
+					onAddHandler={addHandler}
+					placeHolder='add todo'
+				/>
+			)}
 			{isEditing && <TodoEditForm todoToEdit={todoToEdit} />}
 			<ListContainer>
 				{firstLoad && <TodoList allTasks={allTasks} />}

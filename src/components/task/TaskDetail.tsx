@@ -7,7 +7,10 @@ import ListContainer from "../ui/ListContainer";
 import DetailsLists from "./DetailsLists";
 import Summary from "../ui/Summary";
 
-import { setTodoDetailAction } from "@/reduxToolkit/todo/todo-action/detailAction";
+import {
+	setTodoDetailAction,
+	addNewDetailsAction,
+} from "@/reduxToolkit/todo/todo-action/detailAction";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
 import {
@@ -16,34 +19,27 @@ import {
 	RootState,
 } from "@/reduxToolkit/indexStore/indexStore";
 
-interface propsType {
-	selectedTodo: {
-		todoDetail: ITask;
-		index: number;
-	};
-}
-
-const TaskDetail: React.FC<propsType> = (props) => {
+const TaskDetail = () => {
 	const dispatch = useAppDispatch();
+
 	const router = useRouter();
 	const { todoList } = useAppSelector((state: RootState) => state.todoReducer);
 	const { todoDetails, isLoading } = useAppSelector(
 		(state: RootState) => state.detailReducer
 	);
-
-	let { taskid } = router.query;
+	const { taskid } = router.query;
 
 	useEffect(() => {
 		if (!todoDetails._id && taskid) {
-			if (typeof taskid === "string") dispatch(setTodoDetailAction(taskid));
+			if (typeof taskid === "string") {
+				dispatch(setTodoDetailAction(taskid));
+			}
 		}
-		// console.log("effect");
-		// if (typeof taskid === "string") dispatch(setTodoDetailAction(taskid));
-	}, []);
+	}, [taskid]);
 
 	let index: string | number = "";
 	let title = <div></div>;
-	if (todoDetails) {
+	if (todoDetails._id) {
 		index = todoList.findIndex((todo: ITask) => todo._id === todoDetails._id);
 		title = (
 			<h1>
@@ -57,10 +53,32 @@ const TaskDetail: React.FC<propsType> = (props) => {
 		todoLength = todoDetails?.details.length;
 	}
 
+	const addDetailsHandler = (enteredDetail: string) => {
+		console.log(enteredDetail, taskid);
+		let id = "";
+		if (typeof taskid === "string") {
+			id = taskid;
+		}
+		dispatch(addNewDetailsAction(enteredDetail, id));
+	};
+	const backArrowHandler = () => {
+		// if (isInDetails) {
+		// 	await dispatch(resetIsInDetailsAction());
+		// }
+		router.replace("/");
+	};
+
 	return (
 		<Card>
-			<CardHeader title={title} />
-			<AddForm />
+			<CardHeader
+				title={title}
+				onIconHandler={backArrowHandler}
+				isInDetails={true}
+			/>
+			<AddForm
+				onAddHandler={addDetailsHandler}
+				placeHolder='add details'
+			/>
 			<ListContainer>
 				{isLoading && <h1>Loading...</h1>}
 				{!isLoading && <DetailsLists details={todoDetails?.details} />}
