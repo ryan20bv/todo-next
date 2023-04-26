@@ -30,7 +30,7 @@ const DetailItem: React.FC<propsTypes> = ({ detail }) => {
 			key={detail._id}
 			className='flex px-1 w-full justify-between items-center '
 		>
-			<section className='flex w-4/5 '>
+			<section className='flex w-4/5 whitespace-normal'>
 				<input
 					className='mr-6'
 					type='checkbox'
