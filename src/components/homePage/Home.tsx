@@ -10,11 +10,15 @@ import { getAllTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
 import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
 import AddForm from "../ui/AddForm";
-import TodoEditForm from "../ui/TodoEditForm";
+import EditForm from "../ui/EditForm";
 import ListContainer from "../ui/ListContainer";
 import TodoList from "./TodoList";
 import Summary from "../ui/Summary";
-import { addNewTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
+import {
+	addNewTodoAction,
+	confirmEditAction,
+	cancelEditTodoAction,
+} from "@/reduxToolkit/todo/todo-action/todoAction";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
@@ -36,8 +40,14 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	let todoLength: number = firstLoad ? allTasks.length : filteredTodoList.length;
 	const title = <h1>TODO nextJS</h1>;
 
-	const addHandler = (task: string) => {
+	const addTodoHandler = (task: string) => {
 		dispatch(addNewTodoAction(task));
+	};
+	const editTodoHandler = (task: string) => {
+		dispatch(confirmEditAction(task));
+	};
+	const cancelEditingHandler = () => {
+		dispatch(cancelEditTodoAction());
 	};
 
 	const burgerMenuHandler = () => {
@@ -53,11 +63,18 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			/>
 			{!isEditing && (
 				<AddForm
-					onAddHandler={addHandler}
+					onAddHandler={addTodoHandler}
 					placeHolder='add todo'
 				/>
 			)}
-			{isEditing && <TodoEditForm todoToEdit={todoToEdit} />}
+			{isEditing && (
+				<EditForm
+					todoToEdit={todoToEdit}
+					onEditing={editTodoHandler}
+					isEditing={isEditing}
+					onCancel={cancelEditingHandler}
+				/>
+			)}
 			<ListContainer>
 				{firstLoad && <TodoList allTasks={allTasks} />}
 				{!firstLoad && <TodoList allTasks={filteredTodoList} />}

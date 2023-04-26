@@ -6,6 +6,8 @@ import {
 	addNewDetailsRed,
 	toggleDetailIsDoneRed,
 	updateTodoDetailsRed,
+	updateDetailEditingStatusRed,
+	resetIsDetailEditingRed,
 } from "../todo-slice/detailSlice";
 import { updateFirstLoadRed } from "../todo-slice/todoSlice";
 import {
@@ -100,3 +102,14 @@ export const deleteDetailAction =
 		dispatch(updateTodoDetailsRed({ updatedTodoDetails: copyOfTodoDetails }));
 		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
 	};
+
+export const selectDetailToEditAction =
+	(detailToEdit: ITodoDetails) => async (dispatch: any) => {
+		dispatch(
+			updateDetailEditingStatusRed({ isDetailEditingStatus: true, detailToEdit })
+		);
+	};
+
+export const cancelDetailEditingAction = () => async (dispatch: any) => {
+	dispatch(resetIsDetailEditingRed({}));
+};

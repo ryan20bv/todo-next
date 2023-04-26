@@ -3,6 +3,7 @@ import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
 import {
 	toggleDetailIsDoneAction,
 	deleteDetailAction,
+	selectDetailToEditAction,
 } from "@/reduxToolkit/todo/todo-action/detailAction";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { ITodoDetails } from "@/DUMMY_DATA/MODEL";
@@ -21,6 +22,9 @@ const DetailItem: React.FC<propsTypes> = ({ detail }) => {
 	};
 	const deleteDetailHandler = (detail_id: string) => {
 		dispatch(deleteDetailAction(detail_id));
+	};
+	const setIsEditingHandler = (details: ITodoDetails) => {
+		dispatch(selectDetailToEditAction(details));
 	};
 	return (
 		<main
@@ -42,7 +46,7 @@ const DetailItem: React.FC<propsTypes> = ({ detail }) => {
 			</section>
 
 			<section>
-				<button>
+				<button onClick={() => setIsEditingHandler(detail)}>
 					<PencilSquareIcon className='text-blue-600 h-6' />
 				</button>
 				<button onClick={() => deleteDetailHandler(detail._id)}>

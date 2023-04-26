@@ -6,10 +6,12 @@ import AddForm from "../ui/AddForm";
 import ListContainer from "../ui/ListContainer";
 import DetailsLists from "./DetailsLists";
 import Summary from "../ui/Summary";
+import EditForm from "../ui/EditForm";
 
 import {
 	setTodoDetailAction,
 	addNewDetailsAction,
+	cancelDetailEditingAction,
 } from "@/reduxToolkit/todo/todo-action/detailAction";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
@@ -24,9 +26,8 @@ const TaskDetail = () => {
 
 	const router = useRouter();
 	const { todoList } = useAppSelector((state: RootState) => state.todoReducer);
-	const { todoDetails, isLoading } = useAppSelector(
-		(state: RootState) => state.detailReducer
-	);
+	const { todoDetails, isLoading, detailToEdit, isDetailEditing } =
+		useAppSelector((state: RootState) => state.detailReducer);
 	const { taskid } = router.query;
 
 	useEffect(() => {
@@ -68,6 +69,12 @@ const TaskDetail = () => {
 		router.replace("/");
 		// router.reload();
 	};
+	const editDetailHandler = (detail: string) => {
+		console.log(detail);
+	};
+	const cancelDetailEditingHandler = () => {
+		dispatch(cancelDetailEditingAction());
+	};
 
 	return (
 		<Card>
@@ -76,10 +83,20 @@ const TaskDetail = () => {
 				onIconHandler={backArrowHandler}
 				isInDetails={true}
 			/>
-			<AddForm
-				onAddHandler={addDetailsHandler}
-				placeHolder='add details'
-			/>
+			{!isDetailEditing && (
+				<AddForm
+					onAddHandler={addDetailsHandler}
+					placeHolder='add details'
+				/>
+			)}
+			{isDetailEditing && (
+				<EditForm
+					detailToEdit={detailToEdit}
+					onEditing={editDetailHandler}
+					isDetailEditing={isDetailEditing}
+					onCancel={cancelDetailEditingHandler}
+				/>
+			)}
 			<ListContainer>
 				{isLoading && <h1>Loading...</h1>}
 				{!isLoading && <DetailsLists details={todoDetails?.details} />}

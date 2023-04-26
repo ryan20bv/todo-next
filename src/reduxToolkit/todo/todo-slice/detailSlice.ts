@@ -1,16 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { ITask, ITodoDetails } from "@/DUMMY_DATA/MODEL";
 
 interface IDetailState {
 	isLoading: boolean;
 	isInDetails: boolean;
 	todoDetails: ITask;
+	isDetailEditing: boolean;
+	detailToEdit: ITodoDetails;
 }
 
 const initialDetailState: IDetailState = {
 	isLoading: true,
 	isInDetails: false,
 	todoDetails: {} as ITask,
+	isDetailEditing: false,
+	detailToEdit: {} as ITodoDetails,
 };
 
 const detailTodoSlice = createSlice({
@@ -38,6 +42,14 @@ const detailTodoSlice = createSlice({
 		updateTodoDetailsRed(state, action) {
 			state.todoDetails = action.payload.updatedTodoDetails;
 		},
+		updateDetailEditingStatusRed(state, action) {
+			state.isDetailEditing = action.payload.isDetailEditingStatus;
+			state.detailToEdit = action.payload.detailToEdit;
+		},
+		resetIsDetailEditingRed(state, action) {
+			state.isDetailEditing = false;
+			state.detailToEdit = {} as ITodoDetails;
+		},
 	},
 });
 
@@ -48,6 +60,8 @@ export const {
 	addNewDetailsRed,
 	toggleDetailIsDoneRed,
 	updateTodoDetailsRed,
+	updateDetailEditingStatusRed,
+	resetIsDetailEditingRed,
 } = detailTodoSlice.actions;
 
 export const detailInitialState = initialDetailState;
