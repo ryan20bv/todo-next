@@ -1,18 +1,24 @@
 import React, { useRef } from "react";
-import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
-import {
-	confirmEditAction,
-	cancelEditTodoAction,
-} from "@/reduxToolkit/todo/todo-action/todoAction";
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { ITask, ITodoDetails } from "@/DUMMY_DATA/MODEL";
 import { CheckIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 interface propsTypes {
-	todoToEdit: ITask;
+	todoToEdit?: ITask;
+	confirmEditing: (input: string) => void;
+	isEditing?: boolean;
+	detailToEdit?: ITodoDetails;
+	isDetailEditing?: boolean;
+	onCancel: () => void;
 }
 
-const TodoEditForm: React.FC<propsTypes> = ({ todoToEdit }) => {
-	const dispatcher = useAppDispatch();
+const EditForm: React.FC<propsTypes> = ({
+	todoToEdit,
+	confirmEditing,
+	isEditing,
+	isDetailEditing,
+	detailToEdit,
+	onCancel,
+}) => {
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const submitTodoEditHandler = (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,15 +29,15 @@ const TodoEditForm: React.FC<propsTypes> = ({ todoToEdit }) => {
 			console.log("no value");
 			return;
 		}
-		dispatcher(confirmEditAction(enteredInput));
+		confirmEditing(enteredInput);
 		inputRef.current.value = "";
 	};
 
 	const cancelEditHandler = () => {
-		dispatcher(cancelEditTodoAction());
+		onCancel();
 	};
 	return (
-		<section className=' my-4  w-[90%] flex '>
+		<section className=' mt-4  w-full px-3 flex '>
 			<form
 				action=''
 				onSubmit={submitTodoEditHandler}
@@ -41,7 +47,9 @@ const TodoEditForm: React.FC<propsTypes> = ({ todoToEdit }) => {
 					type='text'
 					placeholder='edit todo'
 					required
-					defaultValue={todoToEdit.name}
+					defaultValue={
+						isEditing ? todoToEdit?.name : isDetailEditing ? detailToEdit?.item : ""
+					}
 					ref={inputRef}
 					className='py-2 px-2 focus:outline-none w-[85%] border border-black '
 				/>
@@ -57,4 +65,4 @@ const TodoEditForm: React.FC<propsTypes> = ({ todoToEdit }) => {
 	);
 };
 
-export default TodoEditForm;
+export default EditForm;

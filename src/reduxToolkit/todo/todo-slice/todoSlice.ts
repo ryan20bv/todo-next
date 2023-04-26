@@ -4,7 +4,7 @@ import { ITask } from "@/DUMMY_DATA/MODEL";
 interface ITodoState {
 	todoList: ITask[];
 	firstLoad: boolean;
-	filteredTodoList: ITask[];
+	// filteredTodoList: ITask[];
 	selectedTab: string;
 	isEditing: boolean;
 	todoToEdit: ITask;
@@ -15,7 +15,7 @@ interface ITodoState {
 const initialTodoState: ITodoState = {
 	todoList: [],
 	firstLoad: true,
-	filteredTodoList: [],
+	// filteredTodoList: [],
 	selectedTab: "all",
 	isEditing: false,
 	todoToEdit: {} as ITask,
@@ -30,16 +30,19 @@ const todoSlice = createSlice({
 		getAllTodoRed(state, action) {
 			state.todoList = action.payload.allTodos;
 		},
+		updateTodoListRed(state, action) {
+			state.todoList = action.payload.updatedTodoList;
+		},
 		updateFirstLoadRed(state, action) {
 			state.firstLoad = action.payload.firstLoad;
 		},
 		addNewTodoRed(state, action) {
 			state.todoList = action.payload.updatedTodos;
 		},
-		updateFilteredTodoListRed(state, action) {
-			state.selectedTab = action.payload.selectedTab;
-			state.filteredTodoList = action.payload.updatedFilteredTodoList;
-		},
+		// updateFilteredTodoListRed(state, action) {
+		// 	state.selectedTab = action.payload.selectedTab;
+		// 	state.filteredTodoList = action.payload.updatedFilteredTodoList;
+		// },
 		updateTodoDoneStatusRed(state, action) {
 			state.todoList = action.payload.updatedTodoList;
 		},
@@ -68,13 +71,14 @@ export const {
 	getAllTodoRed,
 	updateFirstLoadRed,
 	addNewTodoRed,
-	updateFilteredTodoListRed,
+	// updateFilteredTodoListRed,
 	updateTodoDoneStatusRed,
 	deleteTodoRed,
 	deleteAllDoneRed,
 	updateEditingStatusRed,
 	updateTodoListAfterEditRed,
 	resetIsEditingRed,
+	updateTodoListRed,
 } = todoSlice.actions;
 export const todoInitialState = initialTodoState;
 

@@ -1,60 +1,52 @@
 import React from "react";
-import {
-	useAppDispatch,
-	useAppSelector,
-	RootState,
-} from "@/reduxToolkit/indexStore/indexStore";
-
-import {
-	updateFilteredTodoListAction,
-	deleteAllDoneAction,
-} from "@/reduxToolkit/todo/todo-action/todoAction";
 
 interface propsTypes {
-	todoLength: number;
+	length: number;
+	onSelectTab: (tabName: string) => void;
+	selectedTab: string;
+	onDeleteAllDone: () => void;
 }
 
-const Summary: React.FC<propsTypes> = ({ todoLength }) => {
-	const dispatch = useAppDispatch();
-	const { selectedTab } = useAppSelector(
-		(state: RootState) => state.todoReducer
-	);
-
+const Summary: React.FC<propsTypes> = ({
+	length,
+	onSelectTab,
+	selectedTab,
+	onDeleteAllDone,
+}) => {
 	const deleteAllDoneHandler = () => {
-		dispatch(deleteAllDoneAction());
+		onDeleteAllDone();
 	};
 
 	const clickTabHandler = (e: React.MouseEvent<HTMLLIElement>) => {
 		const tabName = e.currentTarget.id;
-
-		dispatch(updateFilteredTodoListAction(tabName));
+		onSelectTab(tabName);
 	};
 	let classAll = selectedTab === "all" ? "bg-[#E3E9FF]" : "";
 	let classActive = selectedTab === "active" ? "bg-[#E3E9FF]" : "";
 	let classDone = selectedTab === "done" ? "bg-[#E3E9FF]" : "";
 
 	return (
-		<main className='flex text-[10px] w-[90%] justify-between bg-white  '>
-			<section className='border border-black p-2'>
-				{todoLength} {todoLength > 1 ? "tasks" : "task"}
+		<main className='flex text-[10px]  justify-between  '>
+			<section className='border border-black p-2 bg-white '>
+				{length} {length > 1 ? "tasks" : "task"}
 			</section>
-			<ul className='flex '>
+			<ul className='flex bg-white '>
 				<li
-					className={`border border-black p-2 ${classAll}`}
+					className={`border border-black p-2 ${classAll} cursor-pointer`}
 					id='all'
 					onClick={clickTabHandler}
 				>
 					All
 				</li>
 				<li
-					className={`border border-black p-2 ${classActive}`}
+					className={`border border-black p-2 ${classActive} cursor-pointer`}
 					id='active'
 					onClick={clickTabHandler}
 				>
 					Active
 				</li>
 				<li
-					className={`border border-black p-2 ${classDone}`}
+					className={`border border-black p-2 ${classDone} cursor-pointer`}
 					id='done'
 					onClick={clickTabHandler}
 				>
@@ -63,7 +55,7 @@ const Summary: React.FC<propsTypes> = ({ todoLength }) => {
 			</ul>
 
 			<button
-				className='border border-black p-2'
+				className='border border-black p-2 bg-white cursor-pointer'
 				onClick={deleteAllDoneHandler}
 			>
 				Delete All Done

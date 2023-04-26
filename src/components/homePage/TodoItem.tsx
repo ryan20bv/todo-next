@@ -6,6 +6,7 @@ import {
 	deleteTodoAction,
 	selectTodoToEditAction,
 } from "@/reduxToolkit/todo/todo-action/todoAction";
+import { setTodoDetailAction } from "@/reduxToolkit/todo/todo-action/detailAction";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
@@ -17,7 +18,6 @@ interface propsType {
 const TodoItem: React.FC<propsType> = ({ task, index }) => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const setDone: string = task.isDone ? "line-through" : "";
 
 	const setIsDoneHandler = (id: string) => {
 		dispatch(updateTodoIsDoneAction(id));
@@ -29,19 +29,20 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 		dispatch(deleteTodoAction(id));
 	};
 	const todoDetailHandler = (id: string) => {
-		console.log(id);
+		dispatch(setTodoDetailAction(id));
 		router.push(`/n/${id}`);
 	};
 
 	let summaryName = task.name;
-	if (task.name.length > 15) {
-		summaryName = task.name.substring(0, 15) + "...";
+	if (task.name.length > 14) {
+		summaryName = task.name.substring(0, 14) + "...";
 	}
-
+	let detailsTotal = task.details.length || 0;
+	const setDone: string = task.isDone ? "line-through" : "";
 	return (
 		<li
 			key={task._id}
-			className='flex py-2 px-4 w-full justify-between items-center '
+			className='flex px-2 w-full justify-between items-center '
 		>
 			<section className='flex items-center'>
 				<input
@@ -50,24 +51,26 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 					id=''
 					checked={task.isDone ? true : false}
 					onChange={() => setIsDoneHandler(task._id)}
+					className='cursor-pointer bg-black'
 				/>
 
 				<h3
-					className={`${setDone} px-2`}
+					className={`${setDone} px-2 cursor-pointer `}
 					onClick={() => todoDetailHandler(task._id)}
 				>
-					<span>{index + 1 + ". "}</span>
+					<span>{index + 1 + "."}</span>
 					{summaryName}
+					<span className='text-red-600 ml-2'>{`(${detailsTotal})`}</span>
 				</h3>
 			</section>
 			<section>
 				{!task.isDone && (
 					<button onClick={() => setIsEditingHandler(task)}>
-						<PencilSquareIcon className='text-blue-600 h-6' />
+						<PencilSquareIcon className='text-blue-600 h-6 hover:text-gray-400' />
 					</button>
 				)}
 				<button onClick={() => deleteHandler(task._id)}>
-					<TrashIcon className='text-red-600 h-6' />
+					<TrashIcon className='text-red-600 h-6 hover:text-gray-400' />
 				</button>
 			</section>
 		</li>
