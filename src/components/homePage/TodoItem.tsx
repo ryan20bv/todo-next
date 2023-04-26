@@ -34,8 +34,8 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 	};
 
 	let summaryName = task.name;
-	if (task.name.length > 15) {
-		summaryName = task.name.substring(0, 15) + "...";
+	if (task.name.length > 14) {
+		summaryName = task.name.substring(0, 14) + "...";
 	}
 	let detailsTotal = task.details.length || 0;
 	const setDone: string = task.isDone ? "line-through" : "";
@@ -51,25 +51,26 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 					id=''
 					checked={task.isDone ? true : false}
 					onChange={() => setIsDoneHandler(task._id)}
+					className='cursor-pointer bg-black'
 				/>
 
 				<h3
-					className={`${setDone} px-2`}
+					className={`${setDone} px-2 cursor-pointer `}
 					onClick={() => todoDetailHandler(task._id)}
 				>
-					<span>{index + 1 + ". "}</span>
+					<span>{index + 1 + "."}</span>
 					{summaryName}
-					<span>{`(${detailsTotal})`}</span>
+					<span className='text-red-600 ml-2'>{`(${detailsTotal})`}</span>
 				</h3>
 			</section>
 			<section>
 				{!task.isDone && (
 					<button onClick={() => setIsEditingHandler(task)}>
-						<PencilSquareIcon className='text-blue-600 h-6' />
+						<PencilSquareIcon className='text-blue-600 h-6 hover:text-gray-400' />
 					</button>
 				)}
 				<button onClick={() => deleteHandler(task._id)}>
-					<TrashIcon className='text-red-600 h-6' />
+					<TrashIcon className='text-red-600 h-6 hover:text-gray-400' />
 				</button>
 			</section>
 		</li>

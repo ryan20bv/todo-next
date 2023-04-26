@@ -33,13 +33,15 @@ const TodoList: React.FC<propsType> = ({ allTasks }) => {
 		<>
 			<div className='h-96 bg-white  overflow-y-scroll mb-4 border border-black '>
 				<ul className='p-3  h-full'>
-					{filteredTodoList.map((task, index) => (
-						<TodoItem
-							key={task._id}
-							task={task}
-							index={index}
-						/>
-					))}
+					{todoLength === 0 && <h2>Todo is Empty - {selectedTab}</h2>}
+					{todoLength > 0 &&
+						filteredTodoList.map((task, index) => (
+							<TodoItem
+								key={task._id}
+								task={task}
+								index={index}
+							/>
+						))}
 				</ul>
 			</div>
 			<Summary

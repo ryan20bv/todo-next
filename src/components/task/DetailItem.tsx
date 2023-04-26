@@ -39,17 +39,20 @@ const DetailItem: React.FC<propsTypes> = ({ detail }) => {
 					checked={detail.isDone ? true : false}
 					onChange={() => isDoneDetailHandler(detail._id)}
 				/>
-				<li className={`${setDone} px-2`}>
+				<li className={`${setDone} px-2 `}>
 					<p>{detail.item}</p>
 				</li>
 			</section>
 
 			<section>
-				<button onClick={() => setIsEditingHandler(detail)}>
-					<PencilSquareIcon className='text-blue-600 h-6' />
-				</button>
+				{!detail.isDone && (
+					<button onClick={() => setIsEditingHandler(detail)}>
+						<PencilSquareIcon className='text-blue-600 h-6 hover:text-gray-400' />
+					</button>
+				)}
+
 				<button onClick={() => deleteDetailHandler(detail._id)}>
-					<TrashIcon className='text-red-600 h-6' />
+					<TrashIcon className='text-red-600 h-6 hover:text-gray-400' />
 				</button>
 			</section>
 		</main>

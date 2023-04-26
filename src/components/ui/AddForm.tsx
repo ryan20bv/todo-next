@@ -46,7 +46,7 @@ const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
 				/>
 
 				<button>
-					<PlusCircleIcon className='text-green-600 h-8' />
+					<PlusCircleIcon className='text-green-600 h-8 ' />
 				</button>
 			</form>
 			<button onClick={cancelAddHandler}>

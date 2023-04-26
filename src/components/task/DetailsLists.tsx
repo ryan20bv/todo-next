@@ -39,15 +39,19 @@ const DetailsLists: React.FC<propsTypes> = ({ details, isLoading }) => {
 				{isLoading && <h1>Loading...</h1>}
 				{!isLoading && (
 					<>
-						<h3>Details</h3>
-						<ul className='py-2 px-2 list-disc h-full'>
-							{filteredList.map((detail) => (
-								<DetailItem
-									key={detail._id}
-									detail={detail}
-								/>
-							))}
-						</ul>
+						<h3>
+							{length > 0 ? "Details" : "No Details"} - {selectedTab}
+						</h3>
+						{length > 0 && (
+							<ul className='py-2 px-2 list-disc h-full'>
+								{filteredList.map((detail) => (
+									<DetailItem
+										key={detail._id}
+										detail={detail}
+									/>
+								))}
+							</ul>
+						)}
 					</>
 				)}
 			</div>

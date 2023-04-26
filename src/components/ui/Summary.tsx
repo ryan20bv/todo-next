@@ -26,27 +26,27 @@ const Summary: React.FC<propsTypes> = ({
 	let classDone = selectedTab === "done" ? "bg-[#E3E9FF]" : "";
 
 	return (
-		<main className='flex text-[10px]  justify-between bg-white  '>
-			<section className='border border-black p-2'>
+		<main className='flex text-[10px]  justify-between  '>
+			<section className='border border-black p-2 bg-white '>
 				{length} {length > 1 ? "tasks" : "task"}
 			</section>
-			<ul className='flex '>
+			<ul className='flex bg-white '>
 				<li
-					className={`border border-black p-2 ${classAll}`}
+					className={`border border-black p-2 ${classAll} cursor-pointer`}
 					id='all'
 					onClick={clickTabHandler}
 				>
 					All
 				</li>
 				<li
-					className={`border border-black p-2 ${classActive}`}
+					className={`border border-black p-2 ${classActive} cursor-pointer`}
 					id='active'
 					onClick={clickTabHandler}
 				>
 					Active
 				</li>
 				<li
-					className={`border border-black p-2 ${classDone}`}
+					className={`border border-black p-2 ${classDone} cursor-pointer`}
 					id='done'
 					onClick={clickTabHandler}
 				>
@@ -55,7 +55,7 @@ const Summary: React.FC<propsTypes> = ({
 			</ul>
 
 			<button
-				className='border border-black p-2'
+				className='border border-black p-2 bg-white cursor-pointer'
 				onClick={deleteAllDoneHandler}
 			>
 				Delete All Done
