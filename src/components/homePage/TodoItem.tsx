@@ -34,8 +34,8 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 	};
 
 	let summaryName = task.name;
-	if (task.name.length > 14) {
-		summaryName = task.name.substring(0, 14) + "...";
+	if (task.name.length > 12) {
+		summaryName = task.name.substring(0, 12) + "...";
 	}
 	let detailsTotal = task.details.length || 0;
 	const setDone: string = task.isDone ? "line-through" : "";
