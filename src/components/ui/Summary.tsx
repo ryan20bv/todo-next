@@ -1,30 +1,20 @@
 import React from "react";
-import {
-	useAppDispatch,
-	useAppSelector,
-	RootState,
-} from "@/reduxToolkit/indexStore/indexStore";
-
-import {
-	// updateFilteredTodoListAction,
-	deleteAllDoneAction,
-} from "@/reduxToolkit/todo/todo-action/todoAction";
 
 interface propsTypes {
 	length: number;
 	onSelectTab: (tabName: string) => void;
 	selectedTab: string;
+	onDeleteAllDone: () => void;
 }
 
 const Summary: React.FC<propsTypes> = ({
 	length,
 	onSelectTab,
 	selectedTab,
+	onDeleteAllDone,
 }) => {
-	const dispatch = useAppDispatch();
-
 	const deleteAllDoneHandler = () => {
-		dispatch(deleteAllDoneAction());
+		onDeleteAllDone();
 	};
 
 	const clickTabHandler = (e: React.MouseEvent<HTMLLIElement>) => {

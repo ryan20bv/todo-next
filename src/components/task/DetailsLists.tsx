@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import DetailItem from "./DetailItem";
 import Summary from "../ui/Summary";
+import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
+import { deleteAllDoneDetailAction } from "@/reduxToolkit/todo/todo-action/detailAction";
 
 import { ITodoDetails } from "@/DUMMY_DATA/MODEL";
 interface propsTypes {
@@ -9,10 +11,14 @@ interface propsTypes {
 }
 
 const DetailsLists: React.FC<propsTypes> = ({ details, isLoading }) => {
+	const dispatch = useAppDispatch();
 	const [selectedTab, setSelectedTab] = useState<string>("all");
 
 	const updateSelectedTabHandler = (tabName: string) => {
 		setSelectedTab(tabName);
+	};
+	const deleteAllDetailDoneHandler = () => {
+		dispatch(deleteAllDoneDetailAction());
 	};
 
 	let filteredList = details;
@@ -49,6 +55,7 @@ const DetailsLists: React.FC<propsTypes> = ({ details, isLoading }) => {
 				length={length}
 				onSelectTab={updateSelectedTabHandler}
 				selectedTab={selectedTab}
+				onDeleteAllDone={deleteAllDetailDoneHandler}
 			/>
 		</>
 	);

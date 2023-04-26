@@ -139,3 +139,17 @@ export const confirmDetailEditingAction =
 		);
 		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
 	};
+
+export const deleteAllDoneDetailAction =
+	() => async (dispatch: any, getState: any) => {
+		let { todoDetails } = getState().detailReducer;
+
+		let copyOfTodoDetails: ITask = { ...todoDetails };
+		let updatedDetailsAfterDeleteAllDone = todoDetails.details.filter(
+			(detail: ITodoDetails) => detail.isDone === false
+		);
+
+		copyOfTodoDetails.details = updatedDetailsAfterDeleteAllDone;
+		dispatch(updateTodoDetailsRed({ updatedTodoDetails: copyOfTodoDetails }));
+		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
+	};

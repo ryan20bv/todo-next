@@ -1,16 +1,31 @@
 import React, { useState } from "react";
 import TodoItem from "./TodoItem";
 import Summary from "../ui/Summary";
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
+
+import {
+	// updateFilteredTodoListAction,
+	deleteAllDoneAction,
+} from "@/reduxToolkit/todo/todo-action/todoAction";
+
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
 	allTasks: ITask[];
 }
 const TodoList: React.FC<propsType> = ({ allTasks }) => {
+	const dispatch = useAppDispatch();
 	const [selectedTab, setSelectedTab] = useState<string>("all");
 
 	const updateSelectedTabHandler = (tabName: string) => {
 		setSelectedTab(tabName);
+	};
+	const deleteAllDoneTodoHandler = () => {
+		dispatch(deleteAllDoneAction());
 	};
 
 	let filteredTodoList = allTasks;
@@ -38,6 +53,7 @@ const TodoList: React.FC<propsType> = ({ allTasks }) => {
 				length={todoLength}
 				selectedTab={selectedTab}
 				onSelectTab={updateSelectedTabHandler}
+				onDeleteAllDone={deleteAllDoneTodoHandler}
 			/>
 		</>
 	);
