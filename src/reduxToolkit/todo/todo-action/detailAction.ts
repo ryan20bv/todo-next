@@ -8,6 +8,7 @@ import {
 	updateTodoDetailsRed,
 	updateDetailEditingStatusRed,
 	resetIsDetailEditingRed,
+	updateTodoDetailsAfterEditRed,
 } from "../todo-slice/detailSlice";
 import { updateFirstLoadRed } from "../todo-slice/todoSlice";
 import {
@@ -113,3 +114,28 @@ export const selectDetailToEditAction =
 export const cancelDetailEditingAction = () => async (dispatch: any) => {
 	dispatch(resetIsDetailEditingRed({}));
 };
+
+export const confirmDetailEditingAction =
+	(updatedDetail: string) => async (dispatch: any, getState: any) => {
+		let { todoDetails, detailToEdit } = getState().detailReducer;
+		let copyOfTodoDetails = { ...todoDetails };
+
+		let copyOfDetails: ITodoDetails[] = todoDetails.details.map(
+			(detail: ITodoDetails) => ({
+				...detail,
+			})
+		);
+
+		let detailIndex = copyOfDetails.findIndex(
+			(detail: ITodoDetails) => detail._id === detailToEdit._id
+		);
+
+		copyOfDetails[detailIndex].item = updatedDetail;
+
+		copyOfTodoDetails.details = copyOfDetails;
+
+		dispatch(
+			updateTodoDetailsAfterEditRed({ updatedTodoDetails: copyOfTodoDetails })
+		);
+		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
+	};

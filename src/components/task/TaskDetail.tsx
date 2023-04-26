@@ -12,6 +12,7 @@ import {
 	setTodoDetailAction,
 	addNewDetailsAction,
 	cancelDetailEditingAction,
+	confirmDetailEditingAction,
 } from "@/reduxToolkit/todo/todo-action/detailAction";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
@@ -70,7 +71,7 @@ const TaskDetail = () => {
 		// router.reload();
 	};
 	const editDetailHandler = (detail: string) => {
-		console.log(detail);
+		dispatch(confirmDetailEditingAction(detail));
 	};
 	const cancelDetailEditingHandler = () => {
 		dispatch(cancelDetailEditingAction());
@@ -92,7 +93,7 @@ const TaskDetail = () => {
 			{isDetailEditing && (
 				<EditForm
 					detailToEdit={detailToEdit}
-					onEditing={editDetailHandler}
+					confirmEditing={editDetailHandler}
 					isDetailEditing={isDetailEditing}
 					onCancel={cancelDetailEditingHandler}
 				/>

@@ -9,7 +9,7 @@ import { CheckIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 interface propsTypes {
 	todoToEdit?: ITask;
-	onEditing: (input: string) => void;
+	confirmEditing: (input: string) => void;
 	isEditing?: boolean;
 	detailToEdit?: ITodoDetails;
 	isDetailEditing?: boolean;
@@ -18,7 +18,7 @@ interface propsTypes {
 
 const EditForm: React.FC<propsTypes> = ({
 	todoToEdit,
-	onEditing,
+	confirmEditing,
 	isEditing,
 	isDetailEditing,
 	detailToEdit,
@@ -35,7 +35,7 @@ const EditForm: React.FC<propsTypes> = ({
 			console.log("no value");
 			return;
 		}
-		onEditing(enteredInput);
+		confirmEditing(enteredInput);
 		inputRef.current.value = "";
 	};
 

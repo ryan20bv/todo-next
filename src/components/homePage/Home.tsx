@@ -70,7 +70,7 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			{isEditing && (
 				<EditForm
 					todoToEdit={todoToEdit}
-					onEditing={editTodoHandler}
+					confirmEditing={editTodoHandler}
 					isEditing={isEditing}
 					onCancel={cancelEditingHandler}
 				/>

@@ -50,6 +50,11 @@ const detailTodoSlice = createSlice({
 			state.isDetailEditing = false;
 			state.detailToEdit = {} as ITodoDetails;
 		},
+		updateTodoDetailsAfterEditRed(state, action) {
+			state.isDetailEditing = false;
+			state.detailToEdit = {} as ITodoDetails;
+			state.todoDetails = action.payload.updatedTodoDetails;
+		},
 	},
 });
 
@@ -62,6 +67,7 @@ export const {
 	updateTodoDetailsRed,
 	updateDetailEditingStatusRed,
 	resetIsDetailEditingRed,
+	updateTodoDetailsAfterEditRed,
 } = detailTodoSlice.actions;
 
 export const detailInitialState = initialDetailState;
