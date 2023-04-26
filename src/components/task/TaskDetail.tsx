@@ -5,7 +5,6 @@ import CardHeader from "../ui/CardHeader";
 import AddForm from "../ui/AddForm";
 import ListContainer from "../ui/ListContainer";
 import DetailsLists from "./DetailsLists";
-import Summary from "../ui/Summary";
 import EditForm from "../ui/EditForm";
 
 import {
@@ -37,7 +36,7 @@ const TaskDetail = () => {
 				dispatch(setTodoDetailAction(taskid));
 			}
 		}
-	}, [taskid]);
+	}, [taskid, dispatch]);
 
 	let index: string | number = "";
 	let title = <div></div>;
@@ -56,7 +55,6 @@ const TaskDetail = () => {
 	}
 
 	const addDetailsHandler = (enteredDetail: string) => {
-		console.log(enteredDetail, taskid);
 		let id = "";
 		if (typeof taskid === "string") {
 			id = taskid;
@@ -104,7 +102,6 @@ const TaskDetail = () => {
 					isLoading={isLoading}
 				/>
 			</ListContainer>
-			{/* <Summary length={todoLength} /> */}
 		</Card>
 	);
 };

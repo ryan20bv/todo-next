@@ -1,16 +1,9 @@
 import React, { useState } from "react";
 import TodoItem from "./TodoItem";
 import Summary from "../ui/Summary";
-import {
-	useAppDispatch,
-	useAppSelector,
-	RootState,
-} from "@/reduxToolkit/indexStore/indexStore";
+import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
 
-import {
-	// updateFilteredTodoListAction,
-	deleteAllDoneAction,
-} from "@/reduxToolkit/todo/todo-action/todoAction";
+import { deleteAllDoneAction } from "@/reduxToolkit/todo/todo-action/todoAction";
 
 import { ITask } from "@/DUMMY_DATA/MODEL";
 

@@ -1,7 +1,5 @@
 import React, { useRef } from "react";
 import { PlusCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
-import { addNewTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
 
 interface propsTypes {
 	onAddHandler: (newTask: string) => void;
@@ -9,7 +7,6 @@ interface propsTypes {
 }
 
 const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
-	const dispatch = useAppDispatch();
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const submitTodoHandler = (e: React.FormEvent<HTMLFormElement>) => {

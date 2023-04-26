@@ -19,7 +19,6 @@ const Summary: React.FC<propsTypes> = ({
 
 	const clickTabHandler = (e: React.MouseEvent<HTMLLIElement>) => {
 		const tabName = e.currentTarget.id;
-		console.log("here", tabName);
 		onSelectTab(tabName);
 	};
 	let classAll = selectedTab === "all" ? "bg-[#E3E9FF]" : "";

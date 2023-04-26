@@ -17,7 +17,6 @@ const DetailItem: React.FC<propsTypes> = ({ detail }) => {
 	const setDone: string = detail.isDone ? "line-through" : "";
 
 	const isDoneDetailHandler = (detail_id: string) => {
-		// console.log(detail_id);
 		dispatch(toggleDetailIsDoneAction(detail_id));
 	};
 	const deleteDetailHandler = (detail_id: string) => {

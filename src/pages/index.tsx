@@ -1,7 +1,4 @@
 import { Fragment } from "react";
-// import { Inter } from 'next/font/google'
-
-// const inter = Inter({ subsets: ['latin'] })
 import Home from "@/components/homePage/Home";
 import { getAllTasks } from "@/DUMMY_DATA/DUMMY_DATA";
 import { ITask } from "@/DUMMY_DATA/MODEL";

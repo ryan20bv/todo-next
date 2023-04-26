@@ -1,12 +1,6 @@
 import React from "react";
-import { useRouter } from "next/router";
+
 import { ChevronDoubleLeftIcon, Bars3Icon } from "@heroicons/react/24/outline";
-import {
-	useAppDispatch,
-	useAppSelector,
-	RootState,
-} from "@/reduxToolkit/indexStore/indexStore";
-import { resetIsInDetailsAction } from "@/reduxToolkit/todo/todo-action/detailAction";
 
 interface propsTypes {
 	title: React.ReactElement;
@@ -15,9 +9,6 @@ interface propsTypes {
 }
 
 const CardHeader: React.FC<propsTypes> = (props) => {
-	const dispatch = useAppDispatch();
-	const router = useRouter();
-
 	const clickHandler = async () => {
 		props.onIconHandler();
 	};

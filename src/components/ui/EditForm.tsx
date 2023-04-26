@@ -1,9 +1,4 @@
 import React, { useRef } from "react";
-import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
-import {
-	confirmEditAction,
-	cancelEditTodoAction,
-} from "@/reduxToolkit/todo/todo-action/todoAction";
 import { ITask, ITodoDetails } from "@/DUMMY_DATA/MODEL";
 import { CheckIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
@@ -24,7 +19,6 @@ const EditForm: React.FC<propsTypes> = ({
 	detailToEdit,
 	onCancel,
 }) => {
-	const dispatch = useAppDispatch();
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const submitTodoEditHandler = (e: React.FormEvent<HTMLFormElement>) => {

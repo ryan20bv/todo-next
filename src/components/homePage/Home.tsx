@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
-import { v4 as uuidv4 } from "uuid";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -13,7 +12,6 @@ import AddForm from "../ui/AddForm";
 import EditForm from "../ui/EditForm";
 import ListContainer from "../ui/ListContainer";
 import TodoList from "./TodoList";
-import Summary from "../ui/Summary";
 import {
 	addNewTodoAction,
 	confirmEditAction,
@@ -78,8 +76,6 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 				{firstLoad && <TodoList allTasks={allTasks} />}
 				{!firstLoad && <TodoList allTasks={todoList} />}
 			</ListContainer>
-
-			{/* <Summary todoLength={todoLength} /> */}
 		</Card>
 	);
 };
