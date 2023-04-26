@@ -1,10 +1,12 @@
 import React, { useRef } from "react";
 import { PlusCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
-import { addNewTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
 
-const TodoAddForm = () => {
-	const dispatch = useAppDispatch();
+interface propsTypes {
+	onAddHandler: (newTask: string) => void;
+	placeHolder: string;
+}
+
+const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const submitTodoHandler = (e: React.FormEvent<HTMLFormElement>) => {
@@ -15,7 +17,7 @@ const TodoAddForm = () => {
 			return;
 		}
 
-		dispatch(addNewTodoAction(enteredInput));
+		onAddHandler(enteredInput);
 		inputRef.current.value = "";
 	};
 
@@ -29,7 +31,7 @@ const TodoAddForm = () => {
 	};
 
 	return (
-		<section className=' my-4  w-[90%] flex '>
+		<section className=' mt-4  w-full px-3 flex '>
 			<form
 				action=''
 				onSubmit={submitTodoHandler}
@@ -37,14 +39,14 @@ const TodoAddForm = () => {
 			>
 				<input
 					type='text'
-					placeholder='add todo'
+					placeholder={placeHolder}
 					required
 					ref={inputRef}
 					className='py-2 px-2 focus:outline-none w-[85%] border border-black '
 				/>
 
 				<button>
-					<PlusCircleIcon className='text-green-600 h-8' />
+					<PlusCircleIcon className='text-green-600 h-8 ' />
 				</button>
 			</form>
 			<button onClick={cancelAddHandler}>
@@ -54,4 +56,4 @@ const TodoAddForm = () => {
 	);
 };
 
-export default TodoAddForm;
+export default AddForm;
