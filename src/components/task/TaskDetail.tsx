@@ -99,10 +99,12 @@ const TaskDetail = () => {
 				/>
 			)}
 			<ListContainer>
-				{isLoading && <h1>Loading...</h1>}
-				{!isLoading && <DetailsLists details={todoDetails?.details} />}
+				<DetailsLists
+					details={todoDetails?.details}
+					isLoading={isLoading}
+				/>
 			</ListContainer>
-			<Summary todoLength={todoLength} />
+			{/* <Summary length={todoLength} /> */}
 		</Card>
 	);
 };

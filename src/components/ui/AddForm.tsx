@@ -34,7 +34,7 @@ const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
 	};
 
 	return (
-		<section className=' my-4  w-[95%] flex '>
+		<section className=' mt-4  w-full px-3 flex '>
 			<form
 				action=''
 				onSubmit={submitTodoHandler}

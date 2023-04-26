@@ -43,7 +43,7 @@ const EditForm: React.FC<propsTypes> = ({
 		onCancel();
 	};
 	return (
-		<section className=' my-4  w-[90%] flex '>
+		<section className=' mt-4  w-full px-3 flex '>
 			<form
 				action=''
 				onSubmit={submitTodoEditHandler}

@@ -27,7 +27,7 @@ interface propsType {
 
 const Home: React.FC<propsType> = ({ allTasks }) => {
 	const dispatch = useAppDispatch();
-	const { filteredTodoList, firstLoad, isEditing, todoToEdit } = useAppSelector(
+	const { todoList, firstLoad, isEditing, todoToEdit } = useAppSelector(
 		(state: RootState) => state.todoReducer
 	);
 
@@ -37,7 +37,6 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 		}
 	}, [dispatch, firstLoad]);
 
-	let todoLength: number = firstLoad ? allTasks.length : filteredTodoList.length;
 	const title = <h1>TODO nextJS</h1>;
 
 	const addTodoHandler = (task: string) => {
@@ -77,29 +76,12 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			)}
 			<ListContainer>
 				{firstLoad && <TodoList allTasks={allTasks} />}
-				{!firstLoad && <TodoList allTasks={filteredTodoList} />}
+				{!firstLoad && <TodoList allTasks={todoList} />}
 			</ListContainer>
 
-			<Summary todoLength={todoLength} />
+			{/* <Summary todoLength={todoLength} /> */}
 		</Card>
 	);
 };
 
 export default Home;
-
-// return (
-// 	<main className=' pt-2 pb-6 flex justify-center '>
-// 		<div className='flex flex-col items-center w-[90%] sm:w-96 border border-black'>
-// 			<section className='bg-[#AF7EEB] w-full py-2 px-3 text-white text-center'>
-// 				<h1>TODO nextJS</h1>
-// 			</section>
-
-// 			{!isEditing && <TodoAddForm />}
-// 			{isEditing && <TodoEditForm todoToEdit={todoToEdit} />}
-// 			{firstLoad && <TodoList allTasks={allTasks} />}
-// 			{!firstLoad && <TodoList allTasks={filteredTodoList} />}
-
-// 			<Summary todoLength={todoLength} />
-// 		</div>
-// 	</main>
-// );

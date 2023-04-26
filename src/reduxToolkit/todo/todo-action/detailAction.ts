@@ -13,7 +13,7 @@ import {
 import { updateFirstLoadRed } from "../todo-slice/todoSlice";
 import {
 	updateTodoListAction,
-	updateFilteredTodoListAction,
+	// updateFilteredTodoListAction,
 } from "./todoAction";
 import { getAllTodoRed } from "../todo-slice/todoSlice";
 import { v4 as uuidv4 } from "uuid";
@@ -31,8 +31,8 @@ export const setTodoDetailAction =
 				todoList = JSON.parse(allTodosAsString);
 				dispatch(updateFirstLoadRed(false));
 
-				await dispatch(getAllTodoRed({ allTodos: todoList }));
-				dispatch(updateFilteredTodoListAction(selectedTab));
+				dispatch(getAllTodoRed({ allTodos: todoList }));
+				// dispatch(updateFilteredTodoListAction(selectedTab));
 			}
 		}
 		const foundTodo = todoList.find((todo: ITask) => todo._id === id);

@@ -6,19 +6,22 @@ import {
 } from "@/reduxToolkit/indexStore/indexStore";
 
 import {
-	updateFilteredTodoListAction,
+	// updateFilteredTodoListAction,
 	deleteAllDoneAction,
 } from "@/reduxToolkit/todo/todo-action/todoAction";
 
 interface propsTypes {
-	todoLength: number;
+	length: number;
+	onSelectTab: (tabName: string) => void;
+	selectedTab: string;
 }
 
-const Summary: React.FC<propsTypes> = ({ todoLength }) => {
+const Summary: React.FC<propsTypes> = ({
+	length,
+	onSelectTab,
+	selectedTab,
+}) => {
 	const dispatch = useAppDispatch();
-	const { selectedTab } = useAppSelector(
-		(state: RootState) => state.todoReducer
-	);
 
 	const deleteAllDoneHandler = () => {
 		dispatch(deleteAllDoneAction());
@@ -26,17 +29,17 @@ const Summary: React.FC<propsTypes> = ({ todoLength }) => {
 
 	const clickTabHandler = (e: React.MouseEvent<HTMLLIElement>) => {
 		const tabName = e.currentTarget.id;
-
-		dispatch(updateFilteredTodoListAction(tabName));
+		console.log("here", tabName);
+		onSelectTab(tabName);
 	};
 	let classAll = selectedTab === "all" ? "bg-[#E3E9FF]" : "";
 	let classActive = selectedTab === "active" ? "bg-[#E3E9FF]" : "";
 	let classDone = selectedTab === "done" ? "bg-[#E3E9FF]" : "";
 
 	return (
-		<main className='flex text-[10px] w-[95%] justify-between bg-white  '>
+		<main className='flex text-[10px]  justify-between bg-white  '>
 			<section className='border border-black p-2'>
-				{todoLength} {todoLength > 1 ? "tasks" : "task"}
+				{length} {length > 1 ? "tasks" : "task"}
 			</section>
 			<ul className='flex '>
 				<li
