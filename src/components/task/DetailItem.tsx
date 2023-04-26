@@ -28,9 +28,9 @@ const DetailItem: React.FC<propsTypes> = ({ detail }) => {
 	return (
 		<main
 			key={detail._id}
-			className='flex px-2 w-full justify-between items-center '
+			className='flex px-1 w-full justify-between items-center '
 		>
-			<section className='flex'>
+			<section className='flex w-4/5 '>
 				<input
 					className='mr-6'
 					type='checkbox'
@@ -39,8 +39,8 @@ const DetailItem: React.FC<propsTypes> = ({ detail }) => {
 					checked={detail.isDone ? true : false}
 					onChange={() => isDoneDetailHandler(detail._id)}
 				/>
-				<li className={`${setDone} px-2 `}>
-					<p>{detail.item}</p>
+				<li className={`${setDone} pl-0 pr-1`}>
+					<p className=''>{detail.item}</p>
 				</li>
 			</section>
 
