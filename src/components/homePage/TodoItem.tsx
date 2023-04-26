@@ -34,15 +34,15 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 	};
 
 	let summaryName = task.name;
-	if (task.name.length > 12) {
-		summaryName = task.name.substring(0, 12) + "...";
+	if (task.name.length > 10) {
+		summaryName = task.name.substring(0, 10) + "...";
 	}
 	let detailsTotal = task.details.length || 0;
 	const setDone: string = task.isDone ? "line-through" : "";
 	return (
 		<li
 			key={task._id}
-			className='flex px-2 w-full justify-between items-center '
+			className='flex px-1 w-full justify-between items-center '
 		>
 			<section className='flex items-center'>
 				<input
@@ -55,7 +55,7 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 				/>
 
 				<h3
-					className={`${setDone} px-2 cursor-pointer `}
+					className={`${setDone} pl-2 pr-1 cursor-pointer `}
 					onClick={() => todoDetailHandler(task._id)}
 				>
 					<span>{index + 1 + "."}</span>
