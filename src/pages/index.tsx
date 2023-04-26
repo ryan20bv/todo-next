@@ -22,7 +22,7 @@ const HomePage: React.FC<propsType> = ({ allTasks }) => {
 	);
 };
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
 	const allTodos = getAllTasks();
 
 	return {
