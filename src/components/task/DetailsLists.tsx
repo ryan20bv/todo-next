@@ -34,11 +34,11 @@ const DetailsLists: React.FC<propsTypes> = ({ details, isLoading }) => {
 
 	let length: number = filteredList?.length;
 	return (
-		<>
-			<div className='h-96 bg-white  overflow-y-scroll mb-4 border border-black p-2'>
+		<div className=''>
+			<div className='h-96  bg-white   mb-4 border border-black p-2 overflow-y-scroll'>
 				{isLoading && <h1>Loading...</h1>}
 				{!isLoading && (
-					<>
+					<div>
 						<h3>
 							{length > 0 ? "Details" : "No Details"} - {selectedTab}
 						</h3>
@@ -52,7 +52,7 @@ const DetailsLists: React.FC<propsTypes> = ({ details, isLoading }) => {
 								))}
 							</ul>
 						)}
-					</>
+					</div>
 				)}
 			</div>
 			<Summary
@@ -61,7 +61,7 @@ const DetailsLists: React.FC<propsTypes> = ({ details, isLoading }) => {
 				selectedTab={selectedTab}
 				onDeleteAllDone={deleteAllDetailDoneHandler}
 			/>
-		</>
+		</div>
 	);
 };
 
