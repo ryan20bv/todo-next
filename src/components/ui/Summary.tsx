@@ -35,6 +35,7 @@ const Summary: React.FC<propsTypes> = ({
 					className={`border border-black p-2 ${classAll} cursor-pointer`}
 					id='all'
 					onClick={clickTabHandler}
+					data-testid={`filter_all`}
 				>
 					All
 				</li>
@@ -42,6 +43,7 @@ const Summary: React.FC<propsTypes> = ({
 					className={`border border-black p-2 ${classActive} cursor-pointer`}
 					id='active'
 					onClick={clickTabHandler}
+					data-testid={`filter_active`}
 				>
 					Active
 				</li>
@@ -49,6 +51,7 @@ const Summary: React.FC<propsTypes> = ({
 					className={`border border-black p-2 ${classDone} cursor-pointer`}
 					id='done'
 					onClick={clickTabHandler}
+					data-testid={`filter_done`}
 				>
 					Done
 				</li>
@@ -57,6 +60,7 @@ const Summary: React.FC<propsTypes> = ({
 			<button
 				className='border border-black p-2 bg-white cursor-pointer'
 				onClick={deleteAllDoneHandler}
+				data-testid={`delete_all_done_button`}
 			>
 				Delete All Done
 			</button>

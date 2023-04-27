@@ -52,14 +52,21 @@ const EditForm: React.FC<propsTypes> = ({
 					}
 					ref={inputRef}
 					className='py-2 px-2 focus:outline-none w-[85%] border border-black '
+					id={`edit_input`}
 				/>
 
 				<button>
-					<CheckIcon className='text-green-600 h-8' />
+					<CheckIcon
+						className='text-green-600 h-8'
+						data-testid={`edit_confirm_button`}
+					/>
 				</button>
 			</form>
 			<button onClick={cancelEditHandler}>
-				<XCircleIcon className='text-red-600 h-8 mx-2' />
+				<XCircleIcon
+					className='text-red-600 h-8 mx-2'
+					data-testid={`edit_cancel_button`}
+				/>
 			</button>
 		</section>
 	);
