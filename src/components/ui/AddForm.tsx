@@ -43,14 +43,22 @@ const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
 					required
 					ref={inputRef}
 					className='py-2 px-2 focus:outline-none w-[85%] border border-black '
+					id={`add_input`}
+					// data-testid={`filter_active`}
 				/>
 
 				<button>
-					<PlusCircleIcon className='text-green-600 h-8 ' />
+					<PlusCircleIcon
+						className='text-green-600 h-8 '
+						data-testid={`add_confirm_button`}
+					/>
 				</button>
 			</form>
 			<button onClick={cancelAddHandler}>
-				<XCircleIcon className='text-red-600 h-8 mx-2' />
+				<XCircleIcon
+					className='text-red-600 h-8 mx-2'
+					data-testid={`add_cancel_button`}
+				/>
 			</button>
 		</section>
 	);

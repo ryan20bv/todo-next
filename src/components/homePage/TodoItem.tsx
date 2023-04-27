@@ -57,6 +57,7 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 				<h3
 					className={`${setDone} pl-2 pr-1 cursor-pointer `}
 					onClick={() => todoDetailHandler(task._id)}
+					data-testid={`task_${task.name}`}
 				>
 					<span>{index + 1 + "."}</span>
 					{summaryName}
@@ -65,12 +66,22 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 			</section>
 			<section>
 				{!task.isDone && (
-					<button onClick={() => setIsEditingHandler(task)}>
-						<PencilSquareIcon className='text-blue-600 h-6 hover:text-gray-400' />
+					<button
+						onClick={() => setIsEditingHandler(task)}
+						// data-testid={`task_edit_button_${task.name}`}
+						// title={`task_edit_button_${task.name}`}
+					>
+						<PencilSquareIcon
+							className='text-blue-600 h-6 hover:text-gray-400'
+							data-testid={`task_edit_button_${task.name}`}
+						/>
 					</button>
 				)}
 				<button onClick={() => deleteHandler(task._id)}>
-					<TrashIcon className='text-red-600 h-6 hover:text-gray-400' />
+					<TrashIcon
+						className='text-red-600 h-6 hover:text-gray-400'
+						data-testid={`task_delete_button_${task.name}`}
+					/>
 				</button>
 			</section>
 		</li>
