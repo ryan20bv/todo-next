@@ -88,17 +88,23 @@ export const updateLisOfTodoAction =
 		const todoDetailsIndex = copyOfTodoList.findIndex(
 			(todo: ITask) => todo._id === updatedTodo._id
 		);
-		copyOfTodoList[todoDetailsIndex] = { ...updatedTodo };
+		let todoIsDone: boolean = updatedTodo.details.every(
+			(detail: ITodoDetails) => detail.isDone === true
+		);
+		const copyOfSingleTodo: ITask = { ...updatedTodo };
+		copyOfSingleTodo.isDone = todoIsDone;
+		copyOfTodoList[todoDetailsIndex] = { ...copyOfSingleTodo };
 		dispatch(updateTodoListAction(copyOfTodoList));
 	};
 
 export const deleteDetailAction =
 	(detail_id: string) => async (dispatch: any, getState: any) => {
 		let { todoDetails } = getState().detailReducer;
-		let copyOfTodoDetails = { ...todoDetails };
+		let copyOfTodoDetails: ITask = { ...todoDetails };
 		let updatedTodoDetails = todoDetails.details.filter(
 			(detail: ITodoDetails) => detail._id !== detail_id
 		);
+
 		copyOfTodoDetails.details = [...updatedTodoDetails];
 		dispatch(updateTodoDetailsRed({ updatedTodoDetails: copyOfTodoDetails }));
 		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
