@@ -26,7 +26,7 @@ export const DUMMY_TODOS: ITask[] = [
 	{
 		_id: "t2",
 		name: "Exercise",
-		isDone: true,
+		isDone: false,
 		details: [
 			{
 				_id: "e1",
