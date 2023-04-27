@@ -45,14 +45,14 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 			className='flex px-1 w-full justify-between items-center '
 		>
 			<section className='flex items-center'>
-				<input
+				{/* <input
 					type='checkbox'
 					name=''
 					id=''
 					checked={task.isDone ? true : false}
 					onChange={() => setIsDoneHandler(task._id)}
 					className='cursor-pointer bg-black'
-				/>
+				/> */}
 
 				<h3
 					className={`${setDone} pl-2 pr-1 cursor-pointer `}
