@@ -4,13 +4,15 @@ import { ChevronDoubleLeftIcon, Bars3Icon } from "@heroicons/react/24/outline";
 
 interface propsTypes {
 	title: React.ReactElement;
-	onIconHandler: () => void;
-	isInDetails: boolean;
+	onIconHandler?: () => void;
+	isInDetails?: boolean;
 }
 
 const CardHeader: React.FC<propsTypes> = (props) => {
 	const clickBackHandler = async () => {
-		props.onIconHandler();
+		if (props.onIconHandler) {
+			props.onIconHandler();
+		}
 	};
 
 	const icon = props.isInDetails ? (
