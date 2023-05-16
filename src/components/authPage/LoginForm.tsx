@@ -2,13 +2,25 @@ import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
-import { error } from "console";
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
+import {
+	logInAction,
+	authErrorAction,
+} from "@/reduxToolkit/auth/auth-action/authAction";
 
 interface propsTypes {
 	onToggle: () => void;
 }
 
 const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
+	const dispatch = useAppDispatch();
+	const { isAuthenticated, isSendingData, authError } = useAppSelector(
+		(state: RootState) => state.authReducer
+	);
 	const Router = useRouter();
 	const [errorMessage, setErrorMessage] = useState<string>("");
 	const emailInputRef = useRef<HTMLInputElement>(null);
@@ -17,7 +29,6 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 	const submitLoginFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setErrorMessage("");
-		setIsLoggingIn(true);
 
 		const enteredEmail = emailInputRef.current?.value;
 		const enteredPassword = passwordInputRef.current?.value;
@@ -27,8 +38,8 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 			enteredEmail.trim() === "" ||
 			!enteredEmail.includes("@")
 		) {
-			setErrorMessage("Invalid email!");
-			setIsLoggingIn(false);
+			// setErrorMessage("Invalid email!");
+			dispatch(authErrorAction("Invalid email!"));
 			return;
 		}
 		if (
@@ -36,37 +47,42 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 			enteredPassword.trim() === "" ||
 			enteredPassword.length < 6
 		) {
-			console.log("Invalid form");
-			setErrorMessage("Invalid password. Min of 6 characters required!");
-			setIsLoggingIn(false);
+			// console.log("Invalid form");
+			// setErrorMessage("Invalid password. Min of 6 characters required!");
+			dispatch(authErrorAction("Invalid password. Min of 6 characters required!"));
 			return;
 		}
 
-		const loginHandler = async () => {
-			let result;
-			try {
-				result = await signIn("credentials", {
-					redirect: false,
-					email: enteredEmail,
-					password: enteredPassword,
-				});
-				console.log(result);
-				if (!result?.ok) {
-					throw new Error("Invalid Email or password!");
-				}
-				Router.replace("/t");
-				setIsLoggingIn(false);
-			} catch (err: any) {
-				console.log(err.message);
-				setErrorMessage(err.message);
-				setIsLoggingIn(false);
-			}
-		};
-		loginHandler();
+		dispatch(logInAction(enteredEmail, enteredPassword));
+		// const loginHandler = async () => {
+		// 	let result;
+
+		// try {
+		// 	result = await signIn("credentials", {
+		// 		redirect: false,
+		// 		email: enteredEmail,
+		// 		password: enteredPassword,
+		// 	});
+		// 	console.log(result);
+		// 	if (!result?.ok) {
+		// 		throw new Error("Invalid Email or password!");
+		// 	}
+		// 	Router.replace("/t");
+		// 	setIsLoggingIn(false);
+		// } catch (err: any) {
+		// 	console.log(err.message);
+		// 	setErrorMessage(err.message);
+		// 	setIsLoggingIn(false);
+		// }
+		// };
+		// loginHandler();
 	};
 
+	if (isAuthenticated) {
+		Router.replace("/t");
+	}
 	return (
-		<section className='my-8  '>
+		<section className='my-8  w-3/4'>
 			<form onSubmit={submitLoginFormHandler}>
 				<div className='divide-y divide-gray-200'>
 					<div className=' text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7'>
@@ -107,20 +123,25 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 								Password
 							</label>
 						</div>
-						{errorMessage && errorMessage.trim().length > 0 && <p>{errorMessage}</p>}
+						{authError && authError.trim().length > 0 && (
+							<p className='text-red-500 text-xs text-center'>{authError}</p>
+						)}
 						<div className='relative '>
-							{isLoggingIn && (
-								<button className='bg-blue-500 text-white rounded-md px-4 py-1 flex items-center disabled'>
+							{isSendingData && (
+								<button
+									className='bg-blue-500 text-white rounded-md px-4 py-1 flex items-center '
+									disabled
+								>
 									<div
 										className='inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]'
 										role='status'
 									>
 										<span className='!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]'></span>
 									</div>
-									<p className='ml-4'>LOADING...</p>
+									<p className='ml-4'>Logging In...</p>
 								</button>
 							)}
-							{!isLoggingIn && (
+							{!isSendingData && (
 								<button className='bg-blue-500 text-white rounded-md px-4 py-1'>
 									LOGIN
 								</button>

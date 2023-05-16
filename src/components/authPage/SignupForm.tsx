@@ -96,7 +96,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 		submitToApi();
 	};
 	return (
-		<section className='my-8 '>
+		<section className='my-8  w-3/4'>
 			<form onSubmit={submitSignUpFormHandler}>
 				<div className='divide-y divide-gray-200'>
 					<div className=' text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7'>
