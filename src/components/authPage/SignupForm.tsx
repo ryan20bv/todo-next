@@ -176,7 +176,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 						{!isDataValid && (
 							<p className='text-red-500'>Fill up the form properly!</p>
 						)}
-						<div className='relative '>
+						<div className='flex justify-end'>
 							{isSigningUp && (
 								<button className='bg-blue-500 text-white rounded-md px-4 py-1 flex items-center disabled'>
 									<div

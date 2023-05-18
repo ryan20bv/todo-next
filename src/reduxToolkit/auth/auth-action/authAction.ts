@@ -38,15 +38,25 @@ export const authErrorAction =
 	(message: string) => async (dispatch: any, getState: any) => {
 		dispatch(updateAuthError({ authError: message }));
 	};
+export const clearErrorAction = () => async (dispatch: any, getState: any) => {
+	dispatch(updateAuthError({ authError: "" }));
+};
 
 export const authDataAction =
 	(data: authDataType) => async (dispatch: any, getState: any) => {
 		// console.log(data);
 		dispatch(updateIsAuthDataState({ authData: data }));
+		dispatch(updateIsAuthState({ isAuthenticated: true }));
 	};
 
 export const clearAuthDataAction =
 	() => async (dispatch: any, getState: any) => {
 		// console.log(data);
 		dispatch(updateIsAuthDataState({ authData: {} as authDataType }));
+		dispatch(clearErrorAction());
+	};
+
+export const toggleSendingDataAction =
+	(status: boolean) => async (dispatch: any, getState: any) => {
+		dispatch(toggleSendingData({ isSendingData: status }));
 	};

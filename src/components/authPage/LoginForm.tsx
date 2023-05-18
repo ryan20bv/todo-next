@@ -126,7 +126,7 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 						{authError && authError.trim().length > 0 && (
 							<p className='text-red-500 text-xs text-center'>{authError}</p>
 						)}
-						<div className='relative '>
+						<div className='flex justify-end '>
 							{isSendingData && (
 								<button
 									className='bg-blue-500 text-white rounded-md px-4 py-1 flex items-center '
