@@ -19,7 +19,7 @@ export const logInAction =
 				email: emailInput,
 				password: passwordInput,
 			});
-			console.log(result);
+			// console.log(result);
 			if (!result?.ok) {
 				throw new Error("Invalid Email or password!");
 			}
