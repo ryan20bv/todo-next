@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -26,6 +27,7 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 	const emailInputRef = useRef<HTMLInputElement>(null);
 	const passwordInputRef = useRef<HTMLInputElement>(null);
 	const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
+	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const submitLoginFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setErrorMessage("");
@@ -78,6 +80,10 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 		// loginHandler();
 	};
 
+	const toggleShowPasswordHandler = () => {
+		setShowPassword((prevState) => !prevState);
+	};
+
 	if (isAuthenticated) {
 		Router.replace("/t");
 	}
@@ -97,6 +103,7 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 								className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 								placeholder='Email address'
 							/>
+
 							<label
 								htmlFor='email'
 								className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
@@ -104,24 +111,34 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 								Email Address
 							</label>
 						</div>
-						<div className='relative mb-6'>
-							<input
-								type='password'
-								name='password'
-								id='password'
-								required
-								autoComplete='off'
-								min={6}
-								ref={passwordInputRef}
-								className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
-								placeholder='Password'
-							/>
-							<label
-								htmlFor='password'
-								className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
+						<div className='relative mb-6 flex items-center'>
+							<div>
+								<input
+									type={showPassword ? "text" : "password"}
+									name='password'
+									id='password'
+									required
+									autoComplete='off'
+									min={6}
+									ref={passwordInputRef}
+									className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
+									placeholder='Password'
+								/>
+
+								<label
+									htmlFor='password'
+									className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
+								>
+									Password
+								</label>
+							</div>
+							<div
+								className=' h-10 flex items-end pb-2'
+								onClick={toggleShowPasswordHandler}
 							>
-								Password
-							</label>
+								{showPassword && <EyeIcon className='h-5' />}
+								{!showPassword && <EyeSlashIcon className='h-5' />}
+							</div>
 						</div>
 						{authError && authError.trim().length > 0 && (
 							<p className='text-red-500 text-xs text-center'>{authError}</p>

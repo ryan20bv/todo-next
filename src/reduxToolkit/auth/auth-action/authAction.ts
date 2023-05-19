@@ -3,6 +3,7 @@ import {
 	toggleSendingData,
 	updateAuthError,
 	updateIsAuthDataState,
+	toggleShowingModalState,
 } from "../auth-slice/authSlice";
 import { authDataType } from "../auth-slice/authSlice";
 import { signIn } from "next-auth/react";
@@ -59,4 +60,9 @@ export const clearAuthDataAction =
 export const toggleSendingDataAction =
 	(status: boolean) => async (dispatch: any, getState: any) => {
 		dispatch(toggleSendingData({ isSendingData: status }));
+	};
+
+export const toggleShowModalAction =
+	(status: boolean) => async (dispatch: any, getState: any) => {
+		dispatch(toggleShowingModalState({ isShowingModalStatus: status }));
 	};

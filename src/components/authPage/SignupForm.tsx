@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 
 interface propsTypes {
 	onToggle: () => void;
@@ -14,6 +15,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 	const emailInputRef = useRef<HTMLInputElement>(null);
 	const passwordInputRef = useRef<HTMLInputElement>(null);
 	const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
+	const [showPassword, setShowPassword] = useState<boolean>(false);
 
 	const loginHandler = async (emailInput: string, passwordInput: string) => {
 		let result;
@@ -95,6 +97,9 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 		};
 		submitToApi();
 	};
+	const toggleShowPasswordHandler = () => {
+		setShowPassword((prevState) => !prevState);
+	};
 	return (
 		<section className='my-8  w-3/4'>
 			<form onSubmit={submitSignUpFormHandler}>
@@ -154,24 +159,33 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 								Email Address
 							</label>
 						</div>
-						<div className='relative mb-6'>
-							<input
-								type='password'
-								name='password'
-								id='password'
-								required
-								autoComplete='off'
-								min={6}
-								ref={passwordInputRef}
-								className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
-								placeholder='Password'
-							/>
-							<label
-								htmlFor='password'
-								className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
+						<div className='relative mb-6 flex items-center'>
+							<div>
+								<input
+									type={showPassword ? "text" : "password"}
+									name='password'
+									id='password'
+									required
+									autoComplete='off'
+									min={6}
+									ref={passwordInputRef}
+									className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
+									placeholder='Password'
+								/>
+								<label
+									htmlFor='password'
+									className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
+								>
+									Password
+								</label>
+							</div>
+							<div
+								className=' h-10 flex items-end pb-2'
+								onClick={toggleShowPasswordHandler}
 							>
-								Password
-							</label>
+								{showPassword && <EyeIcon className='h-5' />}
+								{!showPassword && <EyeSlashIcon className='h-5' />}
+							</div>
 						</div>
 						{!isDataValid && (
 							<p className='text-red-500'>Fill up the form properly!</p>

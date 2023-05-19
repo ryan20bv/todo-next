@@ -13,6 +13,7 @@ interface IAuthState {
 	isSendingData: boolean;
 	isAuthenticated: boolean;
 	authData: authDataType;
+	isShowingModal: boolean;
 }
 
 const initialAuthState: IAuthState = {
@@ -20,6 +21,7 @@ const initialAuthState: IAuthState = {
 	isSendingData: false,
 	isAuthenticated: false,
 	authData: {} as authDataType,
+	isShowingModal: false,
 };
 
 const authSlice = createSlice({
@@ -38,6 +40,9 @@ const authSlice = createSlice({
 		updateIsAuthDataState(state, action) {
 			state.authData = action.payload.authData;
 		},
+		toggleShowingModalState(state, action) {
+			state.isShowingModal = action.payload.isShowingModalStatus;
+		},
 	},
 });
 
@@ -46,5 +51,6 @@ export const {
 	toggleSendingData,
 	updateAuthError,
 	updateIsAuthDataState,
+	toggleShowingModalState,
 } = authSlice.actions;
 export default authSlice;

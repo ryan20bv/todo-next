@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
-import { getSession, useSession } from "next-auth/react";
+import { getSession, useSession, signOut } from "next-auth/react";
+
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -12,23 +13,25 @@ import {
 	clearErrorAction,
 	authErrorAction,
 	toggleSendingDataAction,
+	toggleShowModalAction,
 } from "@/reduxToolkit/auth/auth-action/authAction";
 
 import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
+import Modal from "../ui/Modal";
 
 const ProfilePage = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const { isAuthenticated, isSendingData, authError, authData } = useAppSelector(
-		(state: RootState) => state.authReducer
-	);
+	const { isAuthenticated, isSendingData, authError, authData, isShowingModal } =
+		useAppSelector((state: RootState) => state.authReducer);
 	const currPassInputRef = useRef<HTMLInputElement>(null);
 	const newPassInputRef = useRef<HTMLInputElement>(null);
 	const confPassInputRef = useRef<HTMLInputElement>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
 	const [isDataValid, setIsDataValid] = useState<boolean>(true);
+	const [authMessage, setAuthMessage] = useState<string>("");
 	// const { data: session, status } = useSession();
 	// console.log(session);
 	// console.log(status);
@@ -84,6 +87,14 @@ const ProfilePage = () => {
 			dispatch(toggleSendingDataAction(false));
 			return;
 		}
+		if (enteredCurrPassword.trim() === enteredNewPassword.trim()) {
+			dispatch(
+				authErrorAction("Current and new Password should not be the same!")
+			);
+			// setIsSigningUp(false);
+			dispatch(toggleSendingDataAction(false));
+			return;
+		}
 
 		if (enteredNewPassword.trim() !== enteredConfPassword.trim()) {
 			dispatch(authErrorAction("New and confirm password does not match!"));
@@ -123,6 +134,8 @@ const ProfilePage = () => {
 					throw new Error(data.message || "Something went wrong!");
 				}
 				console.log("data", data);
+				setAuthMessage(data.message);
+				dispatch(toggleShowModalAction(true));
 			} catch (err: any) {
 				// console.log("ERR", err.message);
 				dispatch(authErrorAction(err.message));
@@ -131,6 +144,14 @@ const ProfilePage = () => {
 			dispatch(toggleSendingDataAction(false));
 		};
 		submitToApi();
+	};
+
+	const closeModalHandler = () => {
+		setAuthMessage("");
+		dispatch(toggleShowModalAction(false));
+	};
+	const confirmModalHandler = () => {
+		signOut({ callbackUrl: "http://localhost:3000/login" });
 	};
 
 	if (isLoading) {
@@ -233,6 +254,14 @@ const ProfilePage = () => {
 					</div>
 				</form>
 			</section>
+			{isShowingModal && (
+				<Modal
+					message={authMessage}
+					onCloseModal={closeModalHandler}
+					onConfirm={confirmModalHandler}
+				/>
+			)}
+			{/* <Notification message={authMessage} /> */}
 		</Card>
 	);
 };

@@ -23,7 +23,8 @@
 		"**/*.ts",
 		"**/*.tsx",
 		"src/loginContext/authentication-context.js",
-		"src/loginContext/authentication-provider.js"
+		"src/loginContext/authentication-provider.js",
+		"src/components/ui/Modal.tsx"
 	],
 	"exclude": ["node_modules"]
 }
