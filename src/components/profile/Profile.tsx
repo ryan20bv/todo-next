@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { getSession, useSession, signOut } from "next-auth/react";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 
 import {
 	useAppDispatch,
@@ -32,6 +33,9 @@ const ProfilePage = () => {
 	const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
 	const [isDataValid, setIsDataValid] = useState<boolean>(true);
 	const [authMessage, setAuthMessage] = useState<string>("");
+	const [showCurrentPassword, setShowCurrentPassword] = useState<boolean>(false);
+	const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 	// const { data: session, status } = useSession();
 	// console.log(session);
 	// console.log(status);
@@ -154,6 +158,16 @@ const ProfilePage = () => {
 		signOut({ callbackUrl: "http://localhost:3000/login" });
 	};
 
+	const toggleShowPasswordHandler = (identifier: string) => {
+		if (identifier === "curr") {
+			setShowCurrentPassword((prevState) => !prevState);
+		} else if (identifier === "new") {
+			setShowNewPassword((prevState) => !prevState);
+		} else if (identifier === "conf") {
+			setShowConfirmPassword((prevState) => !prevState);
+		}
+	};
+
 	if (isLoading) {
 		return <p>Loading...</p>;
 	}
@@ -166,62 +180,89 @@ const ProfilePage = () => {
 				<form onSubmit={submitNewPasswordHandler}>
 					<div className='divide-y divide-gray-200'>
 						<div className=' text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7'>
-							<div className='relative mb-6'>
-								<input
-									type='password'
-									name='currentpassword'
-									id='currentpassword'
-									required
-									autoComplete='off'
-									min={6}
-									ref={currPassInputRef}
-									className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
-									placeholder='	Current Password'
-								/>
-								<label
-									htmlFor='currentpassword'
-									className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
+							<div className='relative mb-6 flex items-center'>
+								<div>
+									<input
+										type={showCurrentPassword ? "text" : "password"}
+										name='currentpassword'
+										id='currentpassword'
+										required
+										autoComplete='off'
+										min={6}
+										ref={currPassInputRef}
+										className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
+										placeholder='	Current Password'
+									/>
+									<label
+										htmlFor='currentpassword'
+										className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
+									>
+										Current Password
+									</label>
+								</div>
+								<div
+									className=' h-10 flex items-end pb-2'
+									onClick={() => toggleShowPasswordHandler("curr")}
 								>
-									Current Password
-								</label>
+									{showCurrentPassword && <EyeIcon className='h-5' />}
+									{!showCurrentPassword && <EyeSlashIcon className='h-5' />}
+								</div>
 							</div>
-							<div className='relative mb-6'>
-								<input
-									type='password'
-									name='newpassword'
-									id='newpassword'
-									required
-									autoComplete='off'
-									min={6}
-									ref={newPassInputRef}
-									className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
-									placeholder='New Password'
-								/>
-								<label
-									htmlFor='newpassword'
-									className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
+							<div className='relative mb-6 flex items-center'>
+								<div>
+									<input
+										type={showNewPassword ? "text" : "password"}
+										name='newpassword'
+										id='newpassword'
+										required
+										autoComplete='off'
+										min={6}
+										ref={newPassInputRef}
+										className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
+										placeholder='New Password'
+									/>
+									<label
+										htmlFor='newpassword'
+										className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
+									>
+										New Password
+									</label>
+								</div>
+								<div
+									className=' h-10 flex items-end pb-2'
+									onClick={() => toggleShowPasswordHandler("new")}
 								>
-									New Password
-								</label>
+									{showNewPassword && <EyeIcon className='h-5' />}
+									{!showNewPassword && <EyeSlashIcon className='h-5' />}
+								</div>
 							</div>
-							<div className='relative mb-6'>
-								<input
-									type='password'
-									name='confirmpassword'
-									id='confirmpassword'
-									required
-									autoComplete='off'
-									min={6}
-									ref={confPassInputRef}
-									className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
-									placeholder='Confirm Password'
-								/>
-								<label
-									htmlFor='confirmpassword'
-									className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
+							<div className='relative mb-6 flex items-center'>
+								<div>
+									<input
+										type={showConfirmPassword ? "text" : "password"}
+										name='confirmpassword'
+										id='confirmpassword'
+										required
+										autoComplete='off'
+										min={6}
+										ref={confPassInputRef}
+										className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
+										placeholder='Confirm Password'
+									/>
+									<label
+										htmlFor='confirmpassword'
+										className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
+									>
+										Confirm Password
+									</label>
+								</div>
+								<div
+									className=' h-10 flex items-end pb-2'
+									onClick={() => toggleShowPasswordHandler("conf")}
 								>
-									Confirm Password
-								</label>
+									{showConfirmPassword && <EyeIcon className='h-5' />}
+									{!showConfirmPassword && <EyeSlashIcon className='h-5' />}
+								</div>
 							</div>
 							{authError && authError.trim().length > 0 && (
 								<p className='text-red-500 text-xs text-center'>{authError}</p>
