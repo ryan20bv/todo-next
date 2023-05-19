@@ -3,6 +3,7 @@ const authHandler = async (req, res) => {
 	if (req.method !== "POST") {
 		return;
 	}
+
 	const newUser = req.body;
 	const { firstName, lastName, email, password } = newUser;
 	if (
@@ -31,8 +32,6 @@ const authHandler = async (req, res) => {
 	} catch (err) {
 		console.log(err.message);
 	}
-
-	// console.log(data);
 };
 
 export default authHandler;

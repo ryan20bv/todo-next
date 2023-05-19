@@ -5,7 +5,7 @@ const AnyPage = () => {
 	const router = useRouter();
 	useEffect(() => {
 		router.replace("/");
-	}, []);
+	}, [router]);
 
 	return <div>404 page</div>;
 };

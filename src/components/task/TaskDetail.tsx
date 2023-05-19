@@ -36,7 +36,7 @@ const TaskDetail = () => {
 				dispatch(setTodoDetailAction(taskid));
 			}
 		}
-	}, [taskid, dispatch]);
+	}, [taskid, dispatch, todoDetails._id]);
 
 	let index: string | number = "";
 	let title = <div></div>;
