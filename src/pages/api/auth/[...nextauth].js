@@ -9,9 +9,13 @@ export const authOptions = {
 		CredentialsProvider({
 			async authorize(credentials) {
 				// console.log(credentials);
+				const { email, password } = credentials;
 				const res = await fetch("http://localhost:5000/api/users/login", {
 					method: "POST",
-					body: JSON.stringify(credentials),
+					body: JSON.stringify({
+						email,
+						password,
+					}),
 					headers: { "Content-Type": "application/json" },
 				});
 				let user = await res.json();
