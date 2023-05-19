@@ -34,7 +34,7 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 
 		const enteredEmail = emailInputRef.current?.value;
 		const enteredPassword = passwordInputRef.current?.value;
-		console.log(enteredEmail, enteredPassword);
+
 		if (
 			!enteredEmail ||
 			enteredEmail.trim() === "" ||
