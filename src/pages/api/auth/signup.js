@@ -24,18 +24,18 @@ const authHandler = async (req, res) => {
 	}
 
 	try {
-		const { data } = await axios.post(
+		const response = await axios.post(
 			"http://localhost:5000/api/users/signup",
 			newUser
 		);
-		console.log(data);
-		res.status(201).json({ newUser: data });
-	} catch (err) {
-		if (err) {
-			const { data, status } = err.response;
+		// console.log(response.json());
 
-			res.status(status).json({ message: data.message });
-		}
+		res.status(201).json({ newUser: response.data });
+	} catch (err) {
+		const data = err?.response?.data;
+		const status = err?.response?.status;
+
+		res.status(status).json({ message: data?.message });
 	}
 };
 
