@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const authHandler = async (req, res) => {
 	if (req.method !== "POST") {
 		return;
@@ -30,7 +31,9 @@ const authHandler = async (req, res) => {
 
 		res.status(201).json({ newUser: data });
 	} catch (err) {
-		console.log(err.message);
+		const { data, status } = err.response;
+
+		res.status(status).json({ message: data.message });
 	}
 };
 
