@@ -34,9 +34,9 @@ const authHandler = async (req, res) => {
 	} catch (err) {
 		console.log(err);
 		const data = err?.response?.data;
-		const status = err?.response?.status;
+		// const status = err?.response?.status;
 
-		res.status(status).json({ message: data?.message });
+		res.status(422).json({ message: data?.message });
 	}
 };
 
