@@ -48,12 +48,12 @@ const ProfilePage = () => {
 				router.push("/");
 				// window.location.href = "/";
 			} else {
+				const data: any = session.user?.name;
 				const newData = {
-					userId: session.user?.name?.userData?.id,
-					userName:
-						session.user?.name?.userData?.fName + session.user?.name?.userData?.lName,
-					userEmail: session.user?.name?.userData?.email,
-					apiToken: session.user?.name?.token,
+					userId: data.userData?.id,
+					userName: data.userData?.fName + data.userData?.lName,
+					userEmail: data.userData?.email,
+					apiToken: data.token,
 					expires: session.expires,
 				};
 				dispatch(authDataAction(newData));
