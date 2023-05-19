@@ -16,11 +16,12 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 	const passwordInputRef = useRef<HTMLInputElement>(null);
 	const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
 	const [showPassword, setShowPassword] = useState<boolean>(false);
+	const [errorMessage, setErrorMessage] = useState<string>("");
 
 	const loginHandler = async (emailInput: string, passwordInput: string) => {
 		let result;
 		try {
-			result = await signIn("credentials", {
+			result = await signIn("username-login", {
 				redirect: false,
 				email: emailInput,
 				password: passwordInput,
@@ -41,6 +42,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 		e.preventDefault();
 		setIsDataValid(true);
 		setIsSigningUp(true);
+		setErrorMessage("");
 
 		const enteredFName = fNameInputRef.current?.value;
 		const enteredLName = lNameInputRef.current?.value;
@@ -54,11 +56,19 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 			!enteredFName ||
 			enteredFName.trim() === "" ||
 			!enteredLName ||
-			enteredLName.trim() === "" ||
+			enteredLName.trim() === ""
+		) {
+			setErrorMessage("Fill up the form properly!");
+			setIsDataValid(false);
+			setIsSigningUp(false);
+			return;
+		}
+		if (
 			!enteredPassword ||
 			enteredPassword.trim() === "" ||
 			enteredPassword.length < 6
 		) {
+			setErrorMessage("Password must be at least min 6 characters");
 			setIsDataValid(false);
 			setIsSigningUp(false);
 			return;
@@ -82,16 +92,21 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 			};
 			try {
 				const response = await fetch(url, options);
+				// console.log(response);
 				const data = await response.json();
+				// console.log(data);
 				if (!response.ok) {
 					throw new Error(data.message || "Something went wrong!");
 				}
-				console.log(data.newUser);
+
 				if (data.newUser.message === "sign-in success") {
 					loginHandler(enteredEmail, enteredPassword);
 				}
-			} catch (err) {
-				console.log(err);
+				setIsSigningUp(false);
+			} catch (err: any) {
+				// console.log("94", err.message);
+				setErrorMessage(err.message);
+				setIsDataValid(false);
 				setIsSigningUp(false);
 			}
 		};
@@ -110,7 +125,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 								type='text'
 								name='fName'
 								id='fName'
-								required
+								// required
 								autoComplete='off'
 								ref={fNameInputRef}
 								className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
@@ -128,7 +143,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 								type='text'
 								name='lName'
 								id='lName'
-								required
+								// required
 								autoComplete='off'
 								ref={lNameInputRef}
 								className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
@@ -188,7 +203,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 							</div>
 						</div>
 						{!isDataValid && (
-							<p className='text-red-500'>Fill up the form properly!</p>
+							<p className='text-red-500 text-xs text-center'>{errorMessage}</p>
 						)}
 						<div className='flex justify-end'>
 							{isSigningUp && (

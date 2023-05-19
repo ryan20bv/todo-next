@@ -14,13 +14,13 @@ export const logInAction =
 		dispatch(updateAuthError({ authError: "" }));
 		dispatch(toggleSendingData({ isSendingData: true }));
 		try {
-			const result = await signIn("credentials", {
-				redirect: false,
+			const result = await signIn("username-login", {
 				email: emailInput,
 				password: passwordInput,
+				redirect: false,
 			});
-			console.log(emailInput, passwordInput);
-			console.log(result);
+			// console.log(emailInput, passwordInput);
+			// console.log(result);
 			if (!result?.ok) {
 				throw new Error("Invalid Email or password!");
 			}
@@ -29,7 +29,7 @@ export const logInAction =
 			// Router.replace("/t");
 			// setIsLoggingIn(false);
 		} catch (err: any) {
-			console.log(err.message);
+			// console.log(err.message);
 			// setErrorMessage(err.message);
 			// setIsLoggingIn(false);
 			dispatch(updateAuthError({ authError: err.message }));

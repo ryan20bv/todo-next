@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const authHandler = async (req, res) => {
 	if (req.method !== "POST") {
 		return;
@@ -23,14 +24,19 @@ const authHandler = async (req, res) => {
 	}
 
 	try {
-		const { data } = await axios.post(
+		const response = await axios.post(
 			"http://localhost:5000/api/users/signup",
 			newUser
 		);
+		console.log(response);
 
-		res.status(201).json({ newUser: data });
+		res.status(201).json({ newUser: response.data });
 	} catch (err) {
-		console.log(err.message);
+		console.log(err);
+		const data = err?.response?.data;
+		// const status = err?.response?.status;
+
+		res.status(422).json({ message: data?.message });
 	}
 };
 

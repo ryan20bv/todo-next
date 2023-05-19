@@ -3,13 +3,15 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions = {
 	session: {
-		jwt: false,
+		jwt: true,
 	},
 	providers: [
 		CredentialsProvider({
+			id: "username-login",
+			name: "Login",
 			async authorize(credentials) {
-				console.log("credentials", credentials);
 				const { email, password } = credentials;
+
 				const res = await fetch("http://localhost:5000/api/users/login", {
 					method: "POST",
 					body: JSON.stringify({
@@ -19,9 +21,7 @@ export const authOptions = {
 					headers: { "Content-Type": "application/json" },
 				});
 				let user = await res.json();
-				console.log("user", user);
-				// console.log(data.userData.fName);
-
+				// console.log("user", user);
 				if (res.ok && user) {
 					return {
 						name: user,
@@ -34,6 +34,8 @@ export const authOptions = {
 				}
 				// Return null if user data could not be retrieved
 				return null;
+
+				// console.log(data.userData.fName);
 			},
 		}),
 	],
