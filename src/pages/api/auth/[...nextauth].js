@@ -8,7 +8,7 @@ export const authOptions = {
 	providers: [
 		CredentialsProvider({
 			async authorize(credentials) {
-				// console.log(credentials);
+				console.log("credentials", credentials);
 				const { email, password } = credentials;
 				const res = await fetch("http://localhost:5000/api/users/login", {
 					method: "POST",
