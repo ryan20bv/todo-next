@@ -61,7 +61,7 @@ const ProfilePage = () => {
 			}
 		};
 		checkForSession();
-	}, []);
+	}, [dispatch, router]);
 
 	const submitNewPasswordHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
