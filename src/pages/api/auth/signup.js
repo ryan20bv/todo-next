@@ -28,10 +28,11 @@ const authHandler = async (req, res) => {
 			"http://localhost:5000/api/users/signup",
 			newUser
 		);
-		// console.log(response.json());
+		console.log(response);
 
 		res.status(201).json({ newUser: response.data });
 	} catch (err) {
+		console.log(err);
 		const data = err?.response?.data;
 		const status = err?.response?.status;
 
