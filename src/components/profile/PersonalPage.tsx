@@ -11,6 +11,9 @@ import {
 	clearAuthDataAction,
 } from "@/reduxToolkit/auth/auth-action/authAction";
 
+import Card from "../ui/Card";
+import CardHeader from "../ui/CardHeader";
+
 const PersonalPage = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
@@ -67,8 +70,12 @@ const PersonalPage = () => {
 	if (isLoading) {
 		return <p>Loading...</p>;
 	}
-
-	return <div>PersonalPage</div>;
+	const title = <h1>Personal Todo</h1>;
+	return (
+		<Card>
+			<CardHeader title={title} />
+		</Card>
+	);
 };
 
 export default PersonalPage;
