@@ -36,7 +36,10 @@ const Login = () => {
 	}
 	return (
 		<Card>
-			<CardHeader title={title} />
+			<CardHeader
+				title={title}
+				from='login'
+			/>
 			{isLoggingIn && <LoginForm onToggle={toggleLoginState} />}
 			{!isLoggingIn && <SignUpForm onToggle={toggleLoginState} />}
 		</Card>

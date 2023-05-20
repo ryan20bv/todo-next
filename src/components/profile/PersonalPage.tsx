@@ -14,6 +14,17 @@ import {
 import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
 
+interface ICategoryList {
+	categoryId: string;
+	categoryName: string;
+}
+interface Iitem {
+	_id: string;
+	creator_id: string;
+	categoryName: string;
+	mainTaskList: [];
+}
+
 const PersonalPage = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
@@ -23,6 +34,7 @@ const PersonalPage = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const { data: session, status } = useSession();
 	const { userId, apiToken } = authData;
+	const [categoryList, setCategoryList] = useState<ICategoryList[]>([]);
 	// console.log(session);
 	// console.log(status);
 	useEffect(() => {
@@ -52,7 +64,7 @@ const PersonalPage = () => {
 	useEffect(() => {
 		const getAllCategoryByUser = async (userId: string) => {
 			console.log(userId);
-			let userCategory = [];
+			let userCategory: ICategoryList[] = [];
 
 			try {
 				const url = "http://localhost:5000/api/category/user/" + userId;
@@ -67,9 +79,18 @@ const PersonalPage = () => {
 				console.log(response);
 				const data = await response.json();
 				console.log(data);
+				data.userCategories.forEach((item: Iitem) => {
+					const newItem = {
+						categoryId: item._id,
+						categoryName: item.categoryName,
+					};
+					userCategory.push(newItem);
+				});
 			} catch (err) {
 				console.log("userCategory", err);
 			}
+			console.log(userCategory);
+			setCategoryList([...userCategory]);
 		};
 
 		getAllCategoryByUser(userId);
@@ -81,7 +102,17 @@ const PersonalPage = () => {
 	const title = <h1>Personal Todo</h1>;
 	return (
 		<Card>
-			<CardHeader title={title} />
+			<CardHeader
+				title={title}
+				from='category'
+			/>
+			<section>
+				<ul>
+					{categoryList.map((category) => (
+						<li key={category.categoryId}>{category.categoryName}</li>
+					))}
+				</ul>
+			</section>
 		</Card>
 	);
 };

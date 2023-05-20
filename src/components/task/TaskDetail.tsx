@@ -80,7 +80,7 @@ const TaskDetail = () => {
 			<CardHeader
 				title={title}
 				onIconHandler={backArrowHandler}
-				isInDetails={true}
+				from='generalSubtask'
 			/>
 			{!isDetailEditing && (
 				<AddForm
