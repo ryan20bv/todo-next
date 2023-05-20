@@ -17,11 +17,12 @@ import CardHeader from "../ui/CardHeader";
 const PersonalPage = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const { isAuthenticated, isSendingData, authError } = useAppSelector(
+	const { isAuthenticated, isSendingData, authError, authData } = useAppSelector(
 		(state: RootState) => state.authReducer
 	);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const { data: session, status } = useSession();
+	const { userId, apiToken } = authData;
 	// console.log(session);
 	// console.log(status);
 	useEffect(() => {
@@ -47,25 +48,32 @@ const PersonalPage = () => {
 		};
 		checkForSession();
 	}, [dispatch, router]);
-	// useEffect(() => {
-	// 	if (!isAuthenticated) {
-	// 		router.push("/");
-	// 	}
-	// }, [isAuthenticated]);
 
-	// useEffect(() => {
-	// 	if (session) {
-	// 		const newData = {
-	// 			userId: session.user?.name?.userData?.id,
-	// 			userName:
-	// 				session.user?.name?.userData?.fName + session.user?.name?.userData?.lName,
-	// 			userEmail: session.user?.name?.userData?.email,
-	// 			apiToken: session.user?.name?.token,
-	// 			expires: session.expires,
-	// 		};
-	// 		dispatch(authDataAction(newData));
-	// 	}
-	// }, []);
+	useEffect(() => {
+		const getAllCategoryByUser = async (userId: string) => {
+			console.log(userId);
+			let userCategory = [];
+
+			try {
+				const url = "http://localhost:5000/api/category/user/" + userId;
+				const options = {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + apiToken,
+					},
+				};
+				const response = await fetch(url, options);
+				console.log(response);
+				const data = await response.json();
+				console.log(data);
+			} catch (err) {
+				console.log("userCategory", err);
+			}
+		};
+
+		getAllCategoryByUser(userId);
+	}, [userId]);
 
 	if (isLoading) {
 		return <p>Loading...</p>;
