@@ -5,12 +5,15 @@ import {
 	Bars3Icon,
 	Square3Stack3DIcon,
 	HomeIcon,
+	XMarkIcon,
 } from "@heroicons/react/24/outline";
 
 interface propsTypes {
 	title: React.ReactElement;
 	onIconHandler?: () => void;
 	from: string;
+	iconFunction?: () => void;
+	showCategoryList?: boolean;
 }
 
 const CardHeader: React.FC<propsTypes> = (props) => {
@@ -35,10 +38,14 @@ const CardHeader: React.FC<propsTypes> = (props) => {
 		icon = (
 			<button
 				className='absolute left-4 text-red-600 h-6'
-				onClick={clickBackHandler}
+				onClick={props.iconFunction}
 				data-testid={`squaresStack_button`}
 			>
-				<Square3Stack3DIcon className='text-red-600 h-6' />
+				{props.showCategoryList ? (
+					<XMarkIcon className='text-red-600 h-6' />
+				) : (
+					<Square3Stack3DIcon className='text-red-600 h-6' />
+				)}
 			</button>
 		);
 	} else if (props.from === "generalSubtask") {
