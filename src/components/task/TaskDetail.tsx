@@ -39,14 +39,10 @@ const TaskDetail = () => {
 	}, [taskid, dispatch, todoDetails._id]);
 
 	let index: string | number = "";
-	let title = <div></div>;
+	let title = "";
 	if (todoDetails._id) {
 		index = todoList.findIndex((todo: ITask) => todo._id === todoDetails._id);
-		title = (
-			<h1>
-				<span>{index + 1 + ". "}</span> {todoDetails.name}
-			</h1>
-		);
+		title = index + 1 + ". " + todoDetails.name;
 	}
 
 	let todoLength: number = 0;

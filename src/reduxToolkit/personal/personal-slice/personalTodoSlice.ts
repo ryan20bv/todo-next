@@ -12,12 +12,12 @@ const personalTodoSlice = createSlice({
 	name: "Personal Todo Slice",
 	initialState: initialPersonalState,
 	reducers: {
-		getAllCategoryRed(state, action) {
+		getUserCategoryListRed(state, action) {
 			state.categoryList = action.payload.categoryList;
 		},
 	},
 });
 
-export const { getAllCategoryRed } = personalTodoSlice.actions;
+export const { getUserCategoryListRed } = personalTodoSlice.actions;
 
 export default personalTodoSlice;

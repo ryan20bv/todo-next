@@ -30,9 +30,9 @@ const Login = () => {
 	const toggleLoginState = () => {
 		setIsLoggingIn((prevState) => !prevState);
 	};
-	let title = <h1>LogIn</h1>;
+	let title: string = "LogIn";
 	if (!isLoggingIn) {
-		title = <h1>Sign up</h1>;
+		title = "Sign up";
 	}
 	return (
 		<Card>

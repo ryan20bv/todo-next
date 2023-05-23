@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 interface propsTypes {
-	title: React.ReactElement;
+	title: string;
 	onIconHandler?: () => void;
 	from: string;
 	iconFunction?: () => void;
@@ -72,8 +72,7 @@ const CardHeader: React.FC<propsTypes> = (props) => {
 	return (
 		<section className='bg-[#AF7EEB] w-full py-2 px-3 text-white text-center relative min-h-[40px]'>
 			{icon}
-
-			{props.title}
+			<h1>{props.title}</h1>
 		</section>
 	);
 };

@@ -43,7 +43,9 @@ const PersonalPage = () => {
 	const { data: session, status } = useSession();
 	const { userId, apiToken } = authData;
 	const [categoryList, setCategoryList] = useState<ICategoryList[]>([]);
-	const [category, setCategory] = useState<ICategoryList>({} as ICategoryList);
+	const [categoryTitle, setCategoryTitle] = useState<ICategoryList>(
+		{} as ICategoryList
+	);
 	const [showCategoryList, setShowCategoryList] = useState<boolean>(false);
 	const [mainTaskList, setMainTaskList] = useState<any[]>([]);
 	const [rawData, setRawData] = useState([]);
@@ -75,8 +77,6 @@ const PersonalPage = () => {
 
 	useEffect(() => {
 		const getAllCategoryByUser = async (userId: string) => {
-			let userCategory: ICategoryList[] = [];
-
 			try {
 				const url = "http://localhost:5000/api/category/user/" + userId;
 				const options = {
@@ -90,27 +90,30 @@ const PersonalPage = () => {
 				// console.log(response);
 				const data = await response.json();
 
-				// console.log(data);
+				console.log(data);
 				if (!response.ok) {
-					console.log(data);
+					// console.log(data);
 					if (data.message === "Authentication failed!") {
-						// signOut({ callbackUrl: "http://localhost:3000" });
+						signOut({ callbackUrl: "http://localhost:3000" });
 					}
-					// return;
+					return;
 				}
-
-				data.userCategories.forEach((item: Iitem) => {
+				let userCategory: ICategoryList[] = [];
+				data.forEach((item: Iitem) => {
 					const newItem = {
 						categoryId: item._id,
 						categoryName: item.categoryName,
 					};
 					userCategory.push(newItem);
 				});
-				setRawData(data.userCategories);
-				setCategory({
-					categoryName: data.userCategories[0].categoryName,
-					categoryId: data.userCategories[0].categoryId,
+				setCategoryList([...userCategory]);
+
+				setCategoryTitle({
+					categoryName: data[0].categoryName,
+					categoryId: data[0].categoryId,
 				});
+				// setRawData(data.userCategories);
+
 				// console.log(data.userCategories[0].mainTaskList);
 				const mainTasks: any[] = [];
 				data.userCategories[0].mainTaskList.forEach((item: any) =>
@@ -118,21 +121,20 @@ const PersonalPage = () => {
 					mainTasks.push(item.mainTask_id)
 				);
 				// console.log(mainTasks);
-				setMainTaskList([...mainTasks]);
+				// setMainTaskList([...mainTasks]);
 			} catch (err) {
 				console.log("userCategory", err);
 			}
 			// console.log(userCategory);
-
-			setCategoryList([...userCategory]);
 		};
-
-		getAllCategoryByUser(userId);
-	}, [userId]);
+		if (isAuthenticated) {
+			getAllCategoryByUser(userId);
+		}
+	}, [userId, apiToken, isAuthenticated]);
 	// console.log(categoryList);
 	useEffect(() => {
 		const foundCategory: any = rawData.find(
-			(item: any) => item._id === category.categoryId
+			(item: any) => item._id === categoryTitle.categoryId
 		);
 		console.log(foundCategory);
 		if (foundCategory) {
@@ -141,9 +143,9 @@ const PersonalPage = () => {
 				// console.log(item)
 				mainTasks.push(item.mainTask_id)
 			);
-			setMainTaskList([...mainTasks]);
+			// setMainTaskList([...mainTasks]);
 		}
-	}, [category, rawData]);
+	}, [categoryTitle, rawData]);
 
 	if (isLoading) {
 		return <p>Loading...</p>;
@@ -158,17 +160,17 @@ const PersonalPage = () => {
 
 	const selectNewCategory = (categoryId: string, name: string) => {
 		console.log(categoryId);
-		setCategory({
+		setCategoryTitle({
 			categoryName: name,
 			categoryId: categoryId,
 		});
 	};
 
-	const title = <h1>{category.categoryName}</h1>;
+	// const title = <h1>{categoryTitle.categoryName}</h1>;
 	return (
 		<Card>
 			<CardHeader
-				title={title}
+				title={categoryTitle.categoryName}
 				from='category'
 				iconFunction={toggleShowCategoryList}
 				showCategoryList={showCategoryList}
@@ -197,13 +199,13 @@ const PersonalPage = () => {
 			<ListContainer>
 				<>
 					<div className='h-96 bg-white  overflow-y-scroll mb-4 border border-black '>
-						<ul className='p-3  h-full'>
+						{/* <ul className='p-3  h-full'>
 							{mainTaskList.length === 0 && <p>Main Task is Empty!</p>}
 							{mainTaskList.length > 0 &&
 								mainTaskList.map((mainTask) => (
 									<li key={mainTask._id}>{mainTask.taskName}</li>
 								))}
-						</ul>
+						</ul> */}
 					</div>
 					<Summary
 						length={3}

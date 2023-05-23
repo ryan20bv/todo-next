@@ -35,8 +35,6 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 		}
 	}, [dispatch, firstLoad]);
 
-	const title = <h1>TODO nextJS</h1>;
-
 	const addTodoHandler = (task: string) => {
 		dispatch(addNewTodoAction(task));
 	};
@@ -54,9 +52,9 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	return (
 		<Card>
 			<CardHeader
-				title={title}
+				title='TODO nextJS'
 				onIconHandler={burgerMenuHandler}
-				isInDetails={false}
+				from='/'
 			/>
 			{!isEditing && (
 				<AddForm
