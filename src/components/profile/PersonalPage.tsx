@@ -13,6 +13,10 @@ import {
 
 import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
+import AddForm from "../ui/AddForm";
+import EditForm from "../ui/EditForm";
+import ListContainer from "../ui/ListContainer";
+import Summary from "../ui/Summary";
 
 interface ICategoryList {
 	categoryId: string;
@@ -132,7 +136,12 @@ const PersonalPage = () => {
 		);
 		console.log(foundCategory);
 		if (foundCategory) {
-			setMainTaskList([...foundCategory.mainTaskList]);
+			const mainTasks: any[] = [];
+			foundCategory.mainTaskList.forEach((item: any) =>
+				// console.log(item)
+				mainTasks.push(item.mainTask_id)
+			);
+			setMainTaskList([...mainTasks]);
 		}
 	}, [category, rawData]);
 
@@ -181,16 +190,29 @@ const PersonalPage = () => {
 					</ul>
 				</section>
 			)}
-			<section>
-				{mainTaskList.length === 0 && <p>Task is Empty!</p>}
-				{mainTaskList.length > 0 && (
-					<ul>
-						{mainTaskList.map((mainTask) => (
-							<li key={mainTask._id}>{mainTask.taskName}</li>
-						))}
-					</ul>
-				)}
-			</section>
+			<AddForm
+				onAddHandler={() => console.log("here")}
+				placeHolder='add todo'
+			/>
+			<ListContainer>
+				<>
+					<div className='h-96 bg-white  overflow-y-scroll mb-4 border border-black '>
+						<ul className='p-3  h-full'>
+							{mainTaskList.length === 0 && <p>Main Task is Empty!</p>}
+							{mainTaskList.length > 0 &&
+								mainTaskList.map((mainTask) => (
+									<li key={mainTask._id}>{mainTask.taskName}</li>
+								))}
+						</ul>
+					</div>
+					<Summary
+						length={3}
+						selectedTab='selectedTab'
+						onSelectTab={() => console.log("here")}
+						onDeleteAllDone={() => console.log("here")}
+					/>
+				</>
+			</ListContainer>
 		</Card>
 	);
 };

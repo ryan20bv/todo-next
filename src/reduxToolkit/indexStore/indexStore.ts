@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import todoSlice from "../todo/todo-slice/todoSlice";
 import detailTodoSlice from "../todo/todo-slice/detailSlice";
 import authSlice from "../auth/auth-slice/authSlice";
+import personalTodoSlice from "../personal/personal-slice/personalTodoSlice";
 
 const indexStore = configureStore({
 	reducer: {
 		todoReducer: todoSlice.reducer,
 		detailReducer: detailTodoSlice.reducer,
 		authReducer: authSlice.reducer,
+		personalTodoReducer: personalTodoSlice.reducer,
 	},
 });
 
