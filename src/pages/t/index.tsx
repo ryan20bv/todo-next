@@ -11,6 +11,7 @@ import {
 	authDataAction,
 	clearAuthDataAction,
 } from "@/reduxToolkit/auth/auth-action/authAction";
+import { getRawDataAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 import Card from "@/components/ui/Card";
 import CardHeader from "@/components/ui/CardHeader";
 import PersonalPage from "@/components/profile/PersonalPage";
@@ -45,7 +46,14 @@ const Index = () => {
 		checkForSession();
 	}, [dispatch, router]);
 
-	console.log(isAuthenticated);
+	useEffect(() => {
+		if (isAuthenticated) {
+			console.log(isAuthenticated);
+			const { userId, apiToken } = authData;
+			dispatch(getRawDataAction(userId, apiToken));
+		}
+	}, [dispatch, isAuthenticated, authData]);
+
 	// return <PersonalPage />;
 	return (
 		<Card>

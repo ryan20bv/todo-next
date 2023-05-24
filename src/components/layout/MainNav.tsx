@@ -20,7 +20,7 @@ const MainNav = () => {
 		router.push("/login");
 	};
 	const logOutHandler = () => {
-		signOut({ callbackUrl: "http://localhost:3000" });
+		signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
 	};
 
 	const checkProfileHandler = () => {
