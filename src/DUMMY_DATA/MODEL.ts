@@ -10,3 +10,8 @@ export interface ITask {
 	isDone: boolean;
 	details: ITodoDetails[];
 }
+
+export interface ICategory {
+	categoryId: string;
+	categoryName: string;
+}

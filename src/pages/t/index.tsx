@@ -22,6 +22,9 @@ const Index = () => {
 	const { isAuthenticated, isSendingData, authError, authData } = useAppSelector(
 		(state: RootState) => state.authReducer
 	);
+	const { rawData, currentCategory } = useAppSelector(
+		(state: RootState) => state.personalTodoReducer
+	);
 
 	useEffect(() => {
 		const checkForSession = async () => {
@@ -49,12 +52,20 @@ const Index = () => {
 	useEffect(() => {
 		if (isAuthenticated) {
 			console.log(isAuthenticated);
-			const { userId, apiToken } = authData;
-			dispatch(getRawDataAction(userId, apiToken));
+			if (Object.keys(authData).length !== 0) {
+				const { userId, apiToken } = authData;
+				dispatch(getRawDataAction(userId, apiToken));
+			}
 		}
 	}, [dispatch, isAuthenticated, authData]);
 
 	// return <PersonalPage />;
+	if (Object.keys(currentCategory).length !== 0) {
+		console.log(currentCategory);
+		let str = currentCategory.categoryName;
+		str = str.replace(/\s+/g, "-").toLowerCase();
+		router.push(`/t/${str}`);
+	}
 	return (
 		<Card>
 			<CardHeader
