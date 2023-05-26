@@ -1,20 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useRouter } from "next/router";
-import AuthenticationContext from "@/loginContext/authentication-context";
 import { useSession, signOut } from "next-auth/react";
 
 const MainNav = () => {
 	const router = useRouter();
 	const { data: session, status } = useSession();
-
-	const AuthCtx = useContext(AuthenticationContext);
-	const { loginHandler, isAuthenticated, logoutHandler } = AuthCtx;
-	const onLoginHandler = () => {
-		loginHandler();
-	};
-	const onLogoutHandler = () => {
-		logoutHandler();
-	};
 
 	const goToLoginHandler = () => {
 		router.push("/login");

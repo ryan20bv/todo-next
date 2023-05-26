@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
-import { useDispatch, useSelector } from "react-redux";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import todoSlice from "../todo/todo-slice/todoSlice";
 import detailTodoSlice from "../todo/todo-slice/detailSlice";
 import authSlice from "../auth/auth-slice/authSlice";
@@ -14,8 +14,6 @@ const persistConfig = {
 	storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, todoSlice.reducer);
-
 const reducers = combineReducers({
 	todoReducer: todoSlice.reducer,
 	detailReducer: detailTodoSlice.reducer,
@@ -23,8 +21,15 @@ const reducers = combineReducers({
 	personalTodoReducer: personalTodoSlice.reducer,
 });
 
-const indexStore = configureStore({
-	reducer: reducers,
+const persistedReducer = persistReducer(persistConfig, reducers);
+
+export const indexStore = configureStore({
+	reducer: persistedReducer,
+	// middleware: [thunk],
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({
+			serializableCheck: false, // Disable serializable check for redux-persist
+		}),
 });
 
 // const indexStore = configureStore({
@@ -39,7 +44,9 @@ const indexStore = configureStore({
 export type RootState = ReturnType<typeof indexStore.getState>;
 export type AppDispatch = typeof indexStore.dispatch;
 
-export const useAppSelector = useSelector;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useAppDispatch: () => AppDispatch = useDispatch;
 
-export default indexStore;
+// export default indexStore;
+
+export const persistor = persistStore(indexStore);
