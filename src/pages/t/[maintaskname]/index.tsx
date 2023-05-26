@@ -9,7 +9,7 @@ const MainTaskPage = () => {
 	return (
 		<Card>
 			<CardHeader
-				title='Loading...'
+				title='MainTaskPage'
 				from='index'
 			/>
 			<p>Loading</p>
