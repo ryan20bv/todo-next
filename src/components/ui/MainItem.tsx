@@ -1,5 +1,11 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { IMainTask } from "@/DUMMY_DATA/MODEL";
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 
 interface propsType {
@@ -8,8 +14,24 @@ interface propsType {
 }
 
 const MainItem: React.FC<propsType> = ({ mainTask, index }) => {
+	const router = useRouter();
+	console.log(router);
+	const { isAuthenticated } = useAppSelector(
+		(state: RootState) => state.authReducer
+	);
+
 	const setIsEditingHandler = (task: IMainTask) => {
 		console.log("isEditingHandler");
+	};
+	const todoDetailHandler = (task: IMainTask) => {
+		// dispatch(setTodoDetailAction(id));
+		if (!isAuthenticated) {
+			router.push(`/n/${task.mainTaskId}`);
+		} else {
+			let str = task.mainTaskName;
+			str = str.replace(/\s+/g, "-").toLowerCase();
+			router.push(`${router.asPath}/${str}`);
+		}
 	};
 	const deleteHandler = (id: string) => {
 		console.log("deleteHandler");
@@ -39,7 +61,7 @@ const MainItem: React.FC<propsType> = ({ mainTask, index }) => {
 
 				<h3
 					className={`${setDone} pl-2 pr-1 cursor-pointer `}
-					onClick={() => {}}
+					onClick={() => todoDetailHandler(mainTask)}
 					data-testid={`task_${mainTask.mainTaskName}`}
 				>
 					<span>{index + 1 + "."}</span>

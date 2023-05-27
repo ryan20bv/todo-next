@@ -6,7 +6,6 @@ interface IPersonalTodoState {
 	rawData: [];
 	currentCategory: ICategory;
 	mainTaskList: IMainTask[];
-	subTaskList: ISubTask[];
 }
 
 const initialPersonalState: IPersonalTodoState = {
@@ -14,7 +13,6 @@ const initialPersonalState: IPersonalTodoState = {
 	rawData: [],
 	currentCategory: {} as ICategory,
 	mainTaskList: [],
-	subTaskList: [],
 };
 
 const personalTodoSlice = createSlice({
