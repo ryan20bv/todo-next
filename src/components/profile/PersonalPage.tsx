@@ -9,6 +9,7 @@ import {
 	authDataAction,
 	clearAuthDataAction,
 } from "@/reduxToolkit/auth/auth-action/authAction";
+import { setCurrentCategoryAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 
 import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
@@ -17,10 +18,13 @@ import EditForm from "../ui/EditForm";
 import ListContainer from "../ui/ListContainer";
 import Summary from "../ui/Summary";
 
+import { ICategory } from "@/DUMMY_DATA/MODEL";
+
 const PersonalPage = () => {
+	const dispatch = useAppDispatch();
 	const [showListOfCategories, setShowListOfCategories] =
 		useState<boolean>(false);
-	const { currentCategory, categoryList } = useAppSelector(
+	const { currentCategory, categoryList, mainTaskList } = useAppSelector(
 		(state: RootState) => state.personalTodoReducer
 	);
 	// console.log(mainTaskList);
@@ -31,8 +35,10 @@ const PersonalPage = () => {
 		setShowListOfCategories((prevState) => !prevState);
 	};
 
-	const selectNewCategory = (categoryId: string, name: string) => {
-		console.log(categoryId);
+	const selectNewCategory = (category: ICategory) => {
+		console.log(category);
+		dispatch(setCurrentCategoryAction(category));
+		toggleShowCategoryList();
 		// setCategoryTitle({
 		// 	categoryName: name,
 		// 	categoryId: categoryId,
@@ -54,9 +60,7 @@ const PersonalPage = () => {
 						{categoryList.map((category) => (
 							<li
 								key={category.categoryId}
-								onClick={() =>
-									selectNewCategory(category.categoryId, category.categoryName)
-								}
+								onClick={() => selectNewCategory(category)}
 								className='py-1'
 							>
 								{category.categoryName}
@@ -72,13 +76,15 @@ const PersonalPage = () => {
 			<ListContainer>
 				<>
 					<div className='h-96 bg-white  overflow-y-scroll mb-4 border border-black '>
-						{/* <ul className='p-3  h-full'>
-							{mainTaskList.length === 0 && <p>Main Task is Empty!</p>}
+						<ul className='p-3  h-full'>
+							{mainTaskList.length === 0 && (
+								<p className='text-center m-8'>Main Task is Empty!</p>
+							)}
 							{mainTaskList.length > 0 &&
 								mainTaskList.map((mainTask) => (
-									<li key={mainTask._id}>{mainTask.taskName}</li>
+									<li key={mainTask.mainTaskId}>{mainTask.mainTaskName}</li>
 								))}
-						</ul> */}
+						</ul>
 					</div>
 					<Summary
 						length={3}

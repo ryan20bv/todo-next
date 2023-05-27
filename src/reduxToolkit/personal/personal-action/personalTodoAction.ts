@@ -2,9 +2,10 @@ import {
 	getRawDataRed,
 	setCurrentCategoryRed,
 	getUserCategoryListRed,
+	setMainTaskListRed,
 	resetPersonalTodoStateRed,
 } from "../personal-slice/personalTodoSlice";
-import { ICategory } from "@/DUMMY_DATA/MODEL";
+import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
 import { signOut } from "next-auth/react";
 
 export const getRawDataAction =
@@ -33,10 +34,12 @@ export const getRawDataAction =
 			const initialCategory: ICategory = {
 				categoryId: data[0]._id,
 				categoryName: data[0].categoryName,
+				creatorId: userId,
 			};
 			// console.log(data);
-			dispatch(setCurrentCategoryAction(initialCategory));
+
 			await dispatch(getRawDataRed({ rawData: data }));
+			dispatch(setCurrentCategoryAction(initialCategory));
 			dispatch(getUserCategoryListAction());
 		} catch (err) {
 			console.log("getRawDataAction", err);
@@ -46,16 +49,30 @@ export const getRawDataAction =
 export const setCurrentCategoryAction =
 	(category: ICategory) => async (dispatch: any, getState: any) => {
 		const { rawData } = getState().personalTodoReducer;
-		const mainTaskList = [];
+		// const currentMainTaskList = [];
 		const foundCategoryItems = rawData.find(
 			(item: any) => item._id === category.categoryId
 		);
 		console.log(foundCategoryItems);
-		dispatch(setCurrentCategoryRed({ currentCategory: category }));
+		console.log(foundCategoryItems.mainTaskList);
+		const currentMainTaskList = foundCategoryItems.mainTaskList.map(
+			(item: any) => {
+				return {
+					categoryId: category.categoryId,
+					mainTaskId: item._id,
+					mainTaskName: item.taskName,
+				};
+			}
+		);
+		console.log(currentMainTaskList);
+		await dispatch(setCurrentCategoryRed({ currentCategory: category }));
+		dispatch(setMainTaskListAction(currentMainTaskList));
 	};
 
 export const setMainTaskListAction =
-	(category: ICategory) => async (dispatch: any, getState: any) => {};
+	(mainTaskList: IMainTask) => async (dispatch: any, getState: any) => {
+		dispatch(setMainTaskListRed({ mainTaskList: mainTaskList }));
+	};
 
 export const getUserCategoryListAction =
 	() => async (dispatch: any, getState: any) => {
@@ -63,9 +80,11 @@ export const getUserCategoryListAction =
 		// console.log(rawData);
 		const categoryList: ICategory[] = [];
 		rawData.forEach((item: any) => {
+			console.log(item);
 			const indivCategory: ICategory = {
 				categoryId: item._id,
 				categoryName: item.categoryName,
+				creatorId: item.creator_id,
 			};
 			categoryList.push(indivCategory);
 		});

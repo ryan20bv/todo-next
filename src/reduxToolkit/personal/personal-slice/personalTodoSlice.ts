@@ -30,7 +30,9 @@ const personalTodoSlice = createSlice({
 		getUserCategoryListRed(state, action) {
 			state.categoryList = action.payload.categoryList;
 		},
-		setMainTaskListRed(state, action) {},
+		setMainTaskListRed(state, action) {
+			state.mainTaskList = action.payload.mainTaskList;
+		},
 		resetPersonalTodoStateRed(state, action) {
 			state.categoryList = [];
 			state.rawData = [];
@@ -45,6 +47,7 @@ export const {
 	getRawDataRed,
 	setCurrentCategoryRed,
 	getUserCategoryListRed,
+	setMainTaskListRed,
 	resetPersonalTodoStateRed,
 } = personalTodoSlice.actions;
 

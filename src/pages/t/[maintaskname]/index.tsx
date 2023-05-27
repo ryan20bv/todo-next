@@ -6,7 +6,7 @@ import PersonalPage from "@/components/profile/PersonalPage";
 
 const MainTaskPage = () => {
 	const router = useRouter();
-	console.log(router);
+	// console.log(router);
 	return <PersonalPage />;
 };
 
