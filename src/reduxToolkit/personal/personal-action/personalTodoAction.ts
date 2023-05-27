@@ -34,7 +34,7 @@ export const getRawDataAction =
 				categoryId: data[0]._id,
 				categoryName: data[0].categoryName,
 			};
-			console.log(data);
+			// console.log(data);
 			dispatch(setCurrentCategoryAction(initialCategory));
 			await dispatch(getRawDataRed({ rawData: data }));
 			dispatch(getUserCategoryListAction());

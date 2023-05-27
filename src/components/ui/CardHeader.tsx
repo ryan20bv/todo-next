@@ -13,7 +13,7 @@ interface propsTypes {
 	onIconHandler?: () => void;
 	from: string;
 	iconFunction?: () => void;
-	showCategoryList?: boolean;
+	showListOfCategories?: boolean;
 }
 
 const CardHeader: React.FC<propsTypes> = (props) => {
@@ -41,7 +41,7 @@ const CardHeader: React.FC<propsTypes> = (props) => {
 				onClick={props.iconFunction}
 				data-testid={`squaresStack_button`}
 			>
-				{props.showCategoryList ? (
+				{props.showListOfCategories ? (
 					<XMarkIcon className='text-red-600 h-6' />
 				) : (
 					<Square3Stack3DIcon className='text-red-600 h-6' />

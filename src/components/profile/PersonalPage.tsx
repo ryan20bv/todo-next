@@ -46,6 +46,7 @@ const PersonalPage = () => {
 				title={currentCategory.categoryName}
 				from='category'
 				iconFunction={toggleShowCategoryList}
+				showListOfCategories={showListOfCategories}
 			/>
 			{showListOfCategories && (
 				<section className='w-[93%] text-center bg-white  border-b-2 border-black absolute  top-20'>
