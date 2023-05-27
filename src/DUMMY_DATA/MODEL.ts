@@ -13,5 +13,19 @@ export interface ITask {
 
 export interface ICategory {
 	categoryId: string;
+	creatorId: string;
 	categoryName: string;
+}
+
+export interface IMainTask {
+	categoryId: string;
+	mainTaskId: string;
+	mainTaskName: string;
+	subTaskList: ISubTask[];
+}
+
+export interface ISubTask {
+	mainTaskId: string;
+	subTaskId: string;
+	subTaskName: string;
 }
