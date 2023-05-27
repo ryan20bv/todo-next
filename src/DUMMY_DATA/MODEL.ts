@@ -21,7 +21,8 @@ export interface IMainTask {
 	categoryId: string;
 	mainTaskId: string;
 	mainTaskName: string;
-	// subTaskList: ISubTask[];
+	subTaskList: ISubTask[];
+	isAllSubTaskDone: boolean;
 }
 
 export interface ISubTask {

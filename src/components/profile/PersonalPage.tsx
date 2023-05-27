@@ -17,6 +17,7 @@ import AddForm from "../ui/AddForm";
 import EditForm from "../ui/EditForm";
 import ListContainer from "../ui/ListContainer";
 import Summary from "../ui/Summary";
+import MainList from "../ui/MainList";
 
 import { ICategory } from "@/DUMMY_DATA/MODEL";
 
@@ -74,25 +75,7 @@ const PersonalPage = () => {
 				placeHolder='add todo'
 			/>
 			<ListContainer>
-				<>
-					<div className='h-96 bg-white  overflow-y-scroll mb-4 border border-black '>
-						<ul className='p-3  h-full'>
-							{mainTaskList.length === 0 && (
-								<p className='text-center m-8'>Main Task is Empty!</p>
-							)}
-							{mainTaskList.length > 0 &&
-								mainTaskList.map((mainTask) => (
-									<li key={mainTask.mainTaskId}>{mainTask.mainTaskName}</li>
-								))}
-						</ul>
-					</div>
-					<Summary
-						length={3}
-						selectedTab='selectedTab'
-						onSelectTab={() => console.log("here")}
-						onDeleteAllDone={() => console.log("here")}
-					/>
-				</>
+				<MainList mainTaskList={mainTaskList} />
 			</ListContainer>
 		</Card>
 	);

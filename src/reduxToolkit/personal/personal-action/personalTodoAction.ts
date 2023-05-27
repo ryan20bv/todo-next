@@ -46,34 +46,6 @@ export const getRawDataAction =
 		}
 	};
 
-export const setCurrentCategoryAction =
-	(category: ICategory) => async (dispatch: any, getState: any) => {
-		const { rawData } = getState().personalTodoReducer;
-		// const currentMainTaskList = [];
-		const foundCategoryItems = rawData.find(
-			(item: any) => item._id === category.categoryId
-		);
-		console.log(foundCategoryItems);
-		console.log(foundCategoryItems.mainTaskList);
-		const currentMainTaskList = foundCategoryItems.mainTaskList.map(
-			(item: any) => {
-				return {
-					categoryId: category.categoryId,
-					mainTaskId: item._id,
-					mainTaskName: item.taskName,
-				};
-			}
-		);
-		console.log(currentMainTaskList);
-		await dispatch(setCurrentCategoryRed({ currentCategory: category }));
-		dispatch(setMainTaskListAction(currentMainTaskList));
-	};
-
-export const setMainTaskListAction =
-	(mainTaskList: IMainTask) => async (dispatch: any, getState: any) => {
-		dispatch(setMainTaskListRed({ mainTaskList: mainTaskList }));
-	};
-
 export const getUserCategoryListAction =
 	() => async (dispatch: any, getState: any) => {
 		const { rawData } = getState().personalTodoReducer;
@@ -89,6 +61,36 @@ export const getUserCategoryListAction =
 			categoryList.push(indivCategory);
 		});
 		dispatch(getUserCategoryListRed({ categoryList }));
+	};
+
+export const setCurrentCategoryAction =
+	(category: ICategory) => async (dispatch: any, getState: any) => {
+		const { rawData } = getState().personalTodoReducer;
+		// const currentMainTaskList = [];
+		const foundCategoryItems = rawData.find(
+			(item: any) => item._id === category.categoryId
+		);
+		console.log(foundCategoryItems);
+		console.log(foundCategoryItems.mainTaskList);
+		const currentMainTaskList = foundCategoryItems.mainTaskList.map(
+			(item: any) => {
+				return {
+					categoryId: category.categoryId,
+					mainTaskId: item._id,
+					mainTaskName: item.taskName,
+					isAllSubTaskDone: item.isAllSubTaskDone,
+					subTaskList: [],
+				};
+			}
+		);
+		console.log(currentMainTaskList);
+		await dispatch(setCurrentCategoryRed({ currentCategory: category }));
+		dispatch(setMainTaskListAction(currentMainTaskList));
+	};
+
+export const setMainTaskListAction =
+	(mainTaskList: IMainTask) => async (dispatch: any, getState: any) => {
+		dispatch(setMainTaskListRed({ mainTaskList: mainTaskList }));
 	};
 
 export const resetPersonalTodoStateAction =
