@@ -4,6 +4,7 @@ import {
 	updateAuthError,
 	updateIsAuthDataState,
 	toggleShowingModalState,
+	resetAuthStateRed,
 } from "../auth-slice/authSlice";
 import { authDataType } from "../auth-slice/authSlice";
 import { signIn } from "next-auth/react";
@@ -67,3 +68,6 @@ export const toggleShowModalAction =
 	(status: boolean) => async (dispatch: any, getState: any) => {
 		dispatch(toggleShowingModalState({ isShowingModalStatus: status }));
 	};
+export const logoutAuthAction = () => async (dispatch: any, getState: any) => {
+	dispatch(resetAuthStateRed({}));
+};

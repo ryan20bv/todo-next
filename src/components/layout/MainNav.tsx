@@ -1,25 +1,25 @@
-import React, { useContext } from "react";
+import React from "react";
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
+import { logoutAuthAction } from "@/reduxToolkit/auth/auth-action/authAction";
+import { resetPersonalTodoStateAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 import { useRouter } from "next/router";
-import AuthenticationContext from "@/loginContext/authentication-context";
 import { useSession, signOut } from "next-auth/react";
 
 const MainNav = () => {
 	const router = useRouter();
+	const dispatch = useAppDispatch();
 	const { data: session, status } = useSession();
-
-	const AuthCtx = useContext(AuthenticationContext);
-	const { loginHandler, isAuthenticated, logoutHandler } = AuthCtx;
-	const onLoginHandler = () => {
-		loginHandler();
-	};
-	const onLogoutHandler = () => {
-		logoutHandler();
-	};
 
 	const goToLoginHandler = () => {
 		router.push("/login");
 	};
 	const logOutHandler = () => {
+		dispatch(logoutAuthAction());
+		dispatch(resetPersonalTodoStateAction());
 		signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
 	};
 
