@@ -11,17 +11,17 @@ import {
 } from "@/reduxToolkit/auth/auth-action/authAction";
 import { setCurrentCategoryAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 
-import Card from "../ui/Card";
-import CardHeader from "../ui/CardHeader";
-import AddForm from "../ui/AddForm";
-import EditForm from "../ui/EditForm";
-import ListContainer from "../ui/ListContainer";
-import Summary from "../ui/Summary";
-import MainList from "../task/main/MainList";
+import Card from "@/components/ui/Card";
+import CardHeader from "@/components/ui/CardHeader";
+import AddForm from "@/components/ui/AddForm";
+import EditForm from "@/components/ui/EditForm";
+import ListContainer from "@/components/ui/ListContainer";
+import Summary from "@/components/ui/Summary";
+import MainList from "./MainList";
 
 import { ICategory } from "@/DUMMY_DATA/MODEL";
 
-const PersonalPage = () => {
+const MainPage = () => {
 	const dispatch = useAppDispatch();
 	const [showListOfCategories, setShowListOfCategories] =
 		useState<boolean>(false);
@@ -81,4 +81,4 @@ const PersonalPage = () => {
 	);
 };
 
-export default PersonalPage;
+export default MainPage;

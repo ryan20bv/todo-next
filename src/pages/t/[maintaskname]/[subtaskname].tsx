@@ -1,7 +1,8 @@
 import React from "react";
+import SubPage from "@/components/task/sub/SubPage";
 
 const SubtaskPage = () => {
-	return <div>Subtask Page</div>;
+	return <SubPage />;
 };
 
 export default SubtaskPage;

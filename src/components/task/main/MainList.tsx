@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Summary from "./Summary";
+import Summary from "../../ui/Summary";
 import MainItem from "./MainItem";
 import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
