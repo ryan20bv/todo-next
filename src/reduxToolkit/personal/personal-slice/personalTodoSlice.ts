@@ -36,7 +36,6 @@ const personalTodoSlice = createSlice({
 			state.rawData = [];
 			state.currentCategory = {} as ICategory;
 			state.mainTaskList = [];
-			state.subTaskList = [];
 		},
 	},
 });
