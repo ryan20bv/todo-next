@@ -2,15 +2,17 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ICategory } from "@/DUMMY_DATA/MODEL";
 
 interface IPersonalTodoState {
-	categoryList: [];
+	categoryList: ICategory[];
 	rawData: {};
 	currentCategory: ICategory;
+	mainTaskList: [];
 }
 
 const initialPersonalState: IPersonalTodoState = {
 	categoryList: [],
 	rawData: {},
 	currentCategory: {} as ICategory,
+	mainTaskList: [],
 };
 
 const personalTodoSlice = createSlice({
@@ -26,10 +28,19 @@ const personalTodoSlice = createSlice({
 		getUserCategoryListRed(state, action) {
 			state.categoryList = action.payload.categoryList;
 		},
+		resetPersonalTodoStateRed(state, action) {
+			state.categoryList = [];
+			state.rawData = {};
+			state.currentCategory = {} as ICategory;
+		},
 	},
 });
 
-export const { getRawDataRed, setCurrentCategoryRed, getUserCategoryListRed } =
-	personalTodoSlice.actions;
+export const {
+	getRawDataRed,
+	setCurrentCategoryRed,
+	getUserCategoryListRed,
+	resetPersonalTodoStateRed,
+} = personalTodoSlice.actions;
 
 export default personalTodoSlice;

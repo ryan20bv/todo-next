@@ -8,10 +8,12 @@ import personalTodoSlice from "../personal/personal-slice/personalTodoSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
+// import storageSession from "reduxjs-toolkit-persist/lib/storage/session";
 
 const persistConfig = {
 	key: "root",
 	storage,
+	// storageSession,
 };
 
 const reducers = combineReducers({
@@ -32,13 +34,8 @@ export const indexStore = configureStore({
 		}),
 });
 
-// const indexStore = configureStore({
-// 	reducer: {
-// 		todoReducer: todoSlice.reducer,
-// 		detailReducer: detailTodoSlice.reducer,
-// 		authReducer: authSlice.reducer,
-// 		personalTodoReducer: personalTodoSlice.reducer,
-// 	},
+// export const indexStore = configureStore({
+// 	reducer: reducers,
 // });
 
 export type RootState = ReturnType<typeof indexStore.getState>;

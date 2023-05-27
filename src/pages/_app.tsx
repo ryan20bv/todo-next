@@ -16,9 +16,58 @@ export default function App({
 }: AppProps<{
 	session: Session;
 }>) {
+	const { isAuthenticated } = indexStore.getState().authReducer;
+	// console.log(isAuthenticated);
 	return (
 		<SessionProvider session={pageProps.session}>
 			<ReduxProvider store={indexStore}>
+				{/* {isAuthenticated && (
+					<PersistGate
+						loading={null}
+						persistor={persistor}
+					>
+						<Layout>
+							<Head>
+								<title>TODO NEXT</title>
+								<meta
+									name='viewport'
+									content='width=device-width, initial-scale=1.0'
+								/>
+								<meta
+									http-equiv='Content-Type'
+									content='text/html;charset=UTF-8'
+								/>
+								<meta
+									name='description'
+									content='Todo app with crud using nextJS FrontEnd and node js express backend'
+								/>
+							</Head>
+
+							<Component {...pageProps} />
+						</Layout>
+					</PersistGate>
+				)}
+				{!isAuthenticated && (
+					<Layout>
+						<Head>
+							<title>TODO NEXT</title>
+							<meta
+								name='viewport'
+								content='width=device-width, initial-scale=1.0'
+							/>
+							<meta
+								http-equiv='Content-Type'
+								content='text/html;charset=UTF-8'
+							/>
+							<meta
+								name='description'
+								content='Todo app with crud using nextJS FrontEnd and node js express backend'
+							/>
+						</Head>
+
+						<Component {...pageProps} />
+					</Layout>
+				)} */}
 				<PersistGate
 					loading={null}
 					persistor={persistor}
@@ -39,6 +88,7 @@ export default function App({
 								content='Todo app with crud using nextJS FrontEnd and node js express backend'
 							/>
 						</Head>
+
 						<Component {...pageProps} />
 					</Layout>
 				</PersistGate>
