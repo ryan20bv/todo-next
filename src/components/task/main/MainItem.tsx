@@ -45,7 +45,6 @@ const MainItem: React.FC<propsType> = ({
 		}
 	};
 	const deleteHandler = (id: string) => {
-		console.log("deleteHandler");
 		onDeleteMainTask(id);
 	};
 

@@ -10,12 +10,6 @@ import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 // import storageSession from "reduxjs-toolkit-persist/lib/storage/session";
 
-const persistConfig = {
-	key: "root",
-	storage,
-	// storageSession,
-};
-
 const reducers = combineReducers({
 	todoReducer: todoSlice.reducer,
 	detailReducer: detailTodoSlice.reducer,
@@ -31,6 +25,12 @@ const reducers = combineReducers({
 // 		personalTodoReducer: personalTodoSlice.reducer,
 // 	},
 // });
+const persistConfig = {
+	key: "root",
+	storage,
+	blacklist: ["todoReducer", "detailReducer"],
+	// storageSession,
+};
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 export const indexStore = configureStore({

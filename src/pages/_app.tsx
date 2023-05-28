@@ -22,7 +22,7 @@ export default function App({
 	return (
 		<SessionProvider session={pageProps.session}>
 			<ReduxProvider store={indexStore}>
-				{isAuthenticated && (
+				{/* {isAuthenticated && (
 					<PersistGate
 						loading={null}
 						persistor={persistor}
@@ -68,8 +68,8 @@ export default function App({
 
 						<Component {...pageProps} />
 					</Layout>
-				)}
-				{/* <PersistGate
+				)} */}
+				<PersistGate
 					loading={null}
 					persistor={persistor}
 				>
@@ -92,7 +92,7 @@ export default function App({
 
 						<Component {...pageProps} />
 					</Layout>
-				</PersistGate> */}
+				</PersistGate>
 			</ReduxProvider>
 		</SessionProvider>
 	);
