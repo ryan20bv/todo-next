@@ -100,11 +100,13 @@ export const updateTodoIsDoneAction =
 
 		// dispatch(updateFilteredTodoListAction(selectedTab));
 	};
-
-export const deleteTodoAction =
+// checked
+export const deleteMainTodoAction =
 	(id: string) => async (dispatch: any, getState: any) => {
 		const { todoList, selectedTab } = getState().todoReducer;
-		const updatedTodoList = todoList.filter((todo: ITask) => todo._id !== id);
+		const updatedTodoList = todoList.filter(
+			(todo: IMainTask) => todo.mainTaskId !== id
+		);
 		dispatch(deleteTodoRed({ updatedTodoList }));
 		// dispatch(updateFilteredTodoListAction(selectedTab));
 	};

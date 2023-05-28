@@ -3,15 +3,15 @@ import { useRouter } from "next/router";
 import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
 import {
 	updateTodoIsDoneAction,
-	deleteTodoAction,
-	selectTodoToEditAction,
+	deleteMainTodoAction,
+	editSelectedTodoAction,
 } from "@/reduxToolkit/todo/todo-action/todoAction";
 import { setTodoDetailAction } from "@/reduxToolkit/todo/todo-action/detailAction";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
-	task: ITask;
+	task: IMainTask;
 	index: number;
 }
 
@@ -22,11 +22,11 @@ const TodoItem: React.FC<propsType> = ({ task, index }) => {
 	const setIsDoneHandler = (id: string) => {
 		dispatch(updateTodoIsDoneAction(id));
 	};
-	const setIsEditingHandler = (todo: ITask) => {
-		dispatch(selectTodoToEditAction(todo));
+	const setIsEditingHandler = (todo: IMainTask) => {
+		dispatch(editSelectedTodoAction(todo));
 	};
 	const deleteHandler = (id: string) => {
-		dispatch(deleteTodoAction(id));
+		dispatch(deleteMainTodoAction(id));
 	};
 	const todoDetailHandler = (id: string) => {
 		dispatch(setTodoDetailAction(id));

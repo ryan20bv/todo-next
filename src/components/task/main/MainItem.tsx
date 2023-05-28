@@ -14,16 +14,22 @@ interface propsType {
 	mainTask: IMainTask;
 	index: number;
 	onEditing: (task: IMainTask) => void;
+	onDeleteMainTask: (mainTaskId: string) => void;
 }
 
-const MainItem: React.FC<propsType> = ({ mainTask, index, onEditing }) => {
+const MainItem: React.FC<propsType> = ({
+	mainTask,
+	index,
+	onEditing,
+	onDeleteMainTask,
+}) => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	// console.log(router);
 	const { isAuthenticated } = useAppSelector(
 		(state: RootState) => state.authReducer
 	);
-
+	// !checkedHome
 	const setIsEditingHandler = (task: IMainTask) => {
 		onEditing(task);
 	};
@@ -40,6 +46,7 @@ const MainItem: React.FC<propsType> = ({ mainTask, index, onEditing }) => {
 	};
 	const deleteHandler = (id: string) => {
 		console.log("deleteHandler");
+		onDeleteMainTask(id);
 	};
 
 	let summaryName = mainTask.mainTaskName;
