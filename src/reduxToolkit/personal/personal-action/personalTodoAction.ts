@@ -4,8 +4,9 @@ import {
 	getUserCategoryListRed,
 	setMainTaskListRed,
 	resetPersonalTodoStateRed,
+	setSelectedMainTaskRed,
 } from "../personal-slice/personalTodoSlice";
-import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
+import { ICategory, IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 import { signOut } from "next-auth/react";
 
 export const getRawDataAction =
@@ -74,12 +75,23 @@ export const setCurrentCategoryAction =
 		console.log(foundCategoryItems.mainTaskList);
 		const currentMainTaskList = foundCategoryItems.mainTaskList.map(
 			(item: any) => {
+				const formattedSubTaskList: ISubTask[] = item.subTaskList.map(
+					(subItem: any) => {
+						return {
+							mainTaskId: subItem.mainTask_id,
+							subTaskId: subItem._id,
+							subTaskName: subItem.subTaskName,
+							isDone: false,
+						};
+					}
+				);
+
 				return {
 					categoryId: category.categoryId,
 					mainTaskId: item._id,
 					mainTaskName: item.taskName,
 					isAllSubTaskDone: item.isAllSubTaskDone,
-					subTaskList: item.subTaskList,
+					subTaskList: formattedSubTaskList,
 				};
 			}
 		);
@@ -91,6 +103,12 @@ export const setCurrentCategoryAction =
 export const setMainTaskListAction =
 	(mainTaskList: IMainTask) => async (dispatch: any, getState: any) => {
 		dispatch(setMainTaskListRed({ mainTaskList: mainTaskList }));
+	};
+
+export const setSelectedMainTaskAction =
+	(selectedTask: IMainTask) => async (dispatch: any, getState: any) => {
+		console.log("selected", selectedTask);
+		dispatch(setSelectedMainTaskRed({ selectedMainTask: selectedTask }));
 	};
 
 export const resetPersonalTodoStateAction =

@@ -6,6 +6,7 @@ interface IPersonalTodoState {
 	rawData: [];
 	currentCategory: ICategory;
 	mainTaskList: IMainTask[];
+	selectedMainTask: IMainTask;
 }
 
 const initialPersonalState: IPersonalTodoState = {
@@ -13,6 +14,8 @@ const initialPersonalState: IPersonalTodoState = {
 	rawData: [],
 	currentCategory: {} as ICategory,
 	mainTaskList: [],
+
+	selectedMainTask: {} as IMainTask,
 };
 
 const personalTodoSlice = createSlice({
@@ -31,11 +34,15 @@ const personalTodoSlice = createSlice({
 		setMainTaskListRed(state, action) {
 			state.mainTaskList = action.payload.mainTaskList;
 		},
+		setSelectedMainTaskRed(state, action) {
+			state.selectedMainTask = action.payload.selectedMainTask;
+		},
 		resetPersonalTodoStateRed(state, action) {
 			state.categoryList = [];
 			state.rawData = [];
 			state.currentCategory = {} as ICategory;
 			state.mainTaskList = [];
+			state.selectedMainTask = {} as IMainTask;
 		},
 	},
 });
@@ -45,6 +52,7 @@ export const {
 	setCurrentCategoryRed,
 	getUserCategoryListRed,
 	setMainTaskListRed,
+	setSelectedMainTaskRed,
 	resetPersonalTodoStateRed,
 } = personalTodoSlice.actions;
 

@@ -29,4 +29,5 @@ export interface ISubTask {
 	mainTaskId: string;
 	subTaskId: string;
 	subTaskName: string;
+	isDone: boolean;
 }

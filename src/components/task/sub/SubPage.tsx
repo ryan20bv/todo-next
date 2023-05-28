@@ -4,8 +4,19 @@ import CardHeader from "@/components/ui/CardHeader";
 import AddForm from "@/components/ui/AddForm";
 import ListContainer from "@/components/ui/ListContainer";
 import SubList from "./SubList";
+import { ISubTask } from "@/DUMMY_DATA/MODEL";
+
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
 
 const SubPage = () => {
+	const { selectedMainTask } = useAppSelector(
+		(state: RootState) => state.personalTodoReducer
+	);
+
 	return (
 		<Card>
 			<CardHeader
@@ -18,7 +29,7 @@ const SubPage = () => {
 				placeHolder='add details'
 			/>
 			<ListContainer>
-				<SubList />
+				<SubList subTaskList={selectedMainTask.subTaskList} />
 			</ListContainer>
 		</Card>
 	);

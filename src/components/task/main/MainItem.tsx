@@ -6,6 +6,7 @@ import {
 	useAppSelector,
 	RootState,
 } from "@/reduxToolkit/indexStore/indexStore";
+import { setSelectedMainTaskAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 
 interface propsType {
@@ -14,8 +15,9 @@ interface propsType {
 }
 
 const MainItem: React.FC<propsType> = ({ mainTask, index }) => {
+	const dispatch = useAppDispatch();
 	const router = useRouter();
-	console.log(router);
+	// console.log(router);
 	const { isAuthenticated } = useAppSelector(
 		(state: RootState) => state.authReducer
 	);
@@ -23,12 +25,12 @@ const MainItem: React.FC<propsType> = ({ mainTask, index }) => {
 	const setIsEditingHandler = (task: IMainTask) => {
 		console.log("isEditingHandler");
 	};
-	const todoDetailHandler = (task: IMainTask) => {
-		// dispatch(setTodoDetailAction(id));
+	const todoDetailHandler = (selectedTask: IMainTask) => {
+		dispatch(setSelectedMainTaskAction(selectedTask));
 		if (!isAuthenticated) {
-			router.push(`/n/${task.mainTaskId}`);
+			router.push(`/n/${selectedTask.mainTaskId}`);
 		} else {
-			let str = task.mainTaskName;
+			let str = selectedTask.mainTaskName;
 			str = str.replace(/\s+/g, "-").toLowerCase();
 			router.push(`${router.asPath}/${str}`);
 		}

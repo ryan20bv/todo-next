@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import SubItem from "./SubItem";
 import Summary from "@/components/ui/Summary";
+import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 
-const SubList = () => {
+interface PropsType {
+	subTaskList: ISubTask[];
+}
+
+const SubList: React.FC<PropsType> = ({ subTaskList }) => {
 	const [selectedTab, setSelectedTab] = useState<string>("all");
 	const updateSelectedTabHandler = (tabName: string) => {
 		setSelectedTab(tabName);
@@ -37,7 +42,12 @@ const SubList = () => {
 						{length > 0 ? "Details" : "No Details"} - {selectedTab}
 					</h3>
 					<ul className='py-2 px-2 list-disc h-full'>
-						<SubItem />
+						{subTaskList.map((subTask) => (
+							<SubItem
+								key={subTask.subTaskId}
+								subTask={subTask}
+							/>
+						))}
 					</ul>
 				</div>
 			</div>
