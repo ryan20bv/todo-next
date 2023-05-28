@@ -26,23 +26,28 @@ const todoSlice = createSlice({
 	name: "Todo Slice",
 	initialState: initialTodoState,
 	reducers: {
+		// checked
 		getAllTodoRed(state, action) {
 			state.todoList = action.payload.allTodos;
 		},
+		// checked
 		updateTodoListRed(state, action) {
 			state.todoList = action.payload.updatedTodoList;
 		},
+		// checked
 		updateFirstLoadRed(state, action) {
 			state.firstLoad = action.payload.firstLoad;
 		},
+		// checked
 		addNewTodoRed(state, action) {
 			state.todoList = action.payload.updatedTodos;
 		},
+		// checked
 		updateEditingStatusRed(state, action) {
 			state.isEditing = action.payload.isEditingStatus;
 			state.todoToEdit = action.payload.todoToEdit;
 		},
-		// here
+
 		setSelectedTodoRed(state, action) {
 			state.selectedTodo = action.payload.selectedTodo;
 		},
@@ -59,12 +64,13 @@ const todoSlice = createSlice({
 		deleteAllDoneRed(state, action) {
 			state.todoList = action.payload.updatedTodoList;
 		},
-
+		// checked
 		updateTodoListAfterEditRed(state, action) {
 			state.isEditing = false;
 			state.todoToEdit = {} as IMainTask;
 			state.todoList = action.payload.todoList;
 		},
+		// checked
 		resetIsEditingRed(state, action) {
 			state.isEditing = false;
 			state.todoToEdit = {} as IMainTask;

@@ -17,7 +17,7 @@ import MainList from "../task/main/MainList";
 import {
 	addNewTodoAction,
 	confirmEditAction,
-	cancelEditTodoAction,
+	cancelEditMainTaskAction,
 	editSelectedTodoAction,
 } from "@/reduxToolkit/todo/todo-action/todoAction";
 import { IMainTask } from "@/DUMMY_DATA/MODEL";
@@ -45,8 +45,8 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	const confirmEditingHandler = (task: string) => {
 		dispatch(confirmEditAction(task));
 	};
-	const cancelEditingHandler = () => {
-		dispatch(cancelEditTodoAction());
+	const cancelMainTaskEditingHandler = () => {
+		dispatch(cancelEditMainTaskAction());
 	};
 
 	const burgerMenuHandler = () => {
@@ -72,10 +72,10 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			)}
 			{isEditing && (
 				<EditForm
-					todoToEdit={todoToEdit}
+					mainTaskToEdit={todoToEdit}
 					confirmEditing={confirmEditingHandler}
 					isEditing={isEditing}
-					onCancel={cancelEditingHandler}
+					onCancelEditing={cancelMainTaskEditingHandler}
 				/>
 			)}
 			<ListContainer>

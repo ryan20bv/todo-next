@@ -3,21 +3,21 @@ import { IMainTask, ITodoDetails } from "@/DUMMY_DATA/MODEL";
 import { CheckIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 interface propsTypes {
-	todoToEdit: IMainTask;
+	mainTaskToEdit: IMainTask;
 	confirmEditing: (input: string) => void;
 	isEditing: boolean;
 	detailToEdit?: ITodoDetails;
 	isDetailEditing?: boolean;
-	onCancel: () => void;
+	onCancelEditing: () => void;
 }
 
 const EditForm: React.FC<propsTypes> = ({
-	todoToEdit,
+	mainTaskToEdit,
 	confirmEditing,
 	isEditing,
 	isDetailEditing,
 	detailToEdit,
-	onCancel,
+	onCancelEditing,
 }) => {
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -34,7 +34,7 @@ const EditForm: React.FC<propsTypes> = ({
 	};
 
 	const cancelEditHandler = () => {
-		onCancel();
+		onCancelEditing();
 	};
 	return (
 		<section className=' mt-4  w-full px-3 flex '>
@@ -49,7 +49,7 @@ const EditForm: React.FC<propsTypes> = ({
 					required
 					defaultValue={
 						isEditing
-							? todoToEdit?.mainTaskName
+							? mainTaskToEdit?.mainTaskName
 							: isDetailEditing
 							? detailToEdit?.item
 							: ""

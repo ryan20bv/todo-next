@@ -140,7 +140,7 @@ export const confirmEditAction =
 		dispatch(updateTodoListAfterEditRed({ todoList: copyOfTodoList }));
 		// dispatch(updateFilteredTodoListAction(selectedTab));
 	};
-
-export const cancelEditTodoAction = () => async (dispatch: any) => {
+// checked
+export const cancelEditMainTaskAction = () => async (dispatch: any) => {
 	dispatch(resetIsEditingRed({}));
 };

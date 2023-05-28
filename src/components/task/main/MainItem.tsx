@@ -25,7 +25,6 @@ const MainItem: React.FC<propsType> = ({ mainTask, index, onEditing }) => {
 	);
 
 	const setIsEditingHandler = (task: IMainTask) => {
-		console.log("isEditingHandler");
 		onEditing(task);
 	};
 	const todoDetailHandler = (selectedTask: IMainTask) => {
