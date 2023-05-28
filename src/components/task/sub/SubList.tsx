@@ -16,6 +16,17 @@ const SubList: React.FC<PropsType> = ({ subTaskList }) => {
 		console.log("deleteAll");
 	};
 
+	let filteredList = subTaskList;
+	if (selectedTab === "active") {
+		filteredList = subTaskList.filter(
+			(subTask: ISubTask) => subTask.isDone === false
+		);
+	} else if (selectedTab === "done") {
+		filteredList = subTaskList.filter(
+			(subTask: ISubTask) => subTask.isDone === true
+		);
+	}
+	let length: number = filteredList?.length || 0;
 	return (
 		<div className=''>
 			<div className='h-96  bg-white   mb-4 border border-black p-2 overflow-y-scroll'>
@@ -41,14 +52,16 @@ const SubList: React.FC<PropsType> = ({ subTaskList }) => {
 					<h3>
 						{length > 0 ? "Details" : "No Details"} - {selectedTab}
 					</h3>
-					<ul className='py-2 px-2 list-disc h-full'>
-						{subTaskList.map((subTask) => (
-							<SubItem
-								key={subTask.subTaskId}
-								subTask={subTask}
-							/>
-						))}
-					</ul>
+					{length > 0 && (
+						<ul className='py-2 px-2 list-disc h-full'>
+							{filteredList.map((subTask) => (
+								<SubItem
+									key={subTask.subTaskId}
+									subTask={subTask}
+								/>
+							))}
+						</ul>
+					)}
 				</div>
 			</div>
 			<Summary

@@ -81,7 +81,7 @@ export const setCurrentCategoryAction =
 							mainTaskId: subItem.mainTask_id,
 							subTaskId: subItem._id,
 							subTaskName: subItem.subTaskName,
-							isDone: false,
+							isDone: subItem.isDone,
 						};
 					}
 				);
