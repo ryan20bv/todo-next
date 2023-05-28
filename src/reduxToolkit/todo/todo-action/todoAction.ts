@@ -2,6 +2,7 @@ import { getAllTasks } from "@/DUMMY_DATA/DUMMY_DATA";
 import {
 	getAllTodoRed,
 	updateFirstLoadRed,
+	setSelectedTodoRed,
 	addNewTodoRed,
 	// updateFilteredTodoListRed,
 	updateTodoDoneStatusRed,
@@ -13,7 +14,7 @@ import {
 	updateTodoListRed,
 } from "../todo-slice/todoSlice";
 
-import { ITask, ITodoDetails } from "@/DUMMY_DATA/MODEL";
+import { ITask, ITodoDetails, IMainTask } from "@/DUMMY_DATA/MODEL";
 import { v4 as uuidv4 } from "uuid";
 
 export const getAllTodoAction = () => async (dispatch: any, getState: any) => {
@@ -24,14 +25,18 @@ export const getAllTodoAction = () => async (dispatch: any, getState: any) => {
 	// dispatch(updateFilteredTodoListAction("all"));
 };
 export const updateTodoListAction =
-	(allTodos: ITask[]) => async (dispatch: any, getState: any) => {
+	(allTodos: IMainTask[]) => async (dispatch: any, getState: any) => {
 		// console.log(allTodos);
 		const { selectedTab } = getState().todoReducer;
 		await dispatch(updateTodoListRed({ updatedTodoList: allTodos }));
 		// dispatch(updateFilteredTodoListAction(selectedTab));
 		dispatch(updateLocaleStorageAction(allTodos));
 	};
-
+export const setSelectedTodoAction =
+	(todo: IMainTask) => async (dispatch: any, getState: any) => {
+		console.log(todo);
+		dispatch(setSelectedTodoRed({ selectedTodo: todo }));
+	};
 export const addNewTodoAction =
 	(newTask: string) => async (dispatch: any, getState: any) => {
 		const newTodo: ITask = {
@@ -50,7 +55,7 @@ export const addNewTodoAction =
 	};
 
 export const updateLocaleStorageAction =
-	(allTodos: ITask[]) => async (dispatch: any) => {
+	(allTodos: IMainTask[]) => async (dispatch: any) => {
 		const allTodosAsString = JSON.stringify(allTodos);
 		window.localStorage.setItem("allTodos", allTodosAsString);
 	};

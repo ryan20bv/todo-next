@@ -1,26 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
 interface ITodoState {
-	todoList: ITask[];
+	todoList: IMainTask[];
 	firstLoad: boolean;
-	// filteredTodoList: ITask[];
-	selectedTab: string;
+
 	isEditing: boolean;
-	todoToEdit: ITask;
+	todoToEdit: IMainTask;
 	isInDetails: boolean;
-	todoDetails: ITask;
+	todoDetails: IMainTask;
+	selectedTodo: IMainTask;
 }
 
 const initialTodoState: ITodoState = {
 	todoList: [],
 	firstLoad: true,
-	// filteredTodoList: [],
-	selectedTab: "all",
 	isEditing: false,
-	todoToEdit: {} as ITask,
+	selectedTodo: {} as IMainTask,
+	todoToEdit: {} as IMainTask,
 	isInDetails: false,
-	todoDetails: {} as ITask,
+	todoDetails: {} as IMainTask,
 };
 
 const todoSlice = createSlice({
@@ -38,6 +37,9 @@ const todoSlice = createSlice({
 		},
 		addNewTodoRed(state, action) {
 			state.todoList = action.payload.updatedTodos;
+		},
+		setSelectedTodoRed(state, action) {
+			state.selectedTodo = action.payload.selectedTodo;
 		},
 		// updateFilteredTodoListRed(state, action) {
 		// 	state.selectedTab = action.payload.selectedTab;
@@ -58,18 +60,19 @@ const todoSlice = createSlice({
 		},
 		updateTodoListAfterEditRed(state, action) {
 			state.isEditing = false;
-			state.todoToEdit = {} as ITask;
+			state.todoToEdit = {} as IMainTask;
 			state.todoList = action.payload.todoList;
 		},
 		resetIsEditingRed(state, action) {
 			state.isEditing = false;
-			state.todoToEdit = {} as ITask;
+			state.todoToEdit = {} as IMainTask;
 		},
 	},
 });
 export const {
 	getAllTodoRed,
 	updateFirstLoadRed,
+	setSelectedTodoRed,
 	addNewTodoRed,
 	// updateFilteredTodoListRed,
 	updateTodoDoneStatusRed,

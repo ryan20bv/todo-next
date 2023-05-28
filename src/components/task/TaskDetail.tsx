@@ -6,12 +6,14 @@ import AddForm from "../ui/AddForm";
 import ListContainer from "../ui/ListContainer";
 import DetailsLists from "./DetailsLists";
 import EditForm from "../ui/EditForm";
+import SubList from "./sub/SubList";
 
 import {
 	setTodoDetailAction,
 	addNewDetailsAction,
 	cancelDetailEditingAction,
 	confirmDetailEditingAction,
+	toggleDetailIsDoneAction,
 } from "@/reduxToolkit/todo/todo-action/detailAction";
 import { ITask } from "@/DUMMY_DATA/MODEL";
 
@@ -22,6 +24,36 @@ import {
 } from "@/reduxToolkit/indexStore/indexStore";
 
 const TaskDetail = () => {
+	const dispatch = useAppDispatch();
+	const router = useRouter();
+	const { todoList, selectedTodo } = useAppSelector(
+		(state: RootState) => state.todoReducer
+	);
+	const backArrowHandler = () => {
+		router.back();
+	};
+	const isDoneHandler = (subTaskId: string) => {
+		dispatch(toggleDetailIsDoneAction(subTaskId));
+	};
+	return (
+		<Card>
+			<CardHeader
+				title='title'
+				onIconHandler={backArrowHandler}
+				from='generalSubtask'
+			/>
+
+			<ListContainer>
+				<SubList
+					subTaskList={selectedTodo.subTaskList}
+					isDoneHandler={isDoneHandler}
+				/>
+			</ListContainer>
+		</Card>
+	);
+};
+
+/* const TaskDetail = () => {
 	const dispatch = useAppDispatch();
 
 	const router = useRouter();
@@ -100,6 +132,6 @@ const TaskDetail = () => {
 			</ListContainer>
 		</Card>
 	);
-};
+}; */
 
 export default TaskDetail;

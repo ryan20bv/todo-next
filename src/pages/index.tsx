@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import Home from "@/components/homePage/Home";
 import { getAllTasks } from "@/DUMMY_DATA/DUMMY_DATA";
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
 import { Roboto } from "next/font/google";
 
@@ -11,7 +11,7 @@ const roboto = Roboto({
 });
 
 interface propsType {
-	allTasks: ITask[];
+	allTasks: IMainTask[];
 }
 
 const HomePage: React.FC<propsType> = ({ allTasks }) => {

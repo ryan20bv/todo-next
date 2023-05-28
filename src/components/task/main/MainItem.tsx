@@ -7,6 +7,7 @@ import {
 	RootState,
 } from "@/reduxToolkit/indexStore/indexStore";
 import { setSelectedMainTaskAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
+import { setSelectedTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 
 interface propsType {
@@ -26,10 +27,11 @@ const MainItem: React.FC<propsType> = ({ mainTask, index }) => {
 		console.log("isEditingHandler");
 	};
 	const todoDetailHandler = (selectedTask: IMainTask) => {
-		dispatch(setSelectedMainTaskAction(selectedTask));
 		if (!isAuthenticated) {
+			dispatch(setSelectedTodoAction(selectedTask));
 			router.push(`/n/${selectedTask.mainTaskId}`);
 		} else {
+			dispatch(setSelectedMainTaskAction(selectedTask));
 			let str = selectedTask.mainTaskName;
 			str = str.replace(/\s+/g, "-").toLowerCase();
 			router.push(`${router.asPath}/${str}`);

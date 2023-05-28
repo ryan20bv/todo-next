@@ -12,19 +12,22 @@ import AddForm from "../ui/AddForm";
 import EditForm from "../ui/EditForm";
 import ListContainer from "../ui/ListContainer";
 import TodoList from "./TodoList";
+import MainList from "../task/main/MainList";
+
 import {
 	addNewTodoAction,
 	confirmEditAction,
 	cancelEditTodoAction,
 } from "@/reduxToolkit/todo/todo-action/todoAction";
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
-	allTasks: ITask[];
+	allTasks: IMainTask[];
 }
 
 const Home: React.FC<propsType> = ({ allTasks }) => {
 	const dispatch = useAppDispatch();
+
 	const { todoList, firstLoad, isEditing, todoToEdit } = useAppSelector(
 		(state: RootState) => state.todoReducer
 	);
@@ -71,8 +74,10 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 				/>
 			)}
 			<ListContainer>
-				{firstLoad && <TodoList allTasks={allTasks} />}
-				{!firstLoad && <TodoList allTasks={todoList} />}
+				{firstLoad && <MainList mainTaskList={allTasks} />}
+				{!firstLoad && <MainList mainTaskList={todoList} />}
+				{/* {firstLoad && <TodoList allTasks={allTasks} />} */}
+				{/* {!firstLoad && <TodoList allTasks={todoList} />} */}
 			</ListContainer>
 		</Card>
 	);
