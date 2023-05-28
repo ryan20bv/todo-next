@@ -38,6 +38,11 @@ const todoSlice = createSlice({
 		addNewTodoRed(state, action) {
 			state.todoList = action.payload.updatedTodos;
 		},
+		updateEditingStatusRed(state, action) {
+			state.isEditing = action.payload.isEditingStatus;
+			state.todoToEdit = action.payload.todoToEdit;
+		},
+		// here
 		setSelectedTodoRed(state, action) {
 			state.selectedTodo = action.payload.selectedTodo;
 		},
@@ -54,10 +59,7 @@ const todoSlice = createSlice({
 		deleteAllDoneRed(state, action) {
 			state.todoList = action.payload.updatedTodoList;
 		},
-		updateEditingStatusRed(state, action) {
-			state.isEditing = action.payload.isEditingStatus;
-			state.todoToEdit = action.payload.todoToEdit;
-		},
+
 		updateTodoListAfterEditRed(state, action) {
 			state.isEditing = false;
 			state.todoToEdit = {} as IMainTask;

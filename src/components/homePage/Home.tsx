@@ -18,6 +18,7 @@ import {
 	addNewTodoAction,
 	confirmEditAction,
 	cancelEditTodoAction,
+	editSelectedTodoAction,
 } from "@/reduxToolkit/todo/todo-action/todoAction";
 import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
@@ -41,7 +42,7 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	const addTodoHandler = (task: string) => {
 		dispatch(addNewTodoAction(task));
 	};
-	const editTodoHandler = (task: string) => {
+	const confirmEditingHandler = (task: string) => {
 		dispatch(confirmEditAction(task));
 	};
 	const cancelEditingHandler = () => {
@@ -50,6 +51,10 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 
 	const burgerMenuHandler = () => {
 		console.log("burger menu");
+	};
+
+	const isEditingHandler = (mainTask: IMainTask) => {
+		dispatch(editSelectedTodoAction(mainTask));
 	};
 
 	return (
@@ -68,14 +73,24 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			{isEditing && (
 				<EditForm
 					todoToEdit={todoToEdit}
-					confirmEditing={editTodoHandler}
+					confirmEditing={confirmEditingHandler}
 					isEditing={isEditing}
 					onCancel={cancelEditingHandler}
 				/>
 			)}
 			<ListContainer>
-				{firstLoad && <MainList mainTaskList={allTasks} />}
-				{!firstLoad && <MainList mainTaskList={todoList} />}
+				{firstLoad && (
+					<MainList
+						mainTaskList={allTasks}
+						onEditing={isEditingHandler}
+					/>
+				)}
+				{!firstLoad && (
+					<MainList
+						mainTaskList={todoList}
+						onEditing={isEditingHandler}
+					/>
+				)}
 				{/* {firstLoad && <TodoList allTasks={allTasks} />} */}
 				{/* {!firstLoad && <TodoList allTasks={todoList} />} */}
 			</ListContainer>

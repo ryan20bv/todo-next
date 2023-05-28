@@ -17,6 +17,7 @@ import {
 import { ITask, ITodoDetails, IMainTask } from "@/DUMMY_DATA/MODEL";
 import { v4 as uuidv4 } from "uuid";
 
+// checked
 export const getAllTodoAction = () => async (dispatch: any, getState: any) => {
 	const allTodos = getAllTasks();
 	dispatch(updateLocaleStorageAction(allTodos));
@@ -24,6 +25,8 @@ export const getAllTodoAction = () => async (dispatch: any, getState: any) => {
 	await dispatch(updateFirstLoadRed({ firstLoad: false }));
 	// dispatch(updateFilteredTodoListAction("all"));
 };
+
+// checked
 export const updateTodoListAction =
 	(allTodos: IMainTask[]) => async (dispatch: any, getState: any) => {
 		// console.log(allTodos);
@@ -32,18 +35,21 @@ export const updateTodoListAction =
 		// dispatch(updateFilteredTodoListAction(selectedTab));
 		dispatch(updateLocaleStorageAction(allTodos));
 	};
+
 export const setSelectedTodoAction =
 	(todo: IMainTask) => async (dispatch: any, getState: any) => {
-		console.log(todo);
 		dispatch(setSelectedTodoRed({ selectedTodo: todo }));
 	};
+
+// checked
 export const addNewTodoAction =
 	(newTask: string) => async (dispatch: any, getState: any) => {
-		const newTodo: ITask = {
-			_id: uuidv4(),
-			name: newTask,
-			isDone: false,
-			details: [],
+		const newTodo: IMainTask = {
+			categoryId: "Todo next js",
+			mainTaskId: uuidv4(),
+			mainTaskName: newTask,
+			isAllSubTaskDone: false,
+			subTaskList: [],
 		};
 
 		// console.log(getState().todoReducer);
@@ -54,6 +60,7 @@ export const addNewTodoAction =
 		// dispatch(updateFilteredTodoListAction(selectedTab));
 	};
 
+// checked
 export const updateLocaleStorageAction =
 	(allTodos: IMainTask[]) => async (dispatch: any) => {
 		const allTodosAsString = JSON.stringify(allTodos);
@@ -112,22 +119,23 @@ export const deleteAllDoneAction =
 		// dispatch(updateFilteredTodoListAction(selectedTab));
 	};
 
-export const selectTodoToEditAction =
-	(todoToEdit: ITask) => async (dispatch: any) => {
+// checked
+export const editSelectedTodoAction =
+	(todoToEdit: IMainTask) => async (dispatch: any) => {
 		dispatch(updateEditingStatusRed({ isEditingStatus: true, todoToEdit }));
 	};
-
+// checked
 export const confirmEditAction =
 	(newTaskName: string) => async (dispatch: any, getState: any) => {
 		const { todoList, selectedTab, todoToEdit } = getState().todoReducer;
 		let indexToEdit = todoList.findIndex(
-			(todo: ITask) => todo._id === todoToEdit._id
+			(todo: IMainTask) => todo.mainTaskId === todoToEdit.mainTaskId
 		);
 
 		let copyOfTodoList = [...todoList];
 		copyOfTodoList[indexToEdit] = {
 			...copyOfTodoList[indexToEdit],
-			name: newTaskName,
+			mainTaskName: newTaskName,
 		};
 		dispatch(updateTodoListAfterEditRed({ todoList: copyOfTodoList }));
 		// dispatch(updateFilteredTodoListAction(selectedTab));

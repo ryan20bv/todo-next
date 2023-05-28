@@ -5,9 +5,10 @@ import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
 interface PropsTypes {
 	mainTaskList: IMainTask[];
+	onEditing: (mainTask: IMainTask) => void;
 }
 
-const MainList: React.FC<PropsTypes> = ({ mainTaskList }) => {
+const MainList: React.FC<PropsTypes> = ({ mainTaskList, onEditing }) => {
 	const [selectedTab, setSelectedTab] = useState<string>("all");
 
 	const updateSelectedTabHandler = (tabName: string) => {
@@ -40,6 +41,7 @@ const MainList: React.FC<PropsTypes> = ({ mainTaskList }) => {
 								key={mainTask.mainTaskId}
 								mainTask={mainTask}
 								index={index}
+								onEditing={onEditing}
 							/>
 						))}
 				</ul>

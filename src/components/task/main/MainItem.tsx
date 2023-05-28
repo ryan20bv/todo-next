@@ -13,9 +13,10 @@ import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 interface propsType {
 	mainTask: IMainTask;
 	index: number;
+	onEditing: (task: IMainTask) => void;
 }
 
-const MainItem: React.FC<propsType> = ({ mainTask, index }) => {
+const MainItem: React.FC<propsType> = ({ mainTask, index, onEditing }) => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	// console.log(router);
@@ -25,6 +26,7 @@ const MainItem: React.FC<propsType> = ({ mainTask, index }) => {
 
 	const setIsEditingHandler = (task: IMainTask) => {
 		console.log("isEditingHandler");
+		onEditing(task);
 	};
 	const todoDetailHandler = (selectedTask: IMainTask) => {
 		if (!isAuthenticated) {
