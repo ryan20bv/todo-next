@@ -29,8 +29,6 @@ export const addNewSubTodoAction =
 			isDone: false,
 			mainTaskId: mainTodoId,
 		};
-		console.log(newSubTodoName);
-		console.log(selectedTodo);
 
 		const copyOfTodoDetails: IMainTask = { ...selectedTodo };
 
@@ -38,6 +36,35 @@ export const addNewSubTodoAction =
 
 		await dispatch(updateLisOfTodoAction(copyOfTodoDetails));
 		dispatch(setSelectedTodoAction(copyOfTodoDetails));
+	};
+// checked
+export const deleteSubTodoAction =
+	(subTodo_Id: string) => async (dispatch: any, getState: any) => {
+		let { selectedTodo } = getState().todoReducer;
+		let copyOfTodoDetails: IMainTask = { ...selectedTodo };
+		let updatedTodoDetails = selectedTodo.subTaskList.filter(
+			(subTask: ISubTask) => subTask.subTaskId !== subTodo_Id
+		);
+
+		copyOfTodoDetails.subTaskList = [...updatedTodoDetails];
+		await dispatch(updateLisOfTodoAction(copyOfTodoDetails));
+		dispatch(setSelectedTodoAction(copyOfTodoDetails));
+	};
+
+export const updateLisOfTodoAction =
+	(updatedTodo: IMainTask) => async (dispatch: any, getState: any) => {
+		let { mainTodoList } = getState().todoReducer;
+		let copyOfMainTodoList = [...mainTodoList];
+		const todoDetailsIndex = copyOfMainTodoList.findIndex(
+			(todo: IMainTask) => todo.mainTaskId === updatedTodo.mainTaskId
+		);
+		let mainTodoIsDone: boolean = updatedTodo.subTaskList.every(
+			(detail: ISubTask) => detail.isDone === true
+		);
+		const copyOfSingleTodo: IMainTask = { ...updatedTodo };
+		copyOfSingleTodo.isAllSubTaskDone = mainTodoIsDone;
+		copyOfMainTodoList[todoDetailsIndex] = { ...copyOfSingleTodo };
+		dispatch(updateTodoListAction(copyOfMainTodoList));
 	};
 
 export const toggleDetailIsDoneAction =
@@ -57,22 +84,6 @@ export const toggleDetailIsDoneAction =
 		copyOfTodoDetails.details = [...copyOfDetails];
 		dispatch(toggleDetailIsDoneRed({ updatedTodoDetails: copyOfTodoDetails }));
 		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
-	};
-
-export const updateLisOfTodoAction =
-	(updatedTodo: IMainTask) => async (dispatch: any, getState: any) => {
-		let { mainTodoList } = getState().todoReducer;
-		let copyOfMainTodoList = [...mainTodoList];
-		const todoDetailsIndex = copyOfMainTodoList.findIndex(
-			(todo: IMainTask) => todo.mainTaskId === updatedTodo.mainTaskId
-		);
-		let mainTodoIsDone: boolean = updatedTodo.subTaskList.every(
-			(detail: ISubTask) => detail.isDone === true
-		);
-		const copyOfSingleTodo: IMainTask = { ...updatedTodo };
-		copyOfSingleTodo.isAllSubTaskDone = mainTodoIsDone;
-		copyOfMainTodoList[todoDetailsIndex] = { ...copyOfSingleTodo };
-		dispatch(updateTodoListAction(copyOfMainTodoList));
 	};
 
 export const deleteDetailAction =

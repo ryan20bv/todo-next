@@ -35,10 +35,19 @@ export const updateTodoListAction =
 		// dispatch(updateFilteredTodoListAction(selectedTab));
 		dispatch(updateLocaleStorageAction(allTodos));
 	};
-
+// checked
 export const setSelectedTodoAction =
 	(todo: IMainTask) => async (dispatch: any, getState: any) => {
-		dispatch(setSelectedTodoRed({ selectedTodo: todo }));
+		const { mainTodoList } = getState().todoReducer;
+		await dispatch(setSelectedTodoRed({ selectedTodo: todo }));
+		dispatch(updateLocaleStorageAction(mainTodoList, todo));
+	};
+// checked
+export const updateStateAfterRefreshFirstLoadAction =
+	(mainTodoList: IMainTask[], selectedTodo: IMainTask) =>
+	async (dispatch: any, getState: any) => {
+		await dispatch(updateTodoListRed({ updatedTodoList: mainTodoList }));
+		dispatch(setSelectedTodoRed({ selectedTodo }));
 	};
 
 // checked
@@ -53,7 +62,7 @@ export const addNewTodoAction =
 		};
 
 		// console.log(getState().todoReducer);
-		const { mainTodoList, selectedTab } = getState().todoReducer;
+		const { mainTodoList } = getState().todoReducer;
 		const updatedTodos = [...mainTodoList, newTodo];
 		dispatch(updateLocaleStorageAction(updatedTodos));
 		dispatch(addNewTodoRed({ updatedTodos }));
@@ -62,9 +71,10 @@ export const addNewTodoAction =
 
 // checked
 export const updateLocaleStorageAction =
-	(allTodos: IMainTask[]) => async (dispatch: any) => {
-		const allTodosAsString = JSON.stringify(allTodos);
-		window.localStorage.setItem("allTodos", allTodosAsString);
+	(allTodos: IMainTask[], selectedTodo: IMainTask) => async (dispatch: any) => {
+		const todoDataStored = { allTodos, selectedTodo };
+		const allTodosDataAsString = JSON.stringify(todoDataStored);
+		window.localStorage.setItem("todoDataStored", allTodosDataAsString);
 	};
 
 /* export const updateFilteredTodoListAction =

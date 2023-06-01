@@ -1,13 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Card from "@/components/ui/Card";
 import TaskDetail from "@/components/task/TaskDetail";
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
+import { updateStateAfterRefreshFirstLoadAction } from "@/reduxToolkit/todo/todo-action/todoAction";
+
 import { GetStaticProps } from "next";
 
 import { getAllTasks } from "@/DUMMY_DATA/DUMMY_DATA";
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
 const TaskDetails = () => {
+	const dispatch = useAppDispatch();
+	const [allTodoInLocalStorage, setAllTodoInLocalStorage] = useState<
+		IMainTask[]
+	>([]);
+	const { firstLoad } = useAppSelector((state: RootState) => state.todoReducer);
+	useEffect(() => {
+		if (firstLoad) {
+			const allTodoInLocalStorage = window.localStorage.getItem("todoDataStored");
+
+			if (allTodoInLocalStorage) {
+				const parsedData = JSON.parse(allTodoInLocalStorage);
+				dispatch(
+					updateStateAfterRefreshFirstLoadAction(
+						parsedData.allTodos,
+						parsedData.selectedTodo
+					)
+				);
+			}
+		}
+	}, [firstLoad, dispatch]);
+
 	return <TaskDetail />;
 };
 

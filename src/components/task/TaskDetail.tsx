@@ -10,6 +10,7 @@ import SubList from "./sub/SubList";
 
 import {
 	addNewSubTodoAction,
+	deleteSubTodoAction,
 	cancelDetailEditingAction,
 	confirmDetailEditingAction,
 	toggleDetailIsDoneAction,
@@ -25,9 +26,10 @@ import {
 const TaskDetail = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const { mainTodoList, selectedTodo } = useAppSelector(
+	const { mainTodoList, selectedTodo, firstLoad } = useAppSelector(
 		(state: RootState) => state.todoReducer
 	);
+
 	const backArrowHandler = () => {
 		router.back();
 	};
@@ -36,6 +38,10 @@ const TaskDetail = () => {
 	};
 	const addSubTodoHandler = (newSubTodoName: string) => {
 		dispatch(addNewSubTodoAction(newSubTodoName, selectedTodo.mainTaskId));
+	};
+	const deleteSubTodoHandler = (subTodo_Id: string) => {
+		// console.log(subTodo_Id);
+		dispatch(deleteSubTodoAction(subTodo_Id));
 	};
 	return (
 		<Card>
@@ -52,6 +58,7 @@ const TaskDetail = () => {
 				<SubList
 					subTaskList={selectedTodo.subTaskList}
 					isDoneHandler={isDoneHandler}
+					onDeleteSubTodo={deleteSubTodoHandler}
 				/>
 			</ListContainer>
 		</Card>

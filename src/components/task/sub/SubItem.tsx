@@ -6,16 +6,21 @@ import { ISubTask } from "@/DUMMY_DATA/MODEL";
 interface PropsType {
 	subTask: ISubTask;
 	isDoneHandler: (id: string) => void;
+	onDeleteSubTodo: (id: string) => void;
 }
 
-const SubItem: React.FC<PropsType> = ({ subTask, isDoneHandler }) => {
+const SubItem: React.FC<PropsType> = ({
+	subTask,
+	isDoneHandler,
+	onDeleteSubTodo,
+}) => {
 	const setDone: string = subTask.isDone ? "line-through" : "";
 
 	const isDoneDetailHandler = (subTaskId: string) => {
 		isDoneHandler(subTaskId);
 	};
-	const deleteDetailHandler = (detail_id: string) => {
-		console.log("deleteDetailHandler");
+	const deleteDetailHandler = (subTodo_Id: string) => {
+		onDeleteSubTodo(subTodo_Id);
 	};
 	const setIsEditingHandler = (details: any) => {
 		console.log("setIsEditingHandler");

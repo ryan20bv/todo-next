@@ -6,9 +6,14 @@ import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 interface PropsType {
 	subTaskList: ISubTask[];
 	isDoneHandler: (id: string) => void;
+	onDeleteSubTodo: (id: string) => void;
 }
 
-const SubList: React.FC<PropsType> = ({ subTaskList, isDoneHandler }) => {
+const SubList: React.FC<PropsType> = ({
+	subTaskList,
+	isDoneHandler,
+	onDeleteSubTodo,
+}) => {
 	const [selectedTab, setSelectedTab] = useState<string>("all");
 	const updateSelectedTabHandler = (tabName: string) => {
 		setSelectedTab(tabName);
@@ -60,6 +65,7 @@ const SubList: React.FC<PropsType> = ({ subTaskList, isDoneHandler }) => {
 									key={subTask.subTaskId}
 									subTask={subTask}
 									isDoneHandler={isDoneHandler}
+									onDeleteSubTodo={onDeleteSubTodo}
 								/>
 							))}
 						</ul>
