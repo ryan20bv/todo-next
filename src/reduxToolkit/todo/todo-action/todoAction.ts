@@ -48,6 +48,7 @@ export const updateStateAfterRefreshFirstLoadAction =
 	async (dispatch: any, getState: any) => {
 		await dispatch(updateTodoListRed({ updatedTodoList: mainTodoList }));
 		dispatch(setSelectedTodoRed({ selectedTodo }));
+		dispatch(updateFirstLoadRed({ firstLoad: false }));
 	};
 
 // checked
@@ -71,7 +72,8 @@ export const addNewTodoAction =
 
 // checked
 export const updateLocaleStorageAction =
-	(allTodos: IMainTask[], selectedTodo: IMainTask) => async (dispatch: any) => {
+	(allTodos: IMainTask[], selectedTodo: IMainTask = {} as IMainTask) =>
+	async (dispatch: any) => {
 		const todoDataStored = { allTodos, selectedTodo };
 		const allTodosDataAsString = JSON.stringify(todoDataStored);
 		window.localStorage.setItem("todoDataStored", allTodosDataAsString);
