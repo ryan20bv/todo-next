@@ -14,7 +14,7 @@ import {
 	updateTodoListRed,
 } from "../todo-slice/todoSlice";
 
-import { ITask, ITodoDetails, IMainTask } from "@/DUMMY_DATA/MODEL";
+import { IMainTask } from "@/DUMMY_DATA/MODEL";
 import { v4 as uuidv4 } from "uuid";
 
 // checked
@@ -30,7 +30,7 @@ export const getAllTodoAction = () => async (dispatch: any, getState: any) => {
 export const updateTodoListAction =
 	(allTodos: IMainTask[]) => async (dispatch: any, getState: any) => {
 		// console.log(allTodos);
-		const { selectedTab } = getState().todoReducer;
+
 		await dispatch(updateTodoListRed({ updatedTodoList: allTodos }));
 		// dispatch(updateFilteredTodoListAction(selectedTab));
 		dispatch(updateLocaleStorageAction(allTodos));
@@ -53,8 +53,8 @@ export const addNewTodoAction =
 		};
 
 		// console.log(getState().todoReducer);
-		const { todoList, selectedTab } = getState().todoReducer;
-		const updatedTodos = [...todoList, newTodo];
+		const { mainTodoList, selectedTab } = getState().todoReducer;
+		const updatedTodos = [...mainTodoList, newTodo];
 		dispatch(updateLocaleStorageAction(updatedTodos));
 		dispatch(addNewTodoRed({ updatedTodos }));
 		// dispatch(updateFilteredTodoListAction(selectedTab));
@@ -103,8 +103,8 @@ export const updateTodoIsDoneAction =
 // checked
 export const deleteMainTodoAction =
 	(id: string) => async (dispatch: any, getState: any) => {
-		const { todoList, selectedTab } = getState().todoReducer;
-		const updatedTodoList = todoList.filter(
+		const { mainTodoList, selectedTab } = getState().todoReducer;
+		const updatedTodoList = mainTodoList.filter(
 			(todo: IMainTask) => todo.mainTaskId !== id
 		);
 		dispatch(deleteTodoRed({ updatedTodoList }));
@@ -115,7 +115,7 @@ export const deleteAllDoneAction =
 	() => async (dispatch: any, getState: any) => {
 		const { todoList, selectedTab } = getState().todoReducer;
 		const updatedTodoList = todoList.filter(
-			(todo: ITask) => todo.isDone === false
+			(todo: IMainTask) => todo.isAllSubTaskDone === false
 		);
 		dispatch(deleteAllDoneRed({ updatedTodoList }));
 		// dispatch(updateFilteredTodoListAction(selectedTab));
@@ -129,12 +129,12 @@ export const editSelectedTodoAction =
 // checked
 export const confirmEditAction =
 	(newTaskName: string) => async (dispatch: any, getState: any) => {
-		const { todoList, selectedTab, todoToEdit } = getState().todoReducer;
-		let indexToEdit = todoList.findIndex(
+		const { mainTodoList, selectedTab, todoToEdit } = getState().todoReducer;
+		let indexToEdit = mainTodoList.findIndex(
 			(todo: IMainTask) => todo.mainTaskId === todoToEdit.mainTaskId
 		);
 
-		let copyOfTodoList = [...todoList];
+		let copyOfTodoList = [...mainTodoList];
 		copyOfTodoList[indexToEdit] = {
 			...copyOfTodoList[indexToEdit],
 			mainTaskName: newTaskName,

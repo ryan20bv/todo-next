@@ -9,13 +9,12 @@ import EditForm from "../ui/EditForm";
 import SubList from "./sub/SubList";
 
 import {
-	setTodoDetailAction,
-	addNewDetailsAction,
+	addNewSubTodoAction,
 	cancelDetailEditingAction,
 	confirmDetailEditingAction,
 	toggleDetailIsDoneAction,
 } from "@/reduxToolkit/todo/todo-action/detailAction";
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
 import {
 	useAppDispatch,
@@ -26,7 +25,7 @@ import {
 const TaskDetail = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const { todoList, selectedTodo } = useAppSelector(
+	const { mainTodoList, selectedTodo } = useAppSelector(
 		(state: RootState) => state.todoReducer
 	);
 	const backArrowHandler = () => {
@@ -35,14 +34,20 @@ const TaskDetail = () => {
 	const isDoneHandler = (subTaskId: string) => {
 		dispatch(toggleDetailIsDoneAction(subTaskId));
 	};
+	const addSubTodoHandler = (newSubTodoName: string) => {
+		dispatch(addNewSubTodoAction(newSubTodoName, selectedTodo.mainTaskId));
+	};
 	return (
 		<Card>
 			<CardHeader
-				title='title'
+				title={selectedTodo.mainTaskName}
 				onIconHandler={backArrowHandler}
 				from='generalSubtask'
 			/>
-
+			<AddForm
+				onAddHandler={addSubTodoHandler}
+				placeHolder='add sub todo'
+			/>
 			<ListContainer>
 				<SubList
 					subTaskList={selectedTodo.subTaskList}

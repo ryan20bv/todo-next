@@ -1,4 +1,4 @@
-import { ITask, IMainTask } from "./MODEL";
+import { IMainTask } from "./MODEL";
 
 export const DUMMY_TODOS: IMainTask[] = [
 	{

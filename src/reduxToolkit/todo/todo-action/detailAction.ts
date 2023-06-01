@@ -1,4 +1,4 @@
-import { ITask, ITodoDetails } from "@/DUMMY_DATA/MODEL";
+import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 import {
 	setTodoDetailRed,
 	resetIsInDetailsRed,
@@ -11,55 +11,33 @@ import {
 	updateTodoDetailsAfterEditRed,
 } from "../todo-slice/detailSlice";
 import { updateFirstLoadRed } from "../todo-slice/todoSlice";
-import {
-	updateTodoListAction,
-	// updateFilteredTodoListAction,
-} from "./todoAction";
-import { getAllTodoRed } from "../todo-slice/todoSlice";
+import { updateTodoListAction, setSelectedTodoAction } from "./todoAction";
 import { v4 as uuidv4 } from "uuid";
-
-export const setTodoDetailAction =
-	(id: string) => async (dispatch: any, getState: any) => {
-		dispatch(updateIsLoadingRed({ isLoading: true }));
-
-		let { todoList, selectedTab } = getState().todoReducer;
-
-		if (todoList.length === 0) {
-			const allTodosAsString = window.localStorage.getItem("allTodos");
-
-			if (allTodosAsString) {
-				todoList = JSON.parse(allTodosAsString);
-				dispatch(updateFirstLoadRed(false));
-
-				dispatch(getAllTodoRed({ allTodos: todoList }));
-				// dispatch(updateFilteredTodoListAction(selectedTab));
-			}
-		}
-		const foundTodo = todoList.find((todo: ITask) => todo._id === id);
-
-		dispatch(setTodoDetailRed({ todoDetails: foundTodo }));
-		dispatch(updateIsLoadingRed({ isLoading: false }));
-	};
 
 export const resetIsInDetailsAction = () => async (dispatch: any) => {
 	dispatch(resetIsInDetailsRed({}));
 };
 
-export const addNewDetailsAction =
-	(detail: string, taskid: string) => async (dispatch: any, getState: any) => {
-		let { todoDetails } = getState().detailReducer;
-		const newDetail: ITodoDetails = {
-			_id: uuidv4(),
-			item: detail,
+// checked
+export const addNewSubTodoAction =
+	(newSubTodoName: string, mainTodoId: string) =>
+	async (dispatch: any, getState: any) => {
+		let { selectedTodo } = getState().todoReducer;
+		const newSubTodo: ISubTask = {
+			subTaskId: uuidv4(),
+			subTaskName: newSubTodoName,
 			isDone: false,
+			mainTaskId: mainTodoId,
 		};
+		console.log(newSubTodoName);
+		console.log(selectedTodo);
 
-		const copyOfTodoDetails = { ...todoDetails };
+		const copyOfTodoDetails: IMainTask = { ...selectedTodo };
 
-		copyOfTodoDetails.details = [...todoDetails.details, newDetail];
+		copyOfTodoDetails.subTaskList = [...selectedTodo.subTaskList, newSubTodo];
 
-		dispatch(addNewDetailsRed({ updatedTodoDetails: copyOfTodoDetails }));
-		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
+		await dispatch(updateLisOfTodoAction(copyOfTodoDetails));
+		dispatch(setSelectedTodoAction(copyOfTodoDetails));
 	};
 
 export const toggleDetailIsDoneAction =
@@ -82,19 +60,19 @@ export const toggleDetailIsDoneAction =
 	};
 
 export const updateLisOfTodoAction =
-	(updatedTodo: ITask) => async (dispatch: any, getState: any) => {
-		let { todoList } = getState().todoReducer;
-		let copyOfTodoList = [...todoList];
-		const todoDetailsIndex = copyOfTodoList.findIndex(
-			(todo: ITask) => todo._id === updatedTodo._id
+	(updatedTodo: IMainTask) => async (dispatch: any, getState: any) => {
+		let { mainTodoList } = getState().todoReducer;
+		let copyOfMainTodoList = [...mainTodoList];
+		const todoDetailsIndex = copyOfMainTodoList.findIndex(
+			(todo: IMainTask) => todo.mainTaskId === updatedTodo.mainTaskId
 		);
-		let todoIsDone: boolean = updatedTodo.details.every(
-			(detail: ITodoDetails) => detail.isDone === true
+		let mainTodoIsDone: boolean = updatedTodo.subTaskList.every(
+			(detail: ISubTask) => detail.isDone === true
 		);
-		const copyOfSingleTodo: ITask = { ...updatedTodo };
-		copyOfSingleTodo.isDone = todoIsDone;
-		copyOfTodoList[todoDetailsIndex] = { ...copyOfSingleTodo };
-		dispatch(updateTodoListAction(copyOfTodoList));
+		const copyOfSingleTodo: IMainTask = { ...updatedTodo };
+		copyOfSingleTodo.isAllSubTaskDone = mainTodoIsDone;
+		copyOfMainTodoList[todoDetailsIndex] = { ...copyOfSingleTodo };
+		dispatch(updateTodoListAction(copyOfMainTodoList));
 	};
 
 export const deleteDetailAction =

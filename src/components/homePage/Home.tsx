@@ -30,7 +30,7 @@ interface propsType {
 const Home: React.FC<propsType> = ({ allTasks }) => {
 	const dispatch = useAppDispatch();
 
-	const { todoList, firstLoad, isEditing, todoToEdit } = useAppSelector(
+	const { mainTodoList, firstLoad, isEditing, todoToEdit } = useAppSelector(
 		(state: RootState) => state.todoReducer
 	);
 
@@ -95,7 +95,7 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 				)}
 				{!firstLoad && (
 					<MainList
-						mainTaskList={todoList}
+						mainTaskList={mainTodoList}
 						onEditing={isEditingHandler}
 						onDeleteMainTask={deleteMainTaskHandler}
 					/>
