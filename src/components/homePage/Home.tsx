@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
 	useAppDispatch,
@@ -29,10 +29,9 @@ interface propsType {
 
 const Home: React.FC<propsType> = ({ allTasks }) => {
 	const dispatch = useAppDispatch();
-
-	const { mainTodoList, firstLoad, isEditing, todoToEdit } = useAppSelector(
-		(state: RootState) => state.todoReducer
-	);
+	const [isEditing, setIsEditing] = useState<boolean>(false);
+	const { mainTodoList, firstLoad, isEditingMainTodo, todoToEdit } =
+		useAppSelector((state: RootState) => state.todoReducer);
 
 	useEffect(() => {
 		if (firstLoad) {
@@ -45,15 +44,18 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	};
 	// checked
 	const isEditingHandler = (mainTask: IMainTask) => {
+		setIsEditing(true);
 		dispatch(editSelectedTodoAction(mainTask));
 	};
 	// checked
 	const confirmEditingHandler = (task: string) => {
 		dispatch(confirmEditAction(task));
+		setIsEditing(false);
 	};
 	// checked
 	const cancelMainTaskEditingHandler = () => {
 		dispatch(cancelEditMainTaskAction());
+		setIsEditing(false);
 	};
 	// checked
 	const deleteMainTaskHandler = (mainTaskId: string) => {
@@ -81,7 +83,7 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 				<EditForm
 					mainTaskToEdit={todoToEdit}
 					confirmEditing={confirmEditingHandler}
-					isEditing={isEditing}
+					isEditingMainTodo={isEditingMainTodo}
 					onCancelEditing={cancelMainTaskEditingHandler}
 				/>
 			)}

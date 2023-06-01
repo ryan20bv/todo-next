@@ -4,7 +4,7 @@ import { IMainTask } from "@/DUMMY_DATA/MODEL";
 interface ITodoState {
 	mainTodoList: IMainTask[];
 	firstLoad: boolean;
-	isEditing: boolean;
+	isEditingMainTodo: boolean;
 	todoToEdit: IMainTask;
 	selectedTodo: IMainTask;
 }
@@ -12,7 +12,7 @@ interface ITodoState {
 const initialTodoState: ITodoState = {
 	mainTodoList: [],
 	firstLoad: true,
-	isEditing: false,
+	isEditingMainTodo: false,
 	selectedTodo: {} as IMainTask,
 	todoToEdit: {} as IMainTask,
 };
@@ -39,7 +39,7 @@ const todoSlice = createSlice({
 		},
 		// checked
 		updateEditingStatusRed(state, action) {
-			state.isEditing = action.payload.isEditingStatus;
+			state.isEditingMainTodo = action.payload.isEditingStatus;
 			state.todoToEdit = action.payload.todoToEdit;
 		},
 		// checked
@@ -54,13 +54,13 @@ const todoSlice = createSlice({
 
 		// checked
 		updateTodoListAfterEditRed(state, action) {
-			state.isEditing = false;
+			state.isEditingMainTodo = false;
 			state.todoToEdit = {} as IMainTask;
 			state.mainTodoList = action.payload.todoList;
 		},
 		// checked
 		resetIsEditingRed(state, action) {
-			state.isEditing = false;
+			state.isEditingMainTodo = false;
 			state.todoToEdit = {} as IMainTask;
 		},
 		deleteAllDoneRed(state, action) {

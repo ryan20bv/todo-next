@@ -5,7 +5,7 @@ import { CheckIcon, XCircleIcon } from "@heroicons/react/24/outline";
 interface propsTypes {
 	mainTaskToEdit: IMainTask;
 	confirmEditing: (input: string) => void;
-	isEditing: boolean;
+	isEditingMainTodo?: boolean;
 	detailToEdit?: ITodoDetails;
 	isDetailEditing?: boolean;
 	onCancelEditing: () => void;
@@ -14,7 +14,7 @@ interface propsTypes {
 const EditForm: React.FC<propsTypes> = ({
 	mainTaskToEdit,
 	confirmEditing,
-	isEditing,
+	isEditingMainTodo,
 	isDetailEditing,
 	detailToEdit,
 	onCancelEditing,
@@ -48,7 +48,7 @@ const EditForm: React.FC<propsTypes> = ({
 					placeholder='edit todo'
 					required
 					defaultValue={
-						isEditing
+						isEditingMainTodo
 							? mainTaskToEdit?.mainTaskName
 							: isDetailEditing
 							? detailToEdit?.item
