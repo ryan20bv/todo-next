@@ -15,7 +15,7 @@ import {
 	confirmDetailEditingAction,
 	toggleDetailIsDoneAction,
 } from "@/reduxToolkit/todo/todo-action/detailAction";
-import { IMainTask } from "@/DUMMY_DATA/MODEL";
+import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 
 import {
 	useAppDispatch,
@@ -43,6 +43,9 @@ const TaskDetail = () => {
 		// console.log(subTodo_Id);
 		dispatch(deleteSubTodoAction(subTodo_Id));
 	};
+	const onEditingSubTaskHandler = (subTask: ISubTask) => {
+		console.log(subTask);
+	};
 	return (
 		<Card>
 			<CardHeader
@@ -59,6 +62,7 @@ const TaskDetail = () => {
 					subTaskList={selectedTodo.subTaskList}
 					isDoneHandler={isDoneHandler}
 					onDeleteSubTodo={deleteSubTodoHandler}
+					onEditingSubTask={onEditingSubTaskHandler}
 				/>
 			</ListContainer>
 		</Card>

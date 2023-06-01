@@ -16,9 +16,7 @@ import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
 const TaskDetails = () => {
 	const dispatch = useAppDispatch();
-	const [allTodoInLocalStorage, setAllTodoInLocalStorage] = useState<
-		IMainTask[]
-	>([]);
+
 	const { firstLoad } = useAppSelector((state: RootState) => state.todoReducer);
 	useEffect(() => {
 		if (firstLoad) {
@@ -28,7 +26,7 @@ const TaskDetails = () => {
 				const parsedData = JSON.parse(allTodoInLocalStorage);
 				dispatch(
 					updateStateAfterRefreshFirstLoadAction(
-						parsedData.allTodos,
+						parsedData.mainTodoList,
 						parsedData.selectedTodo
 					)
 				);

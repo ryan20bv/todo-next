@@ -7,12 +7,14 @@ interface PropsType {
 	subTask: ISubTask;
 	isDoneHandler: (id: string) => void;
 	onDeleteSubTodo: (id: string) => void;
+	onEditingSubTask: (subTask: ISubTask) => void;
 }
 
 const SubItem: React.FC<PropsType> = ({
 	subTask,
 	isDoneHandler,
 	onDeleteSubTodo,
+	onEditingSubTask,
 }) => {
 	const setDone: string = subTask.isDone ? "line-through" : "";
 
@@ -22,8 +24,8 @@ const SubItem: React.FC<PropsType> = ({
 	const deleteDetailHandler = (subTodo_Id: string) => {
 		onDeleteSubTodo(subTodo_Id);
 	};
-	const setIsEditingHandler = (details: any) => {
-		console.log("setIsEditingHandler");
+	const onEditingSubTaskHandler = (subTask: ISubTask) => {
+		onEditingSubTask(subTask);
 	};
 
 	return (
@@ -45,7 +47,7 @@ const SubItem: React.FC<PropsType> = ({
 
 			<section>
 				{!subTask.isDone && (
-					<button onClick={() => setIsEditingHandler(subTask)}>
+					<button onClick={() => onEditingSubTaskHandler(subTask)}>
 						<PencilSquareIcon
 							className='text-blue-600 h-6 hover:text-gray-400'
 							data-testid={`detail_edit_button_${subTask.subTaskId}`}

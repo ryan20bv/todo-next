@@ -1,22 +1,17 @@
 import React, { useRef } from "react";
-import { IMainTask, ITodoDetails } from "@/DUMMY_DATA/MODEL";
+import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 import { CheckIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 interface propsTypes {
-	mainTaskToEdit: IMainTask;
+	itemToEdit: string;
 	confirmEditing: (input: string) => void;
-	isEditingMainTodo?: boolean;
-	detailToEdit?: ITodoDetails;
-	isDetailEditing?: boolean;
 	onCancelEditing: () => void;
 }
 
 const EditForm: React.FC<propsTypes> = ({
-	mainTaskToEdit,
+	itemToEdit,
 	confirmEditing,
-	isEditingMainTodo,
-	isDetailEditing,
-	detailToEdit,
+
 	onCancelEditing,
 }) => {
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -47,13 +42,7 @@ const EditForm: React.FC<propsTypes> = ({
 					type='text'
 					placeholder='edit todo'
 					required
-					defaultValue={
-						isEditingMainTodo
-							? mainTaskToEdit?.mainTaskName
-							: isDetailEditing
-							? detailToEdit?.item
-							: ""
-					}
+					defaultValue={itemToEdit}
 					ref={inputRef}
 					className='py-2 px-2 focus:outline-none w-[85%] border border-black '
 					id={`edit_input`}

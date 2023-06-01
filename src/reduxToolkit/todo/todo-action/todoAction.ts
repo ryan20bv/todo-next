@@ -20,10 +20,10 @@ import { v4 as uuidv4 } from "uuid";
 // checked
 export const getAllTodoAction = () => async (dispatch: any, getState: any) => {
 	const allTodos = getAllTasks();
-	dispatch(updateLocaleStorageAction(allTodos));
+
 	await dispatch(getAllTodoRed({ allTodos }));
 	await dispatch(updateFirstLoadRed({ firstLoad: false }));
-	// dispatch(updateFilteredTodoListAction("all"));
+	dispatch(updateLocaleStorageAction());
 };
 
 // checked
@@ -33,21 +33,21 @@ export const updateTodoListAction =
 
 		await dispatch(updateTodoListRed({ updatedTodoList: allTodos }));
 		// dispatch(updateFilteredTodoListAction(selectedTab));
-		dispatch(updateLocaleStorageAction(allTodos));
+		dispatch(updateLocaleStorageAction());
 	};
 // checked
 export const setSelectedTodoAction =
 	(todo: IMainTask) => async (dispatch: any, getState: any) => {
 		const { mainTodoList } = getState().todoReducer;
 		await dispatch(setSelectedTodoRed({ selectedTodo: todo }));
-		dispatch(updateLocaleStorageAction(mainTodoList, todo));
+		dispatch(updateLocaleStorageAction());
 	};
 // checked
 export const updateStateAfterRefreshFirstLoadAction =
 	(mainTodoList: IMainTask[], selectedTodo: IMainTask) =>
 	async (dispatch: any, getState: any) => {
 		await dispatch(updateTodoListRed({ updatedTodoList: mainTodoList }));
-		dispatch(setSelectedTodoRed({ selectedTodo }));
+		await dispatch(setSelectedTodoRed({ selectedTodo }));
 		dispatch(updateFirstLoadRed({ firstLoad: false }));
 	};
 
@@ -65,40 +65,22 @@ export const addNewTodoAction =
 		// console.log(getState().todoReducer);
 		const { mainTodoList } = getState().todoReducer;
 		const updatedTodos = [...mainTodoList, newTodo];
-		dispatch(updateLocaleStorageAction(updatedTodos));
-		dispatch(addNewTodoRed({ updatedTodos }));
+
+		await dispatch(addNewTodoRed({ updatedTodos }));
+		dispatch(updateLocaleStorageAction());
 		// dispatch(updateFilteredTodoListAction(selectedTab));
 	};
 
 // checked
 export const updateLocaleStorageAction =
-	(allTodos: IMainTask[], selectedTodo: IMainTask = {} as IMainTask) =>
-	async (dispatch: any) => {
-		const todoDataStored = { allTodos, selectedTodo };
+	() => async (dispatch: any, getState: any) => {
+		const { mainTodoList, selectedTodo } = getState().todoReducer;
+		const todoDataStored = { mainTodoList, selectedTodo };
 		const allTodosDataAsString = JSON.stringify(todoDataStored);
 		window.localStorage.setItem("todoDataStored", allTodosDataAsString);
 	};
 
-/* export const updateFilteredTodoListAction =
-	(tabName: string) => async (dispatch: any, getState: any) => {
-		// console.log(tabName);
-		const { todoList } = getState().todoReducer;
-		let filteredTodoList = todoList;
-		if (tabName === "active") {
-			filteredTodoList = todoList.filter((todo: ITask) => todo.isDone === false);
-		} else if (tabName === "done") {
-			filteredTodoList = todoList.filter((todo: ITask) => todo.isDone === true);
-		}
-
-		dispatch(
-			updateFilteredTodoListRed({
-				selectedTab: tabName,
-				updatedFilteredTodoList: filteredTodoList,
-			})
-		);
-	}; */
-
-export const updateTodoIsDoneAction =
+/* export const updateTodoIsDoneAction =
 	(id: string) => async (dispatch: any, getState: any) => {
 		const { todoList, selectedTab } = getState().todoReducer;
 		const todoIndex = todoList.findIndex((todo: ITask) => todo._id === id);
@@ -111,7 +93,7 @@ export const updateTodoIsDoneAction =
 		dispatch(updateTodoDoneStatusRed({ updatedTodoList: copyOfTodoList }));
 
 		// dispatch(updateFilteredTodoListAction(selectedTab));
-	};
+	}; */
 // checked
 export const deleteMainTodoAction =
 	(id: string) => async (dispatch: any, getState: any) => {
@@ -119,8 +101,8 @@ export const deleteMainTodoAction =
 		const updatedTodoList = mainTodoList.filter(
 			(todo: IMainTask) => todo.mainTaskId !== id
 		);
-		dispatch(deleteTodoRed({ updatedTodoList }));
-		// dispatch(updateFilteredTodoListAction(selectedTab));
+		await dispatch(deleteTodoRed({ updatedTodoList }));
+		dispatch(updateLocaleStorageAction());
 	};
 
 export const deleteAllDoneAction =
@@ -151,8 +133,8 @@ export const confirmEditAction =
 			...copyOfTodoList[indexToEdit],
 			mainTaskName: newTaskName,
 		};
-		dispatch(updateTodoListAfterEditRed({ todoList: copyOfTodoList }));
-		// dispatch(updateFilteredTodoListAction(selectedTab));
+		await dispatch(updateTodoListAfterEditRed({ todoList: copyOfTodoList }));
+		dispatch(updateLocaleStorageAction());
 	};
 // checked
 export const cancelEditMainTaskAction = () => async (dispatch: any) => {

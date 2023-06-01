@@ -1,22 +1,8 @@
 import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
-import {
-	setTodoDetailRed,
-	resetIsInDetailsRed,
-	updateIsLoadingRed,
-	addNewDetailsRed,
-	toggleDetailIsDoneRed,
-	updateTodoDetailsRed,
-	updateDetailEditingStatusRed,
-	resetIsDetailEditingRed,
-	updateTodoDetailsAfterEditRed,
-} from "../todo-slice/detailSlice";
+import { updateIsLoadingRed } from "../todo-slice/detailSlice";
 import { updateFirstLoadRed } from "../todo-slice/todoSlice";
 import { updateTodoListAction, setSelectedTodoAction } from "./todoAction";
 import { v4 as uuidv4 } from "uuid";
-
-export const resetIsInDetailsAction = () => async (dispatch: any) => {
-	dispatch(resetIsInDetailsRed({}));
-};
 
 // checked
 export const addNewSubTodoAction =
@@ -37,6 +23,11 @@ export const addNewSubTodoAction =
 		await dispatch(updateLisOfTodoAction(copyOfTodoDetails));
 		dispatch(setSelectedTodoAction(copyOfTodoDetails));
 	};
+
+export const resetIsInDetailsAction = () => async (dispatch: any) => {
+	// dispatch(resetIsInDetailsRed({}));
+};
+
 // checked
 export const deleteSubTodoAction =
 	(subTodo_Id: string) => async (dispatch: any, getState: any) => {
@@ -50,7 +41,7 @@ export const deleteSubTodoAction =
 		await dispatch(updateLisOfTodoAction(copyOfTodoDetails));
 		dispatch(setSelectedTodoAction(copyOfTodoDetails));
 	};
-
+// checked
 export const updateLisOfTodoAction =
 	(updatedTodo: IMainTask) => async (dispatch: any, getState: any) => {
 		let { mainTodoList } = getState().todoReducer;
