@@ -37,6 +37,8 @@ const CardHeader: React.FC<propsTypes> = ({
 	// );
 	if (from === "generalSubtask") {
 		icon = <ChevronDoubleLeftIcon className='text-red-600 h-6' />;
+	} else if (from === "login") {
+		icon = <HomeIcon className='text-red-600 h-6' />;
 	} else if (from === "category") {
 		icon = (
 			<>
@@ -47,10 +49,7 @@ const CardHeader: React.FC<propsTypes> = ({
 				)}
 			</>
 		);
-	} else if (from === "login") {
-		icon = <HomeIcon className='text-red-600 h-6' />;
 	}
-
 	return (
 		<section className='bg-[#AF7EEB] w-full py-2 px-3 text-white text-center relative min-h-[40px]'>
 			<button
