@@ -14,7 +14,6 @@ import {
 import { getRawDataAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 import Card from "@/components/ui/Card";
 import CardHeader from "@/components/ui/CardHeader";
-import PersonalPage from "@/components/profile/PersonalPage";
 
 const Index = () => {
 	const router = useRouter();

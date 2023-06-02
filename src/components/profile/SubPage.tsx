@@ -3,7 +3,7 @@ import Card from "@/components/ui/Card";
 import CardHeader from "@/components/ui/CardHeader";
 import AddForm from "@/components/ui/AddForm";
 import ListContainer from "@/components/ui/ListContainer";
-import SubList from "./SubList";
+import SubList from "../task/sub/SubList";
 import { ISubTask } from "@/DUMMY_DATA/MODEL";
 
 import {

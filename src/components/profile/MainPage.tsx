@@ -17,7 +17,7 @@ import AddForm from "@/components/ui/AddForm";
 import EditForm from "@/components/ui/EditForm";
 import ListContainer from "@/components/ui/ListContainer";
 import Summary from "@/components/ui/Summary";
-import MainList from "./MainList";
+import MainList from "../task/main/MainList";
 
 import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
 

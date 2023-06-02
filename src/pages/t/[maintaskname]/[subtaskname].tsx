@@ -1,5 +1,5 @@
 import React from "react";
-import SubPage from "@/components/task/sub/SubPage";
+import SubPage from "@/components/profile/SubPage";
 
 const SubtaskPage = () => {
 	return <SubPage />;
