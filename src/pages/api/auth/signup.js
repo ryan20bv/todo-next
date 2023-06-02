@@ -25,7 +25,7 @@ const authHandler = async (req, res) => {
 
 	try {
 		const response = await axios.post(
-			"http://localhost:5000/api/users/signup",
+			process.env.NEXT_PUBLIC_BACK_END_URL + "/api/users/signup",
 			newUser
 		);
 		console.log(response);

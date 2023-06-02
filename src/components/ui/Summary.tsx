@@ -21,9 +21,9 @@ const Summary: React.FC<propsTypes> = ({
 		const tabName = e.currentTarget.id;
 		onSelectTab(tabName);
 	};
-	let classAll = selectedTab === "all" ? "bg-[#E3E9FF]" : "";
-	let classActive = selectedTab === "active" ? "bg-[#E3E9FF]" : "";
-	let classDone = selectedTab === "done" ? "bg-[#E3E9FF]" : "";
+	let classAll = selectedTab === "all" ? "bg-[#AF7EEB] text-white" : "";
+	let classActive = selectedTab === "active" ? "bg-[#AF7EEB] text-white" : "";
+	let classDone = selectedTab === "done" ? "bg-[#AF7EEB] text-white" : "";
 
 	return (
 		<main className='flex text-[10px]  justify-between  '>

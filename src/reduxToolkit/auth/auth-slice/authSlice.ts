@@ -43,6 +43,13 @@ const authSlice = createSlice({
 		toggleShowingModalState(state, action) {
 			state.isShowingModal = action.payload.isShowingModalStatus;
 		},
+		resetAuthStateRed(state, action) {
+			state.authError = "";
+			state.isSendingData = false;
+			state.isAuthenticated = false;
+			state.authData = {} as authDataType;
+			state.isShowingModal = false;
+		},
 	},
 });
 
@@ -52,5 +59,6 @@ export const {
 	updateAuthError,
 	updateIsAuthDataState,
 	toggleShowingModalState,
+	resetAuthStateRed,
 } = authSlice.actions;
 export default authSlice;

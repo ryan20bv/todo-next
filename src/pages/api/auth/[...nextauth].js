@@ -10,16 +10,22 @@ export const authOptions = {
 			id: "username-login",
 			name: "Login",
 			async authorize(credentials) {
+				// console.log(credentials);
 				const { email, password } = credentials;
 
-				const res = await fetch("http://localhost:5000/api/users/login", {
-					method: "POST",
-					body: JSON.stringify({
-						email,
-						password,
-					}),
-					headers: { "Content-Type": "application/json" },
-				});
+				// "https://todo-next-back.onrender.com/api/users/login"
+
+				const res = await fetch(
+					process.env.NEXT_PUBLIC_BACK_END_URL + "/api/users/login",
+					{
+						method: "POST",
+						body: JSON.stringify({
+							email,
+							password,
+						}),
+						headers: { "Content-Type": "application/json" },
+					}
+				);
 				let user = await res.json();
 				// console.log("user", user);
 				if (res.ok && user) {

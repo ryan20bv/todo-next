@@ -4,8 +4,9 @@ import Layout from "@/components/layout/Layout";
 import Head from "next/head";
 import { Provider as ReduxProvider } from "react-redux";
 import { SessionProvider } from "next-auth/react";
-import AuthenticationProvider from "../loginContext/authentication-provider";
-import indexStore from "@/reduxToolkit/indexStore/indexStore";
+// import AuthenticationProvider from "../loginContext/authentication-provider";
+import { indexStore, persistor } from "@/reduxToolkit/indexStore/indexStore";
+import { PersistGate } from "redux-persist/integration/react";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 
@@ -15,10 +16,16 @@ export default function App({
 }: AppProps<{
 	session: Session;
 }>) {
+	const { isAuthenticated } = indexStore.getState().authReducer;
+	// console.log(isAuthenticated);
+
 	return (
 		<SessionProvider session={pageProps.session}>
-			<AuthenticationProvider>
-				<ReduxProvider store={indexStore}>
+			<ReduxProvider store={indexStore}>
+				<PersistGate
+					loading={null}
+					persistor={persistor}
+				>
 					<Layout>
 						<Head>
 							<title>TODO NEXT</title>
@@ -35,10 +42,11 @@ export default function App({
 								content='Todo app with crud using nextJS FrontEnd and node js express backend'
 							/>
 						</Head>
+
 						<Component {...pageProps} />
 					</Layout>
-				</ReduxProvider>
-			</AuthenticationProvider>
+				</PersistGate>
+			</ReduxProvider>
 		</SessionProvider>
 	);
 }

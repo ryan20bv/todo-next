@@ -171,11 +171,13 @@ const ProfilePage = () => {
 	if (isLoading) {
 		return <p>Loading...</p>;
 	}
-	let title = <h1>Profile</h1>;
 
 	return (
 		<Card>
-			<CardHeader title={title} />
+			<CardHeader
+				title='Profile'
+				from='profile'
+			/>
 			<section className='my-8  w-3/4'>
 				<form onSubmit={submitNewPasswordHandler}>
 					<div className='divide-y divide-gray-200'>
