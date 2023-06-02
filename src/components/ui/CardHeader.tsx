@@ -35,46 +35,31 @@ const CardHeader: React.FC<propsTypes> = ({
 	// 		data-testid={`icon_${from}`}
 	// 	/>
 	// );
-
-	if (from === "category") {
+	if (from === "generalSubtask") {
+		icon = <ChevronDoubleLeftIcon className='text-red-600 h-6' />;
+	} else if (from === "category") {
 		icon = (
-			<button
-				className='absolute left-4 text-red-600 h-6'
-				onClick={iconFunction}
-				data-testid={`squaresStack_button`}
-			>
+			<>
 				{showListOfCategories ? (
 					<XMarkIcon className='text-red-600 h-6' />
 				) : (
 					<Square3Stack3DIcon className='text-red-600 h-6' />
 				)}
-			</button>
-		);
-	} else if (from === "generalSubtask") {
-		icon = (
-			<button
-				className='absolute left-4 text-red-600 h-6'
-				onClick={clickIconHandler}
-				data-testid={`back_button`}
-			>
-				<ChevronDoubleLeftIcon className='text-red-600 h-6' />
-			</button>
+			</>
 		);
 	} else if (from === "login") {
-		icon = (
-			<button
-				className='absolute left-4 text-red-600 h-6'
-				data-testid={`login_home_button`}
-				onClick={clickIconHandler}
-			>
-				<HomeIcon className='text-red-600 h-6' />
-			</button>
-		);
+		icon = <HomeIcon className='text-red-600 h-6' />;
 	}
 
 	return (
 		<section className='bg-[#AF7EEB] w-full py-2 px-3 text-white text-center relative min-h-[40px]'>
-			<button className='absolute left-4 text-red-600 h-6'>{icon}</button>
+			<button
+				className='absolute left-4 text-red-600 h-6'
+				onClick={clickIconHandler}
+				data-testid={`icon_header_${from}`}
+			>
+				{icon}
+			</button>
 
 			<h1>{title}</h1>
 		</section>
