@@ -15,6 +15,7 @@ interface propsType {
 	index: number;
 	onEditing: (task: IMainTask) => void;
 	onDeleteMainTask: (mainTaskId: string) => void;
+	onSeeSubTaskPage: (mainTask: IMainTask) => void;
 }
 
 const MainItem: React.FC<propsType> = ({
@@ -22,6 +23,7 @@ const MainItem: React.FC<propsType> = ({
 	index,
 	onEditing,
 	onDeleteMainTask,
+	onSeeSubTaskPage,
 }) => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
@@ -33,16 +35,17 @@ const MainItem: React.FC<propsType> = ({
 	const setIsEditingHandler = (task: IMainTask) => {
 		onEditing(task);
 	};
-	const todoDetailHandler = (selectedTask: IMainTask) => {
-		if (!isAuthenticated) {
-			dispatch(setSelectedTodoAction(selectedTask));
-			router.push(`/n/${selectedTask.mainTaskId}`);
-		} else {
-			dispatch(setSelectedMainTaskAction(selectedTask));
-			let str = selectedTask.mainTaskName;
-			str = str.replace(/\s+/g, "-").toLowerCase();
-			router.push(`${router.asPath}/${str}`);
-		}
+	const seeSubTaskHandler = (selectedTask: IMainTask) => {
+		onSeeSubTaskPage(selectedTask);
+		// if (!isAuthenticated) {
+		// 	dispatch(setSelectedTodoAction(selectedTask));
+		// 	router.push(`/n/${selectedTask.mainTaskId}`);
+		// } else {
+		// 	dispatch(setSelectedMainTaskAction(selectedTask));
+		// 	let str = selectedTask.mainTaskName;
+		// 	str = str.replace(/\s+/g, "-").toLowerCase();
+		// 	router.push(`${router.asPath}/${str}`);
+		// }
 	};
 	const deleteHandler = (id: string) => {
 		onDeleteMainTask(id);
@@ -82,7 +85,7 @@ const MainItem: React.FC<propsType> = ({
 
 				<h3
 					className={`${setDone} pl-2 pr-1 cursor-pointer `}
-					onClick={() => todoDetailHandler(mainTask)}
+					onClick={() => seeSubTaskHandler(mainTask)}
 					data-testid={`task_${mainTask.mainTaskName}`}
 				>
 					<span>{index + 1 + "."}</span>

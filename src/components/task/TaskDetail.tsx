@@ -62,7 +62,7 @@ const TaskDetail = () => {
 		dispatch(confirmSubTodoEditingAction(newSubTodoName));
 		setIsEditingSubTodo(false);
 	};
-	// ?working on
+	// checked
 	const isDoneHandler = (subTaskId: string) => {
 		dispatch(toggleSubTodoIsDoneAction(subTaskId));
 	};

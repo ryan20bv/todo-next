@@ -1,33 +1,44 @@
 import { Fragment } from "react";
+import { useRouter } from "next/router";
+import NotAuthenticatedPage from "./n";
 import Home from "@/components/homePage/Home";
 import { getAllTasks } from "@/DUMMY_DATA/DUMMY_DATA";
-import { IMainTask } from "@/DUMMY_DATA/MODEL";
+import Card from "@/components/ui/Card";
+import CardHeader from "@/components/ui/CardHeader";
 
 import { Roboto } from "next/font/google";
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
 
 const roboto = Roboto({
 	weight: "400",
 	subsets: ["latin"],
 });
 
-interface propsType {
-	allTasks: IMainTask[];
-}
+const HomePage = () => {
+	const router = useRouter();
+	console.log(router);
+	const { isAuthenticated } = useAppSelector(
+		(state: RootState) => state.authReducer
+	);
 
-const HomePage: React.FC<propsType> = ({ allTasks }) => {
+	if (!isAuthenticated) {
+		router.push("/n");
+	} else if (isAuthenticated) {
+		router.push("/t");
+	}
+
 	return (
-		<Fragment>
-			<Home allTasks={allTasks} />
-		</Fragment>
+		<Card>
+			<CardHeader
+				title='Loading....'
+				from='index_api'
+			/>
+		</Card>
 	);
 };
-
-export async function getStaticProps() {
-	const allTodos = getAllTasks();
-
-	return {
-		props: { allTasks: allTodos }, // will be passed to the page component as props
-	};
-}
 
 export default HomePage;

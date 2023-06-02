@@ -7,12 +7,14 @@ interface PropsTypes {
 	mainTaskList: IMainTask[];
 	onEditing: (mainTask: IMainTask) => void;
 	onDeleteMainTask: (mainTaskId: string) => void;
+	onSeeSubTaskPage: (mainTask: IMainTask) => void;
 }
 
 const MainList: React.FC<PropsTypes> = ({
 	mainTaskList,
 	onEditing,
 	onDeleteMainTask,
+	onSeeSubTaskPage,
 }) => {
 	const [selectedTab, setSelectedTab] = useState<string>("all");
 
@@ -48,6 +50,7 @@ const MainList: React.FC<PropsTypes> = ({
 								index={index}
 								onEditing={onEditing}
 								onDeleteMainTask={onDeleteMainTask}
+								onSeeSubTaskPage={onSeeSubTaskPage}
 							/>
 						))}
 				</ul>
