@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SubItem from "./SubItem";
 import Summary from "@/components/ui/Summary";
-import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
+import { ISubTask } from "@/DUMMY_DATA/MODEL";
 
 interface PropsType {
 	subTaskList: ISubTask[];
