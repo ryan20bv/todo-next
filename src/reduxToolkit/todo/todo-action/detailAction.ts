@@ -90,7 +90,7 @@ export const confirmSubTodoEditingAction =
 		await dispatch(updateLisOfTodoAction(copyOfSelectedTodo));
 		dispatch(setSelectedTodoAction(copyOfSelectedTodo));
 	};
-// ?working on
+// checked
 export const toggleSubTodoIsDoneAction =
 	(subTodo_id: string) => async (dispatch: any, getState: any) => {
 		let { selectedTodo } = getState().todoReducer;
@@ -108,35 +108,31 @@ export const toggleSubTodoIsDoneAction =
 			!copyOfSubTodoList[subTaskIndex].isDone;
 
 		copyOfSelectedTodo.subTaskList = [...copyOfSubTodoList];
-		// let { todoDetails } = getState().detailReducer;
-		// let copyOfTodoDetails: ITask = { ...todoDetails };
-		// let copyOfDetails: ITodoDetails[] = todoDetails.details.map(
-		// 	(detail: ITodoDetails) => ({
-		// 		...detail,
-		// 	})
-		// );
-		// const foundDetailIndex = copyOfTodoDetails.details.findIndex(
-		// 	(detail: ITodoDetails) => detail._id === detail_id
-		// );
-		// copyOfDetails[foundDetailIndex].isDone =
-		// 	!copyOfDetails[foundDetailIndex].isDone;
-		// copyOfTodoDetails.details = [...copyOfDetails];
-		// dispatch(toggleDetailIsDoneRed({ updatedTodoDetails: copyOfTodoDetails }));
-		// dispatch(updateLisOfTodoAction(copyOfTodoDetails));
+
 		await dispatch(updateLisOfTodoAction(copyOfSelectedTodo));
 		dispatch(setSelectedTodoAction(copyOfSelectedTodo));
 	};
 
 export const deleteAllDoneDetailAction =
 	() => async (dispatch: any, getState: any) => {
-		let { todoDetails } = getState().detailReducer;
+		let { selectedTodo } = getState().todoReducer;
+		let copyOfSelectedTodo: IMainTask = { ...selectedTodo };
+		let updatedSubTaskListAfterDeleteAllDone =
+			copyOfSelectedTodo.subTaskList.filter(
+				(subTask: ISubTask) => subTask.isDone === false
+			);
 
-		let copyOfTodoDetails: ITask = { ...todoDetails };
-		let updatedDetailsAfterDeleteAllDone = todoDetails.details.filter(
-			(detail: ITodoDetails) => detail.isDone === false
-		);
+		copyOfSelectedTodo.subTaskList = [...updatedSubTaskListAfterDeleteAllDone];
 
-		copyOfTodoDetails.details = updatedDetailsAfterDeleteAllDone;
-		dispatch(updateTodoDetailsRed({ updatedTodoDetails: copyOfTodoDetails }));
-		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
+		// let copyOfTodoDetails: ITask = { ...todoDetails };
+		// let updatedDetailsAfterDeleteAllDone = todoDetails.details.filter(
+		// 	(detail: ITodoDetails) => detail.isDone === false
+		// );
+
+		// copyOfTodoDetails.details = updatedDetailsAfterDeleteAllDone;
+		// dispatch(updateTodoDetailsRed({ updatedTodoDetails: copyOfTodoDetails }));
+		// dispatch(updateLisOfTodoAction(copyOfTodoDetails));
+
+		await dispatch(updateLisOfTodoAction(copyOfSelectedTodo));
+		dispatch(setSelectedTodoAction(copyOfSelectedTodo));
 	};

@@ -8,6 +8,7 @@ interface PropsType {
 	isDoneHandler: (id: string) => void;
 	onDeleteSubTodo: (id: string) => void;
 	onEditingSubTask: (subTask: ISubTask) => void;
+	onDeleteAllDone: () => void;
 }
 
 const SubList: React.FC<PropsType> = ({
@@ -15,13 +16,11 @@ const SubList: React.FC<PropsType> = ({
 	isDoneHandler,
 	onDeleteSubTodo,
 	onEditingSubTask,
+	onDeleteAllDone,
 }) => {
 	const [selectedTab, setSelectedTab] = useState<string>("all");
 	const updateSelectedTabHandler = (tabName: string) => {
 		setSelectedTab(tabName);
-	};
-	const deleteAllDetailDoneHandler = () => {
-		console.log("deleteAll");
 	};
 
 	let filteredList = subTaskList;
@@ -79,7 +78,7 @@ const SubList: React.FC<PropsType> = ({
 				length={3}
 				onSelectTab={updateSelectedTabHandler}
 				selectedTab={selectedTab}
-				onDeleteAllDone={deleteAllDetailDoneHandler}
+				onDeleteAllDone={onDeleteAllDone}
 			/>
 		</div>
 	);
