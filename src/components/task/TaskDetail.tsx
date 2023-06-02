@@ -14,6 +14,7 @@ import {
 	selectSubTodoToEditAction,
 	cancelSubTodoEditingAction,
 	confirmSubTodoEditingAction,
+	toggleSubTodoIsDoneAction,
 } from "@/reduxToolkit/todo/todo-action/detailAction";
 import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 
@@ -56,14 +57,14 @@ const TaskDetail = () => {
 		setIsEditingSubTodo(false);
 		dispatch(cancelSubTodoEditingAction());
 	};
-	// working on
+	// checked
 	const confirmEditSubTaskHandler = (newSubTodoName: string) => {
 		dispatch(confirmSubTodoEditingAction(newSubTodoName));
 		setIsEditingSubTodo(false);
 	};
-
+	// ?working on
 	const isDoneHandler = (subTaskId: string) => {
-		// dispatch(toggleDetailIsDoneAction(subTaskId));
+		dispatch(toggleSubTodoIsDoneAction(subTaskId));
 	};
 	return (
 		<Card>

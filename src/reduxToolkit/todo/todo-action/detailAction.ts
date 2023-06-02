@@ -66,7 +66,7 @@ export const selectSubTodoToEditAction =
 export const cancelSubTodoEditingAction = () => async (dispatch: any) => {
 	dispatch(setSubTaskToEditRed({} as ISubTask));
 };
-// working on
+// checked
 export const confirmSubTodoEditingAction =
 	(newSubTodoName: string) => async (dispatch: any, getState: any) => {
 		let { selectedTodo } = getState().todoReducer;
@@ -90,24 +90,42 @@ export const confirmSubTodoEditingAction =
 		await dispatch(updateLisOfTodoAction(copyOfSelectedTodo));
 		dispatch(setSelectedTodoAction(copyOfSelectedTodo));
 	};
-
-export const toggleDetailIsDoneAction =
-	(detail_id: string) => async (dispatch: any, getState: any) => {
-		let { todoDetails } = getState().detailReducer;
-		let copyOfTodoDetails: ITask = { ...todoDetails };
-		let copyOfDetails: ITodoDetails[] = todoDetails.details.map(
-			(detail: ITodoDetails) => ({
-				...detail,
+// ?working on
+export const toggleSubTodoIsDoneAction =
+	(subTodo_id: string) => async (dispatch: any, getState: any) => {
+		console.log(subTodo_id);
+		let { selectedTodo } = getState().todoReducer;
+		let copyOfSelectedTodo: IMainTask = { ...selectedTodo };
+		let copyOfSubTodoList: ISubTask[] = selectedTodo.subTaskList.map(
+			(subTodo: ISubTask) => ({
+				...subTodo,
 			})
 		);
-		const foundDetailIndex = copyOfTodoDetails.details.findIndex(
-			(detail: ITodoDetails) => detail._id === detail_id
+		let subTaskIndex = copyOfSubTodoList.findIndex(
+			(subTodo: ISubTask) => subTodo.subTaskId === subTodo_id
 		);
-		copyOfDetails[foundDetailIndex].isDone =
-			!copyOfDetails[foundDetailIndex].isDone;
-		copyOfTodoDetails.details = [...copyOfDetails];
-		dispatch(toggleDetailIsDoneRed({ updatedTodoDetails: copyOfTodoDetails }));
-		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
+
+		copyOfSubTodoList[subTaskIndex].isDone =
+			!copyOfSubTodoList[subTaskIndex].isDone;
+
+		copyOfSelectedTodo.subTaskList = [...copyOfSubTodoList];
+		// let { todoDetails } = getState().detailReducer;
+		// let copyOfTodoDetails: ITask = { ...todoDetails };
+		// let copyOfDetails: ITodoDetails[] = todoDetails.details.map(
+		// 	(detail: ITodoDetails) => ({
+		// 		...detail,
+		// 	})
+		// );
+		// const foundDetailIndex = copyOfTodoDetails.details.findIndex(
+		// 	(detail: ITodoDetails) => detail._id === detail_id
+		// );
+		// copyOfDetails[foundDetailIndex].isDone =
+		// 	!copyOfDetails[foundDetailIndex].isDone;
+		// copyOfTodoDetails.details = [...copyOfDetails];
+		// dispatch(toggleDetailIsDoneRed({ updatedTodoDetails: copyOfTodoDetails }));
+		// dispatch(updateLisOfTodoAction(copyOfTodoDetails));
+		await dispatch(updateLisOfTodoAction(copyOfSelectedTodo));
+		dispatch(setSelectedTodoAction(copyOfSelectedTodo));
 	};
 
 export const deleteAllDoneDetailAction =
