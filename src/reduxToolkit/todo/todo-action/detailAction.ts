@@ -93,7 +93,6 @@ export const confirmSubTodoEditingAction =
 // ?working on
 export const toggleSubTodoIsDoneAction =
 	(subTodo_id: string) => async (dispatch: any, getState: any) => {
-		console.log(subTodo_id);
 		let { selectedTodo } = getState().todoReducer;
 		let copyOfSelectedTodo: IMainTask = { ...selectedTodo };
 		let copyOfSubTodoList: ISubTask[] = selectedTodo.subTaskList.map(

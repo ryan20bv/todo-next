@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { IMainTask } from "@/DUMMY_DATA/MODEL";
+import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -52,9 +52,19 @@ const MainItem: React.FC<propsType> = ({
 	if (mainTask.mainTaskName.length > 10) {
 		summaryName = mainTask.mainTaskName.substring(0, 10) + "...";
 	}
-	let detailsTotal = mainTask.subTaskList.length || 0;
-	const setDone: string = mainTask.isAllSubTaskDone ? "line-through" : "";
+	let subTaskThatIsDoneTotal: number = 0;
+	mainTask.subTaskList.forEach((subTask: ISubTask) => {
+		if (subTask.isDone) {
+			subTaskThatIsDoneTotal++;
+		}
+	});
 
+	let subTaskTotal = mainTask.subTaskList.length || 0;
+	const setDone: string = mainTask.isAllSubTaskDone ? "line-through" : "";
+	let taskDataToShow = `(${subTaskThatIsDoneTotal}/${subTaskTotal})`;
+	if (subTaskTotal === 0) {
+		taskDataToShow = "(0)";
+	}
 	return (
 		<li
 			key={mainTask.mainTaskId}
@@ -77,7 +87,7 @@ const MainItem: React.FC<propsType> = ({
 				>
 					<span>{index + 1 + "."}</span>
 					{summaryName}
-					<span className='text-red-600 ml-2'>{`(${detailsTotal})`}</span>
+					<span className='text-red-600 ml-2 '>{taskDataToShow}</span>
 				</h3>
 			</section>
 			<section>
