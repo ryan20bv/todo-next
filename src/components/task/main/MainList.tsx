@@ -8,6 +8,7 @@ interface PropsTypes {
 	onEditing: (mainTask: IMainTask) => void;
 	onDeleteMainTask: (mainTaskId: string) => void;
 	onSeeSubTaskPage: (mainTask: IMainTask) => void;
+	onDeleteAllDone: () => void;
 }
 
 const MainList: React.FC<PropsTypes> = ({
@@ -15,6 +16,7 @@ const MainList: React.FC<PropsTypes> = ({
 	onEditing,
 	onDeleteMainTask,
 	onSeeSubTaskPage,
+	onDeleteAllDone,
 }) => {
 	const [selectedTab, setSelectedTab] = useState<string>("all");
 
@@ -59,7 +61,7 @@ const MainList: React.FC<PropsTypes> = ({
 				length={todoLength}
 				selectedTab={selectedTab}
 				onSelectTab={updateSelectedTabHandler}
-				onDeleteAllDone={() => console.log("here")}
+				onDeleteAllDone={onDeleteAllDone}
 			/>
 		</>
 	);

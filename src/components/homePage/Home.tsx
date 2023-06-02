@@ -20,6 +20,7 @@ import {
 	editSelectedTodoAction,
 	deleteMainTodoAction,
 	setSelectedTodoAction,
+	deleteAllDoneMainTaskAction,
 } from "@/reduxToolkit/todo/todo-action/todoAction";
 import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
@@ -63,9 +64,17 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	const deleteMainTaskHandler = (mainTaskId: string) => {
 		dispatch(deleteMainTodoAction(mainTaskId));
 	};
+	// checked
 	const goToSubTaskPageHandler = (selectedTask: IMainTask) => {
 		dispatch(setSelectedTodoAction(selectedTask));
-		router.push(`/n/${selectedTask.mainTaskName}`);
+		let str = selectedTask.mainTaskName;
+		str = str.replace(/\s+/g, "-").toLowerCase();
+		router.push(`${router.asPath}/${str}`);
+		// router.push(`/n/${selectedTask.mainTaskName}`);
+	};
+	// working on
+	const deleteAllDoneMainTaskHandler = () => {
+		dispatch(deleteAllDoneMainTaskAction());
 	};
 
 	const burgerMenuHandler = () => {
@@ -99,6 +108,7 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 						onEditing={isEditingHandler}
 						onDeleteMainTask={deleteMainTaskHandler}
 						onSeeSubTaskPage={goToSubTaskPageHandler}
+						onDeleteAllDone={deleteAllDoneMainTaskHandler}
 					/>
 				)}
 				{!firstLoad && (
@@ -107,6 +117,7 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 						onEditing={isEditingHandler}
 						onDeleteMainTask={deleteMainTaskHandler}
 						onSeeSubTaskPage={goToSubTaskPageHandler}
+						onDeleteAllDone={deleteAllDoneMainTaskHandler}
 					/>
 				)}
 				{/* {firstLoad && <TodoList allTasks={allTasks} />} */}

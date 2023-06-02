@@ -37,6 +37,7 @@ const HomePage = () => {
 				title='Loading....'
 				from='index_api'
 			/>
+			<h1>Loading</h1>
 		</Card>
 	);
 };

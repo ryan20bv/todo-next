@@ -104,15 +104,16 @@ export const deleteMainTodoAction =
 		await dispatch(deleteTodoRed({ updatedTodoList }));
 		dispatch(updateLocaleStorageAction());
 	};
-
-export const deleteAllDoneAction =
+// working on
+export const deleteAllDoneMainTaskAction =
 	() => async (dispatch: any, getState: any) => {
-		const { todoList, selectedTab } = getState().todoReducer;
-		const updatedTodoList = todoList.filter(
+		const { mainTodoList } = getState().todoReducer;
+		const updatedTodoList = mainTodoList.filter(
 			(todo: IMainTask) => todo.isAllSubTaskDone === false
 		);
-		dispatch(deleteAllDoneRed({ updatedTodoList }));
-		// dispatch(updateFilteredTodoListAction(selectedTab));
+		await dispatch(deleteAllDoneRed({ updatedTodoList }));
+
+		dispatch(updateLocaleStorageAction());
 	};
 
 // checked
