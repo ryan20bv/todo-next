@@ -30,7 +30,7 @@ interface propsType {
 const Home: React.FC<propsType> = ({ allTasks }) => {
 	const dispatch = useAppDispatch();
 	const [isEditing, setIsEditing] = useState<boolean>(false);
-	const { mainTodoList, firstLoad, isEditingMainTodo, todoToEdit } =
+	const { mainTodoList, firstLoad, isEditingMainTodo, mainTodoToEdit } =
 		useAppSelector((state: RootState) => state.todoReducer);
 
 	useEffect(() => {
@@ -81,9 +81,8 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			)}
 			{isEditing && (
 				<EditForm
-					mainTaskToEdit={todoToEdit}
+					itemToEdit={mainTodoToEdit.mainTaskName}
 					confirmEditing={confirmEditingHandler}
-					isEditingMainTodo={isEditingMainTodo}
 					onCancelEditing={cancelMainTaskEditingHandler}
 				/>
 			)}

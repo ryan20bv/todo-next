@@ -123,9 +123,9 @@ export const editSelectedTodoAction =
 // checked
 export const confirmEditAction =
 	(newTaskName: string) => async (dispatch: any, getState: any) => {
-		const { mainTodoList, selectedTab, todoToEdit } = getState().todoReducer;
+		const { mainTodoList, mainTodoToEdit } = getState().todoReducer;
 		let indexToEdit = mainTodoList.findIndex(
-			(todo: IMainTask) => todo.mainTaskId === todoToEdit.mainTaskId
+			(todo: IMainTask) => todo.mainTaskId === mainTodoToEdit.mainTaskId
 		);
 
 		let copyOfTodoList = [...mainTodoList];

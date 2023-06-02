@@ -11,7 +11,6 @@ interface propsTypes {
 const EditForm: React.FC<propsTypes> = ({
 	itemToEdit,
 	confirmEditing,
-
 	onCancelEditing,
 }) => {
 	const inputRef = useRef<HTMLInputElement>(null);
