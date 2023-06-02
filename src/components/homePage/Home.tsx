@@ -11,7 +11,6 @@ import CardHeader from "../ui/CardHeader";
 import AddForm from "../ui/AddForm";
 import EditForm from "../ui/EditForm";
 import ListContainer from "../ui/ListContainer";
-import TodoList from "./TodoList";
 import MainList from "../task/main/MainList";
 
 import {
@@ -30,8 +29,9 @@ interface propsType {
 const Home: React.FC<propsType> = ({ allTasks }) => {
 	const dispatch = useAppDispatch();
 	const [isEditing, setIsEditing] = useState<boolean>(false);
-	const { mainTodoList, firstLoad, isEditingMainTodo, mainTodoToEdit } =
-		useAppSelector((state: RootState) => state.todoReducer);
+	const { mainTodoList, firstLoad, mainTodoToEdit } = useAppSelector(
+		(state: RootState) => state.todoReducer
+	);
 
 	useEffect(() => {
 		if (firstLoad) {
