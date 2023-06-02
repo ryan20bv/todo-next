@@ -4,7 +4,7 @@ import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
 import AddForm from "../ui/AddForm";
 import ListContainer from "../ui/ListContainer";
-import DetailsLists from "./DetailsLists";
+
 import EditForm from "../ui/EditForm";
 import SubList from "./sub/SubList";
 
@@ -16,7 +16,7 @@ import {
 	confirmSubTodoEditingAction,
 	toggleSubTodoIsDoneAction,
 } from "@/reduxToolkit/todo/todo-action/detailAction";
-import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
+import { ISubTask } from "@/DUMMY_DATA/MODEL";
 
 import {
 	useAppDispatch,
@@ -28,7 +28,7 @@ const TaskDetail = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const [isEditingSubTodo, setIsEditingSubTodo] = useState<boolean>(false);
-	const { mainTodoList, selectedTodo, firstLoad } = useAppSelector(
+	const { selectedTodo } = useAppSelector(
 		(state: RootState) => state.todoReducer
 	);
 	const { subTaskToEdit } = useAppSelector(
