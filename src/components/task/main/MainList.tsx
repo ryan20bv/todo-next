@@ -40,7 +40,7 @@ const MainList: React.FC<PropsTypes> = ({
 						<p className='text-center m-8'>Main Task is Empty!</p>
 					)}
 					{todoLength > 0 &&
-						mainTaskList.map((mainTask, index) => (
+						filteredTodoList.map((mainTask, index) => (
 							// <li key={mainTask.mainTaskId}>{mainTask.mainTaskName}</li>
 							<MainItem
 								key={mainTask.mainTaskId}
