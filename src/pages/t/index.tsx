@@ -9,7 +9,7 @@ import {
 } from "@/reduxToolkit/indexStore/indexStore";
 import {
 	authDataAction,
-	clearAuthDataAction,
+	logoutAuthAction,
 } from "@/reduxToolkit/auth/auth-action/authAction";
 import { getRawDataAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 import Card from "@/components/ui/Card";
@@ -30,8 +30,8 @@ const Index = () => {
 			const session = await getSession();
 			// console.log(session);
 			if (!session) {
-				dispatch(clearAuthDataAction());
-				router.push("/");
+				dispatch(logoutAuthAction());
+				router.push("/n");
 				// window.location.href = "/";
 			} else {
 				const data: any = session.user?.name;

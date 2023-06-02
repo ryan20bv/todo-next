@@ -10,59 +10,62 @@ import {
 
 interface propsTypes {
 	title: string;
-	onIconHandler?: () => void;
 	from: string;
-	iconFunction?: () => void;
+	iconFunction: () => void;
 	showListOfCategories?: boolean;
 }
 
-const CardHeader: React.FC<propsTypes> = (props) => {
-	const clickBackHandler = async () => {
-		if (props.onIconHandler) {
-			props.onIconHandler();
-		}
+const CardHeader: React.FC<propsTypes> = ({
+	title,
+	from,
+	iconFunction,
+	showListOfCategories,
+}) => {
+	const clickIconHandler = () => {
+		// if (props.onIconHandler) {
+		// 	props.onIconHandler();
+		// }
+		iconFunction();
 	};
 
 	let icon = <span></span>;
+	// icon = (
+	// 	<Bars3Icon
+	// 		className='text-red-600 h-6'
+	// 		data-testid={`icon_${from}`}
+	// 	/>
+	// );
 
-	if (props.from === "home") {
+	if (from === "category") {
 		icon = (
 			<button
 				className='absolute left-4 text-red-600 h-6'
-				data-testid={`menu_button`}
-			>
-				<Bars3Icon className='text-red-600 h-6' />
-			</button>
-		);
-	} else if (props.from === "category") {
-		icon = (
-			<button
-				className='absolute left-4 text-red-600 h-6'
-				onClick={props.iconFunction}
+				onClick={iconFunction}
 				data-testid={`squaresStack_button`}
 			>
-				{props.showListOfCategories ? (
+				{showListOfCategories ? (
 					<XMarkIcon className='text-red-600 h-6' />
 				) : (
 					<Square3Stack3DIcon className='text-red-600 h-6' />
 				)}
 			</button>
 		);
-	} else if (props.from === "generalSubtask") {
+	} else if (from === "generalSubtask") {
 		icon = (
 			<button
 				className='absolute left-4 text-red-600 h-6'
-				onClick={clickBackHandler}
+				onClick={clickIconHandler}
 				data-testid={`back_button`}
 			>
 				<ChevronDoubleLeftIcon className='text-red-600 h-6' />
 			</button>
 		);
-	} else if (props.from === "login") {
+	} else if (from === "login") {
 		icon = (
 			<button
 				className='absolute left-4 text-red-600 h-6'
 				data-testid={`login_home_button`}
+				onClick={clickIconHandler}
 			>
 				<HomeIcon className='text-red-600 h-6' />
 			</button>
@@ -71,8 +74,9 @@ const CardHeader: React.FC<propsTypes> = (props) => {
 
 	return (
 		<section className='bg-[#AF7EEB] w-full py-2 px-3 text-white text-center relative min-h-[40px]'>
-			{icon}
-			<h1>{props.title}</h1>
+			<button className='absolute left-4 text-red-600 h-6'>{icon}</button>
+
+			<h1>{title}</h1>
 		</section>
 	);
 };

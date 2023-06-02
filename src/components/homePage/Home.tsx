@@ -85,8 +85,8 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 		<Card>
 			<CardHeader
 				title='TODO nextJS'
-				onIconHandler={burgerMenuHandler}
-				from='/'
+				iconFunction={burgerMenuHandler}
+				from='home'
 			/>
 			{!isEditing && (
 				<AddForm
