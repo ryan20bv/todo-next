@@ -1,6 +1,9 @@
 import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
-import { updateIsLoadingRed } from "../todo-slice/detailSlice";
-import { updateFirstLoadRed } from "../todo-slice/todoSlice";
+import {
+	updateIsLoadingRed,
+	setSubTaskToEditRed,
+} from "../todo-slice/detailSlice";
+
 import { updateTodoListAction, setSelectedTodoAction } from "./todoAction";
 import { v4 as uuidv4 } from "uuid";
 
@@ -23,10 +26,6 @@ export const addNewSubTodoAction =
 		await dispatch(updateLisOfTodoAction(copyOfTodoDetails));
 		dispatch(setSelectedTodoAction(copyOfTodoDetails));
 	};
-
-export const resetIsInDetailsAction = () => async (dispatch: any) => {
-	// dispatch(resetIsInDetailsRed({}));
-};
 
 // checked
 export const deleteSubTodoAction =
@@ -58,6 +57,40 @@ export const updateLisOfTodoAction =
 		dispatch(updateTodoListAction(copyOfMainTodoList));
 	};
 
+// checked
+export const selectSubTodoToEditAction =
+	(subTaskToEdit: ISubTask) => async (dispatch: any) => {
+		dispatch(setSubTaskToEditRed({ subTaskToEdit }));
+	};
+// checked
+export const cancelSubTodoEditingAction = () => async (dispatch: any) => {
+	dispatch(setSubTaskToEditRed({} as ISubTask));
+};
+// working on
+export const confirmSubTodoEditingAction =
+	(newSubTodoName: string) => async (dispatch: any, getState: any) => {
+		let { selectedTodo } = getState().todoReducer;
+		let { subTaskToEdit } = getState().detailReducer;
+		let copyOfSelectedTodo: IMainTask = { ...selectedTodo };
+		// let copyOfSubTodoList: ISubTask[] = [...selectedTodo.subTaskList];
+		let copyOfSubTodoList: ISubTask[] = selectedTodo.subTaskList.map(
+			(subTodo: ISubTask) => ({
+				...subTodo,
+			})
+		);
+
+		let subTaskIndex = copyOfSubTodoList.findIndex(
+			(subTodo: ISubTask) => subTodo.subTaskId === subTaskToEdit.subTaskId
+		);
+
+		copyOfSubTodoList[subTaskIndex].subTaskName = newSubTodoName;
+
+		copyOfSelectedTodo.subTaskList = [...copyOfSubTodoList];
+
+		await dispatch(updateLisOfTodoAction(copyOfSelectedTodo));
+		dispatch(setSelectedTodoAction(copyOfSelectedTodo));
+	};
+
 export const toggleDetailIsDoneAction =
 	(detail_id: string) => async (dispatch: any, getState: any) => {
 		let { todoDetails } = getState().detailReducer;
@@ -74,55 +107,6 @@ export const toggleDetailIsDoneAction =
 			!copyOfDetails[foundDetailIndex].isDone;
 		copyOfTodoDetails.details = [...copyOfDetails];
 		dispatch(toggleDetailIsDoneRed({ updatedTodoDetails: copyOfTodoDetails }));
-		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
-	};
-
-export const deleteDetailAction =
-	(detail_id: string) => async (dispatch: any, getState: any) => {
-		let { todoDetails } = getState().detailReducer;
-		let copyOfTodoDetails: ITask = { ...todoDetails };
-		let updatedTodoDetails = todoDetails.details.filter(
-			(detail: ITodoDetails) => detail._id !== detail_id
-		);
-
-		copyOfTodoDetails.details = [...updatedTodoDetails];
-		dispatch(updateTodoDetailsRed({ updatedTodoDetails: copyOfTodoDetails }));
-		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
-	};
-
-export const selectDetailToEditAction =
-	(detailToEdit: ITodoDetails) => async (dispatch: any) => {
-		dispatch(
-			updateDetailEditingStatusRed({ isDetailEditingStatus: true, detailToEdit })
-		);
-	};
-
-export const cancelDetailEditingAction = () => async (dispatch: any) => {
-	dispatch(resetIsDetailEditingRed({}));
-};
-
-export const confirmDetailEditingAction =
-	(updatedDetail: string) => async (dispatch: any, getState: any) => {
-		let { todoDetails, detailToEdit } = getState().detailReducer;
-		let copyOfTodoDetails = { ...todoDetails };
-
-		let copyOfDetails: ITodoDetails[] = todoDetails.details.map(
-			(detail: ITodoDetails) => ({
-				...detail,
-			})
-		);
-
-		let detailIndex = copyOfDetails.findIndex(
-			(detail: ITodoDetails) => detail._id === detailToEdit._id
-		);
-
-		copyOfDetails[detailIndex].item = updatedDetail;
-
-		copyOfTodoDetails.details = copyOfDetails;
-
-		dispatch(
-			updateTodoDetailsAfterEditRed({ updatedTodoDetails: copyOfTodoDetails })
-		);
 		dispatch(updateLisOfTodoAction(copyOfTodoDetails));
 	};
 
