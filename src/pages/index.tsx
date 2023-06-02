@@ -20,7 +20,7 @@ const roboto = Roboto({
 
 const HomePage = () => {
 	const router = useRouter();
-	console.log(router);
+
 	const { isAuthenticated } = useAppSelector(
 		(state: RootState) => state.authReducer
 	);

@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import {
-	useAppDispatch,
 	useAppSelector,
 	RootState,
 } from "@/reduxToolkit/indexStore/indexStore";
 
 const AnyPage = () => {
 	const router = useRouter();
-	const { isAuthenticated, isSendingData, authError, authData } = useAppSelector(
+	const { isAuthenticated } = useAppSelector(
 		(state: RootState) => state.authReducer
 	);
 	useEffect(() => {

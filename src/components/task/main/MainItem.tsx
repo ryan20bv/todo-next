@@ -1,13 +1,7 @@
 import React from "react";
-import { useRouter } from "next/router";
+
 import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
-import {
-	useAppDispatch,
-	useAppSelector,
-	RootState,
-} from "@/reduxToolkit/indexStore/indexStore";
-import { setSelectedMainTaskAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
-import { setSelectedTodoAction } from "@/reduxToolkit/todo/todo-action/todoAction";
+
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 
 interface propsType {
@@ -25,13 +19,6 @@ const MainItem: React.FC<propsType> = ({
 	onDeleteMainTask,
 	onSeeSubTaskPage,
 }) => {
-	const dispatch = useAppDispatch();
-	const router = useRouter();
-	// console.log(router);
-	const { isAuthenticated } = useAppSelector(
-		(state: RootState) => state.authReducer
-	);
-	// !checkedHome
 	const setIsEditingHandler = (task: IMainTask) => {
 		onEditing(task);
 	};

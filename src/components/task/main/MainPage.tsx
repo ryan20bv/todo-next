@@ -19,7 +19,7 @@ import ListContainer from "@/components/ui/ListContainer";
 import Summary from "@/components/ui/Summary";
 import MainList from "./MainList";
 
-import { ICategory } from "@/DUMMY_DATA/MODEL";
+import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
 
 const MainPage = () => {
 	const dispatch = useAppDispatch();
@@ -75,7 +75,13 @@ const MainPage = () => {
 				placeHolder='add todo'
 			/>
 			<ListContainer>
-				<MainList mainTaskList={mainTaskList} />
+				<MainList
+					mainTaskList={mainTaskList}
+					onEditing={(mainTask: IMainTask) => {}}
+					onDeleteMainTask={(mainTaskId: string) => {}}
+					onSeeSubTaskPage={(mainTask: IMainTask) => {}}
+					onDeleteAllDone={() => {}}
+				/>
 			</ListContainer>
 		</Card>
 	);

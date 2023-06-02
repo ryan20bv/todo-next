@@ -120,8 +120,6 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 						onDeleteAllDone={deleteAllDoneMainTaskHandler}
 					/>
 				)}
-				{/* {firstLoad && <TodoList allTasks={allTasks} />} */}
-				{/* {!firstLoad && <TodoList allTasks={todoList} />} */}
 			</ListContainer>
 		</Card>
 	);

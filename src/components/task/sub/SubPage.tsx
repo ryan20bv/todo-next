@@ -29,7 +29,13 @@ const SubPage = () => {
 				placeHolder='add details'
 			/>
 			<ListContainer>
-				<SubList subTaskList={selectedMainTask.subTaskList} />
+				<SubList
+					subTaskList={selectedMainTask.subTaskList}
+					isDoneHandler={(id: string) => {}}
+					onDeleteSubTodo={(id: string) => {}}
+					onEditingSubTask={(subTask: ISubTask) => {}}
+					onDeleteAllDone={() => {}}
+				/>
 			</ListContainer>
 		</Card>
 	);
