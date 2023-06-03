@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { PlusCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 interface propsTypes {
-	onAddHandler: (newTask: string) => void;
+	onAddHandler: (newTaskName: string) => void;
 	placeHolder: string;
 }
 

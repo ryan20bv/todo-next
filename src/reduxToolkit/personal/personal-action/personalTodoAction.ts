@@ -89,7 +89,7 @@ export const setCurrentCategoryAction =
 				return {
 					categoryId: category.categoryId,
 					mainTaskId: item._id,
-					mainTaskName: item.taskName,
+					mainTaskName: item.mainTaskName,
 					isAllSubTaskDone: item.isAllSubTaskDone,
 					subTaskList: formattedSubTaskList,
 				};
@@ -104,10 +104,9 @@ export const setMainTaskListAction =
 	(mainTaskList: IMainTask) => async (dispatch: any, getState: any) => {
 		dispatch(setMainTaskListRed({ mainTaskList: mainTaskList }));
 	};
-// ?working on
+// checked
 export const setSelectedMainTaskAction =
 	(selectedTask: IMainTask) => async (dispatch: any, getState: any) => {
-		console.log("selected", selectedTask);
 		dispatch(setSelectedMainTaskRed({ selectedMainTask: selectedTask }));
 	};
 

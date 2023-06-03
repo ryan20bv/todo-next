@@ -6,13 +6,10 @@ import {
 	RootState,
 } from "@/reduxToolkit/indexStore/indexStore";
 import {
-	authDataAction,
-	clearAuthDataAction,
-} from "@/reduxToolkit/auth/auth-action/authAction";
-import {
 	setCurrentCategoryAction,
 	setSelectedMainTaskAction,
 } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
+import { addMainTaskAction } from "@/reduxToolkit/personal/mainTask-action/mainTaskAction";
 
 import Card from "@/components/ui/Card";
 import CardHeader from "@/components/ui/CardHeader";
@@ -22,16 +19,16 @@ import ListContainer from "@/components/ui/ListContainer";
 import Summary from "@/components/ui/Summary";
 import MainList from "../task/main/MainList";
 
-import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
+import { ICategory, IMainTask, INewMainTask } from "@/DUMMY_DATA/MODEL";
 
 const MainPage = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const [showListOfCategories, setShowListOfCategories] =
 		useState<boolean>(false);
-	const { currentCategory, categoryList, mainTaskList } = useAppSelector(
-		(state: RootState) => state.personalTodoReducer
-	);
+	const { currentCategory, categoryList, mainTaskList, selectedMainTask } =
+		useAppSelector((state: RootState) => state.personalTodoReducer);
+	const { authData } = useAppSelector((state: RootState) => state.authReducer);
 	// console.log(mainTaskList);
 
 	// mainTaskList.forEach((mainTask) => console.log(mainTask));
@@ -49,12 +46,21 @@ const MainPage = () => {
 		// 	categoryId: categoryId,
 		// });
 	};
-
+	// checked
 	const goToSubTaskPageHandler = (mainTask: IMainTask) => {
 		dispatch(setSelectedMainTaskAction(mainTask));
 		let formattedName = mainTask.mainTaskName;
 		formattedName = formattedName.replace(/\s+/g, "-").toLowerCase();
 		router.push(`${router.asPath}/${formattedName}`);
+	};
+	const addNewMainTaskHandler = (enteredMainTaskName: string) => {
+		const enteredData: INewMainTask = {
+			enteredMainTaskName: enteredMainTaskName,
+			category_id: currentCategory.categoryId,
+			apiToken: authData.apiToken,
+		};
+
+		dispatch(addMainTaskAction(enteredData));
 	};
 	return (
 		<Card>
@@ -80,7 +86,7 @@ const MainPage = () => {
 				</section>
 			)}
 			<AddForm
-				onAddHandler={() => console.log("here")}
+				onAddHandler={addNewMainTaskHandler}
 				placeHolder='add todo'
 			/>
 			<ListContainer>
