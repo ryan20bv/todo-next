@@ -13,8 +13,6 @@ export const authOptions = {
 				// console.log(credentials);
 				const { email, password } = credentials;
 
-				// "https://todo-next-back.onrender.com/api/users/login"
-
 				const res = await fetch(
 					process.env.NEXT_PUBLIC_BACK_END_URL + "/api/users/login",
 					{
