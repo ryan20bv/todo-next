@@ -75,7 +75,7 @@ const TaskDetail = () => {
 		<Card>
 			<CardHeader
 				title={selectedTodo.mainTaskName}
-				onIconHandler={backArrowHandler}
+				iconFunction={backArrowHandler}
 				from='generalSubtask'
 			/>
 			{!isEditingSubTodo && (

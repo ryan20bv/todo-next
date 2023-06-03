@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 import { CheckIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 interface propsTypes {

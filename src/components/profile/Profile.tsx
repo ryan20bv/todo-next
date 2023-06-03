@@ -20,7 +20,7 @@ import {
 import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
 import Modal from "../ui/Modal";
-
+import LoadingPage from "../ui/LoadingPage";
 const ProfilePage = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
@@ -169,7 +169,7 @@ const ProfilePage = () => {
 	};
 
 	if (isLoading) {
-		return <p>Loading...</p>;
+		return <LoadingPage status='Loading...' />;
 	}
 
 	return (
@@ -177,6 +177,7 @@ const ProfilePage = () => {
 			<CardHeader
 				title='Profile'
 				from='profile'
+				iconFunction={() => {}}
 			/>
 			<section className='my-8  w-3/4'>
 				<form onSubmit={submitNewPasswordHandler}>

@@ -31,7 +31,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 				throw new Error("Invalid Email or password!");
 			}
 			Router.replace("/t");
-			setIsSigningUp(false);
+			// setIsSigningUp(false);
 		} catch (err: any) {
 			console.log(err.message);
 			setIsSigningUp(false);
@@ -102,7 +102,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 				if (data.newUser.message === "sign-in success") {
 					loginHandler(enteredEmail, enteredPassword);
 				}
-				setIsSigningUp(false);
+				// setIsSigningUp(false);
 			} catch (err: any) {
 				// console.log("94", err.message);
 				setErrorMessage(err.message);

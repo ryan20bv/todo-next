@@ -9,11 +9,10 @@ import {
 } from "@/reduxToolkit/indexStore/indexStore";
 import {
 	authDataAction,
-	clearAuthDataAction,
+	logoutAuthAction,
 } from "@/reduxToolkit/auth/auth-action/authAction";
 import { getRawDataAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
-import Card from "@/components/ui/Card";
-import CardHeader from "@/components/ui/CardHeader";
+import LoadingPage from "@/components/ui/LoadingPage";
 
 const Index = () => {
 	const router = useRouter();
@@ -30,8 +29,8 @@ const Index = () => {
 			const session = await getSession();
 			// console.log(session);
 			if (!session) {
-				dispatch(clearAuthDataAction());
-				router.push("/");
+				dispatch(logoutAuthAction());
+				router.push("/n");
 				// window.location.href = "/";
 			} else {
 				const data: any = session.user?.name;
@@ -63,15 +62,7 @@ const Index = () => {
 		str = str.replace(/\s+/g, "-").toLowerCase();
 		router.push(`/t/${str}`);
 	}
-	return (
-		<Card>
-			<CardHeader
-				title='Loading...'
-				from='index'
-			/>
-			<p>Loading</p>
-		</Card>
-	);
+	return <LoadingPage status='Loading...' />;
 };
 
 export default Index;

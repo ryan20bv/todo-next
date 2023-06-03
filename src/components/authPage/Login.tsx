@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useSession, getSession } from "next-auth/react";
 import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignupForm";
+import LoadingPage from "../ui/LoadingPage";
 
 const Login = () => {
+	const router = useRouter();
 	const [isLoggingIn, setIsLoggingIn] = useState<boolean>(true);
 
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -24,8 +27,11 @@ const Login = () => {
 	}, []);
 
 	if (isLoading) {
-		return <p>Loading...</p>;
+		return <LoadingPage status='Loading...' />;
 	}
+	const iconFunctionHandler = () => {
+		router.push("/n");
+	};
 
 	const toggleLoginState = () => {
 		setIsLoggingIn((prevState) => !prevState);
@@ -39,6 +45,7 @@ const Login = () => {
 			<CardHeader
 				title={title}
 				from='login'
+				iconFunction={iconFunctionHandler}
 			/>
 			{isLoggingIn && <LoginForm onToggle={toggleLoginState} />}
 			{!isLoggingIn && <SignUpForm onToggle={toggleLoginState} />}
