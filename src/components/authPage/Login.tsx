@@ -27,7 +27,7 @@ const Login = () => {
 	}, []);
 
 	if (isLoading) {
-		return <LoadingPage />;
+		return <LoadingPage status='Loading...' />;
 	}
 	const iconFunctionHandler = () => {
 		router.push("/n");

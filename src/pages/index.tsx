@@ -26,7 +26,7 @@ const HomePage = () => {
 		router.push("/t");
 	}
 
-	return <LoadingPage />;
+	return <LoadingPage status='Loading...' />;
 };
 
 export default HomePage;

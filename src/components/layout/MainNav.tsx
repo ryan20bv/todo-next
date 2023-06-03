@@ -14,12 +14,12 @@ const MainNav = () => {
 		router.push("/login");
 	};
 	const logOutHandler = () => {
-		signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
+		/* signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
 
 		dispatch(logoutAuthAction());
-		dispatch(resetPersonalTodoStateAction());
+		dispatch(resetPersonalTodoStateAction()); */
 		// signOut();
-		// router.push("/");
+		router.push("/t/loggingout");
 	};
 
 	const checkProfileHandler = () => {

@@ -62,7 +62,7 @@ const Index = () => {
 		str = str.replace(/\s+/g, "-").toLowerCase();
 		router.push(`/t/${str}`);
 	}
-	return <LoadingPage />;
+	return <LoadingPage status='Loading...' />;
 };
 
 export default Index;

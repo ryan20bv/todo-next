@@ -1,18 +1,21 @@
 import React from "react";
 import Card from "./Card";
 import CardHeader from "./CardHeader";
-import ListContainer from "./ListContainer";
 
-const LoadingPage = () => {
+interface PropsType {
+	status: string;
+}
+
+const LoadingPage: React.FC<PropsType> = ({ status }) => {
 	return (
 		<Card>
 			<CardHeader
-				title='Loading....'
+				title={status}
 				from='index_api'
 				iconFunction={() => {}}
 			/>
 			<div className='bg-white w-full h-full flex justify-center p-10'>
-				<h1>Loading</h1>
+				<h1>{status}</h1>
 			</div>
 		</Card>
 	);
