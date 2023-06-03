@@ -21,7 +21,7 @@ const SubPage = () => {
 		<Card>
 			<CardHeader
 				title='Sub Page'
-				onIconHandler={() => {}}
+				iconFunction={() => {}}
 				from='Sub Page'
 			/>
 			<AddForm
