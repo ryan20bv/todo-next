@@ -8,7 +8,7 @@ import {
 } from "../personal-slice/personalTodoSlice";
 import { ICategory, IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 import { signOut } from "next-auth/react";
-
+// checked
 export const getRawDataAction =
 	(userId: string, apiToken: string) => async (dispatch: any, getState: any) => {
 		try {
@@ -46,7 +46,7 @@ export const getRawDataAction =
 			console.log("getRawDataAction", err);
 		}
 	};
-
+// checked
 export const getUserCategoryListAction =
 	() => async (dispatch: any, getState: any) => {
 		const { rawData } = getState().personalTodoReducer;
@@ -63,7 +63,7 @@ export const getUserCategoryListAction =
 		});
 		dispatch(getUserCategoryListRed({ categoryList }));
 	};
-
+// checked
 export const setCurrentCategoryAction =
 	(category: ICategory) => async (dispatch: any, getState: any) => {
 		const { rawData } = getState().personalTodoReducer;
@@ -99,12 +99,12 @@ export const setCurrentCategoryAction =
 		await dispatch(setCurrentCategoryRed({ currentCategory: category }));
 		dispatch(setMainTaskListAction(currentMainTaskList));
 	};
-
+// checked
 export const setMainTaskListAction =
 	(mainTaskList: IMainTask) => async (dispatch: any, getState: any) => {
 		dispatch(setMainTaskListRed({ mainTaskList: mainTaskList }));
 	};
-
+// ?working on
 export const setSelectedMainTaskAction =
 	(selectedTask: IMainTask) => async (dispatch: any, getState: any) => {
 		console.log("selected", selectedTask);

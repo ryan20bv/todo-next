@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import Card from "@/components/ui/Card";
 import CardHeader from "@/components/ui/CardHeader";
 import AddForm from "@/components/ui/AddForm";
@@ -13,16 +14,19 @@ import {
 } from "@/reduxToolkit/indexStore/indexStore";
 
 const SubPage = () => {
+	const router = useRouter();
 	const { selectedMainTask } = useAppSelector(
 		(state: RootState) => state.personalTodoReducer
 	);
-
+	const backArrowHandler = () => {
+		router.back();
+	};
 	return (
 		<Card>
 			<CardHeader
-				title='Sub Page'
-				iconFunction={() => {}}
-				from='Sub Page'
+				title={selectedMainTask.mainTaskName}
+				iconFunction={backArrowHandler}
+				from='sub_page'
 			/>
 			<AddForm
 				onAddHandler={() => {}}

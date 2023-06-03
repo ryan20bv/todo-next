@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { useRouter } from "next/router";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -9,7 +9,10 @@ import {
 	authDataAction,
 	clearAuthDataAction,
 } from "@/reduxToolkit/auth/auth-action/authAction";
-import { setCurrentCategoryAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
+import {
+	setCurrentCategoryAction,
+	setSelectedMainTaskAction,
+} from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 
 import Card from "@/components/ui/Card";
 import CardHeader from "@/components/ui/CardHeader";
@@ -23,6 +26,7 @@ import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
 
 const MainPage = () => {
 	const dispatch = useAppDispatch();
+	const router = useRouter();
 	const [showListOfCategories, setShowListOfCategories] =
 		useState<boolean>(false);
 	const { currentCategory, categoryList, mainTaskList } = useAppSelector(
@@ -46,7 +50,12 @@ const MainPage = () => {
 		// });
 	};
 
-	// const title = <h1>{categoryTitle.categoryName}</h1>;
+	const goToSubTaskPageHandler = (mainTask: IMainTask) => {
+		dispatch(setSelectedMainTaskAction(mainTask));
+		let formattedName = mainTask.mainTaskName;
+		formattedName = formattedName.replace(/\s+/g, "-").toLowerCase();
+		router.push(`${router.asPath}/${formattedName}`);
+	};
 	return (
 		<Card>
 			<CardHeader
@@ -77,9 +86,9 @@ const MainPage = () => {
 			<ListContainer>
 				<MainList
 					mainTaskList={mainTaskList}
+					onSeeSubTaskPage={goToSubTaskPageHandler}
 					onEditing={(mainTask: IMainTask) => {}}
 					onDeleteMainTask={(mainTaskId: string) => {}}
-					onSeeSubTaskPage={(mainTask: IMainTask) => {}}
 					onDeleteAllDone={() => {}}
 				/>
 			</ListContainer>

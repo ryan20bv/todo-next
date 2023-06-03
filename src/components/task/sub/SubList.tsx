@@ -57,7 +57,7 @@ const SubList: React.FC<PropsType> = ({
 				</div>
 			</div>
 			<Summary
-				length={3}
+				length={length}
 				onSelectTab={updateSelectedTabHandler}
 				selectedTab={selectedTab}
 				onDeleteAllDone={onDeleteAllDone}
