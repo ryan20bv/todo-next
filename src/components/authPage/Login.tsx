@@ -5,6 +5,7 @@ import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignupForm";
+import LoadingPage from "../ui/LoadingPage";
 
 const Login = () => {
 	const router = useRouter();
@@ -26,7 +27,7 @@ const Login = () => {
 	}, []);
 
 	if (isLoading) {
-		return <p>Loading...</p>;
+		return <LoadingPage />;
 	}
 	const iconFunctionHandler = () => {
 		router.push("/n");

@@ -53,7 +53,7 @@ export const getUserCategoryListAction =
 		// console.log(rawData);
 		const categoryList: ICategory[] = [];
 		rawData.forEach((item: any) => {
-			console.log(item);
+			// console.log(item);
 			const indivCategory: ICategory = {
 				categoryId: item._id,
 				categoryName: item.categoryName,
@@ -71,8 +71,8 @@ export const setCurrentCategoryAction =
 		const foundCategoryItems = rawData.find(
 			(item: any) => item._id === category.categoryId
 		);
-		console.log(foundCategoryItems);
-		console.log(foundCategoryItems.mainTaskList);
+		// console.log(foundCategoryItems);
+		// console.log(foundCategoryItems.mainTaskList);
 		const currentMainTaskList = foundCategoryItems.mainTaskList.map(
 			(item: any) => {
 				const formattedSubTaskList: ISubTask[] = item.subTaskList.map(
@@ -95,7 +95,7 @@ export const setCurrentCategoryAction =
 				};
 			}
 		);
-		console.log(currentMainTaskList);
+		// console.log(currentMainTaskList);
 		await dispatch(setCurrentCategoryRed({ currentCategory: category }));
 		dispatch(setMainTaskListAction(currentMainTaskList));
 	};

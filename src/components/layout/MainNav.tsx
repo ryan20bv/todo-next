@@ -15,8 +15,11 @@ const MainNav = () => {
 	};
 	const logOutHandler = () => {
 		signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
+
 		dispatch(logoutAuthAction());
 		dispatch(resetPersonalTodoStateAction());
+		// signOut();
+		// router.push("/");
 	};
 
 	const checkProfileHandler = () => {
