@@ -1,9 +1,11 @@
 import { IMainTask, INewMainTask } from "@/DUMMY_DATA/MODEL";
 import { updateMainTaskListAction } from "../personal-action/personalTodoAction";
+import { updateIsSendingDataRed } from "../personal-slice/personalTodoSlice";
 
 export const addMainTaskAction =
 	(data: INewMainTask) => async (dispatch: any, getState: any) => {
 		// console.log("addMainTaskAction", data);
+		dispatch(updateIsSendingDataRed({ isSendingData: true }));
 		const { enteredMainTaskName, category_id, apiToken } = data;
 		try {
 			const url =
@@ -25,6 +27,7 @@ export const addMainTaskAction =
 			const data = await response.json();
 			// console.log(data);
 			if (!response.ok) {
+				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 				return;
 			}
 			if (data.message === "new Task Added!") {
@@ -38,6 +41,7 @@ export const addMainTaskAction =
 				};
 				const addNewMainTaskList: IMainTask[] = [...mainTaskList, newMainTask];
 				dispatch(updateMainTaskListAction(addNewMainTaskList));
+				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 			}
 		} catch (err) {
 			console.log("addMainTaskAction", err);

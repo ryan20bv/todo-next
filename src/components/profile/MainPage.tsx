@@ -11,6 +11,7 @@ import {
 } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 import { addMainTaskAction } from "@/reduxToolkit/personal/mainTask-action/mainTaskAction";
 
+// component import
 import Card from "@/components/ui/Card";
 import CardHeader from "@/components/ui/CardHeader";
 import AddForm from "@/components/ui/AddForm";
@@ -18,7 +19,9 @@ import EditForm from "@/components/ui/EditForm";
 import ListContainer from "@/components/ui/ListContainer";
 import Summary from "@/components/ui/Summary";
 import MainList from "../task/main/MainList";
+import SendingData from "../ui/SendingData";
 
+// types
 import { ICategory, IMainTask, INewMainTask } from "@/DUMMY_DATA/MODEL";
 
 const MainPage = () => {
@@ -26,8 +29,13 @@ const MainPage = () => {
 	const router = useRouter();
 	const [showListOfCategories, setShowListOfCategories] =
 		useState<boolean>(false);
-	const { currentCategory, categoryList, mainTaskList, selectedMainTask } =
-		useAppSelector((state: RootState) => state.personalTodoReducer);
+	const {
+		currentCategory,
+		categoryList,
+		mainTaskList,
+		selectedMainTask,
+		isSendingData,
+	} = useAppSelector((state: RootState) => state.personalTodoReducer);
 	const { authData } = useAppSelector((state: RootState) => state.authReducer);
 	// console.log(mainTaskList);
 
@@ -53,14 +61,14 @@ const MainPage = () => {
 		formattedName = formattedName.replace(/\s+/g, "-").toLowerCase();
 		router.push(`${router.asPath}/${formattedName}`);
 	};
-	const addNewMainTaskHandler = (enteredMainTaskName: string) => {
+	const addNewMainTaskHandler = async (enteredMainTaskName: string) => {
 		const enteredData: INewMainTask = {
 			enteredMainTaskName: enteredMainTaskName,
 			category_id: currentCategory.categoryId,
 			apiToken: authData.apiToken,
 		};
 
-		dispatch(addMainTaskAction(enteredData));
+		await dispatch(addMainTaskAction(enteredData));
 	};
 	return (
 		<Card>
@@ -85,10 +93,14 @@ const MainPage = () => {
 					</ul>
 				</section>
 			)}
-			<AddForm
-				onAddHandler={addNewMainTaskHandler}
-				placeHolder='add todo'
-			/>
+
+			{isSendingData && <SendingData />}
+			{!isSendingData && (
+				<AddForm
+					onAddHandler={addNewMainTaskHandler}
+					placeHolder='add todo'
+				/>
+			)}
 			<ListContainer>
 				<MainList
 					mainTaskList={mainTaskList}

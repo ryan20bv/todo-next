@@ -7,6 +7,7 @@ interface IPersonalTodoState {
 	currentCategory: ICategory;
 	mainTaskList: IMainTask[];
 	selectedMainTask: IMainTask;
+	isSendingData: boolean;
 }
 
 const initialPersonalState: IPersonalTodoState = {
@@ -16,12 +17,16 @@ const initialPersonalState: IPersonalTodoState = {
 	mainTaskList: [],
 
 	selectedMainTask: {} as IMainTask,
+	isSendingData: false,
 };
 
 const personalTodoSlice = createSlice({
 	name: "Personal Todo Slice",
 	initialState: initialPersonalState,
 	reducers: {
+		updateIsSendingDataRed(state, action) {
+			state.isSendingData = action.payload.isSendingData;
+		},
 		getRawDataRed(state, action) {
 			state.rawData = action.payload.rawData;
 		},
@@ -51,6 +56,7 @@ const personalTodoSlice = createSlice({
 });
 
 export const {
+	updateIsSendingDataRed,
 	getRawDataRed,
 	setCurrentCategoryRed,
 	getUserCategoryListRed,
