@@ -44,6 +44,9 @@ const personalTodoSlice = createSlice({
 			state.mainTaskList = [];
 			state.selectedMainTask = {} as IMainTask;
 		},
+		updateMainTaskListRed(state, action) {
+			state.mainTaskList = action.payload.newMainTaskList;
+		},
 	},
 });
 
@@ -54,6 +57,7 @@ export const {
 	setMainTaskListRed,
 	setSelectedMainTaskRed,
 	resetPersonalTodoStateRed,
+	updateMainTaskListRed,
 } = personalTodoSlice.actions;
 
 export default personalTodoSlice;

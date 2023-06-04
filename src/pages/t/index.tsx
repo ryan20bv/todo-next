@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { getSession, useSession, signOut } from "next-auth/react";
@@ -17,9 +17,11 @@ import LoadingPage from "@/components/ui/LoadingPage";
 const Index = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
+	const [isFetchingData, setIsFetchingData] = useState<boolean>(true);
 	const { isAuthenticated, isSendingData, authError, authData } = useAppSelector(
 		(state: RootState) => state.authReducer
 	);
+
 	const { rawData, currentCategory } = useAppSelector(
 		(state: RootState) => state.personalTodoReducer
 	);
@@ -41,27 +43,32 @@ const Index = () => {
 					apiToken: data.token,
 					expires: session.expires,
 				};
-				dispatch(authDataAction(newData));
+				await dispatch(authDataAction(newData));
+				// await dispatch(getRawDataAction(newData.userId, newData.apiToken));
+				setIsFetchingData(false);
 			}
 		};
 		checkForSession();
 	}, [dispatch, router]);
 
-	useEffect(() => {
-		if (isAuthenticated) {
-			if (Object.keys(authData).length !== 0) {
-				const { userId, apiToken } = authData;
-				dispatch(getRawDataAction(userId, apiToken));
-			}
-		}
-	}, [dispatch, isAuthenticated, authData]);
+	// useEffect(() => {
+	// 	if (isAuthenticated) {
+	// 		if (Object.keys(authData).length !== 0) {
+	// 			const { userId, apiToken } = authData;
+	// 			dispatch(getRawDataAction(userId, apiToken));
+	// 		}
+	// 	}
+	// }, [dispatch, isAuthenticated, authData]);
 
 	// return <PersonalPage />;
-	if (Object.keys(currentCategory).length !== 0) {
-		let str = currentCategory.categoryName;
-		str = str.replace(/\s+/g, "-").toLowerCase();
-		router.push(`/t/${str}`);
+	if (!isFetchingData) {
+		if (Object.keys(currentCategory).length !== 0) {
+			let str = currentCategory.categoryName;
+			str = str.replace(/\s+/g, "-").toLowerCase();
+			router.push(`/t/${str}`);
+		}
 	}
+
 	return <LoadingPage status='Loading...' />;
 };
 

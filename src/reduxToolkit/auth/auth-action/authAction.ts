@@ -8,6 +8,7 @@ import {
 } from "../auth-slice/authSlice";
 import { authDataType } from "../auth-slice/authSlice";
 import { signIn } from "next-auth/react";
+import { getRawDataAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 
 export const logInAction =
 	(emailInput: string, passwordInput: string) =>
@@ -48,8 +49,9 @@ export const clearErrorAction = () => async (dispatch: any, getState: any) => {
 export const authDataAction =
 	(data: authDataType) => async (dispatch: any, getState: any) => {
 		// console.log(data);
-		dispatch(updateIsAuthDataState({ authData: data }));
-		dispatch(updateIsAuthState({ isAuthenticated: true }));
+		await dispatch(updateIsAuthDataState({ authData: data }));
+		await dispatch(updateIsAuthState({ isAuthenticated: true }));
+		dispatch(getRawDataAction(data.userId, data.apiToken));
 	};
 
 export const clearAuthDataAction =
