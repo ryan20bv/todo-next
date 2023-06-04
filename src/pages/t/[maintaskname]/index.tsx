@@ -25,7 +25,7 @@ const MainTaskPage = () => {
 
 	const fetchRawData = useCallback(() => {
 		dispatch(getRawDataAction(userId, apiToken));
-	}, []);
+	}, [dispatch, userId, apiToken]);
 	/* const entries = performance.getEntriesByType(
 		"navigation"
 	) as PerformanceNavigationTiming[];
