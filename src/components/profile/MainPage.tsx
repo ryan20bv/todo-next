@@ -16,6 +16,7 @@ import {
 import {
 	addMainTaskAction,
 	selectedMainTaskToEditAction,
+	cancelEditMainTaskNameAction,
 } from "@/reduxToolkit/personal/mainTask-action/mainTaskAction";
 
 // component import
@@ -81,11 +82,18 @@ const MainPage = () => {
 		await dispatch(addMainTaskAction(enteredData));
 	};
 
-	// !working
-	const editMainTaskNameHandler = (selectedMainTask: IMainTask) => {
+	// checked
+	const selectMainTaskToEditHandler = (selectedMainTask: IMainTask) => {
 		setIsEditing(true);
 		dispatch(selectedMainTaskToEditAction(selectedMainTask));
 	};
+
+	// !working on
+	const cancelEditingMainTaskNameHandler = () => {
+		setIsEditing(false);
+		dispatch(cancelEditMainTaskNameAction());
+	};
+
 	return (
 		<Card>
 			<CardHeader
@@ -121,14 +129,14 @@ const MainPage = () => {
 				<EditForm
 					itemToEdit={mainTaskToEdit.mainTaskName}
 					confirmEditing={() => {}}
-					onCancelEditing={() => {}}
+					onCancelEditing={cancelEditingMainTaskNameHandler}
 				/>
 			)}
 			<ListContainer>
 				<MainList
 					mainTaskList={mainTaskList}
 					onSeeSubTaskPage={goToSubTaskPageHandler}
-					onEditing={editMainTaskNameHandler}
+					onEditing={selectMainTaskToEditHandler}
 					onDeleteMainTask={(mainTaskId: string) => {}}
 					onDeleteAllDone={() => {}}
 				/>

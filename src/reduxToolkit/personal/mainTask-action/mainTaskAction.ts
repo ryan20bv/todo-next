@@ -62,3 +62,8 @@ export const selectedMainTaskToEditAction =
 	(mainTaskToEdit: IMainTask) => async (dispatch: any, getState: any) => {
 		dispatch(setMainTakToEditRed({ mainTaskToEdit }));
 	};
+
+export const cancelEditMainTaskNameAction =
+	() => async (dispatch: any, getState: any) => {
+		dispatch(setMainTakToEditRed({ mainTaskToEdit: {} as IMainTask }));
+	};
