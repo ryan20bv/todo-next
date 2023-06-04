@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import {
 	useAppDispatch,
@@ -22,9 +22,25 @@ const MainTaskPage = () => {
 	);
 	// console.log(authData);
 	const { userId, apiToken } = authData;
-	useEffect(() => {
+
+	const fetchRawData = useCallback(() => {
 		dispatch(getRawDataAction(userId, apiToken));
-	}, [dispatch, userId, apiToken]);
+	}, []);
+	/* const entries = performance.getEntriesByType(
+		"navigation"
+	) as PerformanceNavigationTiming[];
+	const windowStatus = entries.map((nav) => nav.type);
+
+	useEffect(() => {
+		if (windowStatus[0] === "reload") {
+			console.log("fetching");
+			fetchRawData();
+		}
+	}, [windowStatus, fetchRawData]); */
+
+	useEffect(() => {
+		fetchRawData();
+	}, [fetchRawData]);
 
 	return <MainPage />;
 };

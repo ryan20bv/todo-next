@@ -21,14 +21,13 @@ export const addMainTaskAction =
 			};
 			// console.log(options);
 			const response = await fetch(url, options);
-			console.log(response);
+			// console.log(response);
 			const data = await response.json();
-			console.log(data);
+			// console.log(data);
 			if (!response.ok) {
 				return;
 			}
 			if (data.message === "new Task Added!") {
-				console.log("here");
 				const { mainTaskList } = getState().personalTodoReducer;
 				const newMainTask: IMainTask = {
 					categoryId: data.newTask.category_id,
