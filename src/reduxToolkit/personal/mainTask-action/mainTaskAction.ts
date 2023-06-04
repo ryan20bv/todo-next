@@ -1,6 +1,15 @@
-import { IMainTask, INewMainTask } from "@/DUMMY_DATA/MODEL";
+import {
+	IMainTask,
+	INewMainTask,
+	IUpdateMainTaskName,
+} from "@/DUMMY_DATA/MODEL";
+// import from personalTodoAction
 import { updateMainTaskListAction } from "../personal-action/personalTodoAction";
-import { updateIsSendingDataRed } from "../personal-slice/personalTodoSlice";
+// import from personalTodoSlice
+import {
+	updateIsSendingDataRed,
+	setMainTakToEditRed,
+} from "../personal-slice/personalTodoSlice";
 
 export const addMainTaskAction =
 	(data: INewMainTask) => async (dispatch: any, getState: any) => {
@@ -8,18 +17,19 @@ export const addMainTaskAction =
 		dispatch(updateIsSendingDataRed({ isSendingData: true }));
 		const { enteredMainTaskName, category_id, apiToken } = data;
 		try {
+			const bodyData = {
+				enteredMainTaskName,
+				category_id,
+			};
 			const url =
-				process.env.NEXT_PUBLIC_BACK_END_URL +
-				"/api/mainTask/" +
-				category_id +
-				"/createTask";
+				process.env.NEXT_PUBLIC_BACK_END_URL + "/api/mainTask/createMainTask";
 			const options = {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 					Authorization: "Bearer " + apiToken,
 				},
-				body: JSON.stringify({ enteredMainTaskName }),
+				body: JSON.stringify(bodyData),
 			};
 			// console.log(options);
 			const response = await fetch(url, options);
@@ -46,4 +56,9 @@ export const addMainTaskAction =
 		} catch (err) {
 			console.log("addMainTaskAction", err);
 		}
+	};
+
+export const selectedMainTaskToEditAction =
+	(mainTaskToEdit: IMainTask) => async (dispatch: any, getState: any) => {
+		dispatch(setMainTakToEditRed({ mainTaskToEdit }));
 	};

@@ -8,6 +8,7 @@ interface IPersonalTodoState {
 	mainTaskList: IMainTask[];
 	selectedMainTask: IMainTask;
 	isSendingData: boolean;
+	mainTaskToEdit: IMainTask;
 }
 
 const initialPersonalState: IPersonalTodoState = {
@@ -15,9 +16,9 @@ const initialPersonalState: IPersonalTodoState = {
 	rawData: [],
 	currentCategory: {} as ICategory,
 	mainTaskList: [],
-
 	selectedMainTask: {} as IMainTask,
 	isSendingData: false,
+	mainTaskToEdit: {} as IMainTask,
 };
 
 const personalTodoSlice = createSlice({
@@ -52,6 +53,9 @@ const personalTodoSlice = createSlice({
 		updateMainTaskListRed(state, action) {
 			state.mainTaskList = action.payload.newMainTaskList;
 		},
+		setMainTakToEditRed(state, action) {
+			state.mainTaskToEdit = action.payload.mainTaskToEdit;
+		},
 	},
 });
 
@@ -64,6 +68,7 @@ export const {
 	setSelectedMainTaskRed,
 	resetPersonalTodoStateRed,
 	updateMainTaskListRed,
+	setMainTakToEditRed,
 } = personalTodoSlice.actions;
 
 export default personalTodoSlice;

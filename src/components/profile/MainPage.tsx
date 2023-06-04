@@ -5,11 +5,18 @@ import {
 	useAppSelector,
 	RootState,
 } from "@/reduxToolkit/indexStore/indexStore";
+
+// import from personalTodoAction
 import {
 	setCurrentCategoryAction,
 	setSelectedMainTaskAction,
 } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
-import { addMainTaskAction } from "@/reduxToolkit/personal/mainTask-action/mainTaskAction";
+
+// import from mainTaskAction
+import {
+	addMainTaskAction,
+	selectedMainTaskToEditAction,
+} from "@/reduxToolkit/personal/mainTask-action/mainTaskAction";
 
 // component import
 import Card from "@/components/ui/Card";
@@ -29,12 +36,14 @@ const MainPage = () => {
 	const router = useRouter();
 	const [showListOfCategories, setShowListOfCategories] =
 		useState<boolean>(false);
+	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const {
 		currentCategory,
 		categoryList,
 		mainTaskList,
 		selectedMainTask,
 		isSendingData,
+		mainTaskToEdit,
 	} = useAppSelector((state: RootState) => state.personalTodoReducer);
 	const { authData } = useAppSelector((state: RootState) => state.authReducer);
 	// console.log(mainTaskList);
@@ -61,6 +70,7 @@ const MainPage = () => {
 		formattedName = formattedName.replace(/\s+/g, "-").toLowerCase();
 		router.push(`${router.asPath}/${formattedName}`);
 	};
+	// checked
 	const addNewMainTaskHandler = async (enteredMainTaskName: string) => {
 		const enteredData: INewMainTask = {
 			enteredMainTaskName: enteredMainTaskName,
@@ -69,6 +79,12 @@ const MainPage = () => {
 		};
 
 		await dispatch(addMainTaskAction(enteredData));
+	};
+
+	// !working
+	const editMainTaskNameHandler = (selectedMainTask: IMainTask) => {
+		setIsEditing(true);
+		dispatch(selectedMainTaskToEditAction(selectedMainTask));
 	};
 	return (
 		<Card>
@@ -93,19 +109,26 @@ const MainPage = () => {
 					</ul>
 				</section>
 			)}
-
+			{/* <SendingData /> */}
 			{isSendingData && <SendingData />}
-			{!isSendingData && (
+			{!isSendingData && !isEditing && (
 				<AddForm
 					onAddHandler={addNewMainTaskHandler}
 					placeHolder='add todo'
+				/>
+			)}
+			{!isSendingData && isEditing && (
+				<EditForm
+					itemToEdit={mainTaskToEdit.mainTaskName}
+					confirmEditing={() => {}}
+					onCancelEditing={() => {}}
 				/>
 			)}
 			<ListContainer>
 				<MainList
 					mainTaskList={mainTaskList}
 					onSeeSubTaskPage={goToSubTaskPageHandler}
-					onEditing={(mainTask: IMainTask) => {}}
+					onEditing={editMainTaskNameHandler}
 					onDeleteMainTask={(mainTaskId: string) => {}}
 					onDeleteAllDone={() => {}}
 				/>

@@ -37,3 +37,7 @@ export interface INewMainTask {
 	category_id: string;
 	apiToken: string;
 }
+export interface IUpdateMainTaskName {
+	enteredNewMainTaskName: string;
+	mainTask_id: string;
+}
