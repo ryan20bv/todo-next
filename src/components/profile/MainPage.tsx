@@ -17,6 +17,7 @@ import {
 	addMainTaskAction,
 	selectedMainTaskToEditAction,
 	cancelEditMainTaskNameAction,
+	confirmEditMainTaskNameAction,
 } from "@/reduxToolkit/personal/mainTask-action/mainTaskAction";
 
 // component import
@@ -72,14 +73,8 @@ const MainPage = () => {
 		router.push(`${router.asPath}/${formattedName}`);
 	};
 	// checked
-	const addNewMainTaskHandler = async (enteredMainTaskName: string) => {
-		const enteredData: INewMainTask = {
-			enteredMainTaskName: enteredMainTaskName,
-			category_id: currentCategory.categoryId,
-			apiToken: authData.apiToken,
-		};
-
-		await dispatch(addMainTaskAction(enteredData));
+	const addNewMainTaskHandler = (enteredMainTaskName: string) => {
+		dispatch(addMainTaskAction(enteredMainTaskName));
 	};
 
 	// checked
@@ -88,10 +83,16 @@ const MainPage = () => {
 		dispatch(selectedMainTaskToEditAction(selectedMainTask));
 	};
 
-	// !working on
+	// checked
 	const cancelEditingMainTaskNameHandler = () => {
 		setIsEditing(false);
 		dispatch(cancelEditMainTaskNameAction());
+	};
+
+	// !working on
+	const confirmEditMainTaskNameHandler = (newTaskName: string) => {
+		dispatch(confirmEditMainTaskNameAction(newTaskName));
+		setIsEditing(false);
 	};
 
 	return (
@@ -128,7 +129,7 @@ const MainPage = () => {
 			{!isSendingData && isEditing && (
 				<EditForm
 					itemToEdit={mainTaskToEdit.mainTaskName}
-					confirmEditing={() => {}}
+					confirmEditing={confirmEditMainTaskNameHandler}
 					onCancelEditing={cancelEditingMainTaskNameHandler}
 				/>
 			)}

@@ -32,11 +32,6 @@ export interface ISubTask {
 	isDone: boolean;
 }
 
-export interface INewMainTask {
-	enteredMainTaskName: string;
-	category_id: string;
-	apiToken: string;
-}
 export interface IUpdateMainTaskName {
 	enteredNewMainTaskName: string;
 	mainTask_id: string;
