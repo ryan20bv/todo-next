@@ -43,9 +43,9 @@ const TaskDetail = () => {
 		dispatch(addNewSubTodoAction(newSubTodoName, selectedTodo.mainTaskId));
 	};
 	// checked
-	const deleteSubTodoHandler = (subTodo_Id: string) => {
+	const deleteSubTodoHandler = (subTask: ISubTask) => {
 		// console.log(subTodo_Id);
-		dispatch(deleteSubTodoAction(subTodo_Id));
+		dispatch(deleteSubTodoAction(subTask));
 	};
 
 	// checked

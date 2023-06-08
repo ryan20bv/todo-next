@@ -18,6 +18,7 @@ import {
 	selectedMainTaskToEditAction,
 	cancelEditMainTaskNameAction,
 	confirmEditMainTaskNameAction,
+	setMainTaskToDeleteAction,
 } from "@/reduxToolkit/personal/mainTask-action/mainTaskAction";
 
 // component import
@@ -31,7 +32,7 @@ import MainList from "../task/main/MainList";
 import SendingData from "../ui/SendingData";
 
 // types
-import { ICategory, IMainTask, INewMainTask } from "@/DUMMY_DATA/MODEL";
+import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
 
 const MainPage = () => {
 	const dispatch = useAppDispatch();
@@ -89,10 +90,16 @@ const MainPage = () => {
 		dispatch(cancelEditMainTaskNameAction());
 	};
 
-	// !working on
+	// checked
 	const confirmEditMainTaskNameHandler = (newTaskName: string) => {
 		dispatch(confirmEditMainTaskNameAction(newTaskName));
 		setIsEditing(false);
+	};
+	// !working on
+
+	const selectMainTaskToDeleteHandler = (selectedMainTask: IMainTask) => {
+		// console.log(selectedMainTask);
+		dispatch(setMainTaskToDeleteAction(selectedMainTask));
 	};
 
 	return (
@@ -138,7 +145,7 @@ const MainPage = () => {
 					mainTaskList={mainTaskList}
 					onSeeSubTaskPage={goToSubTaskPageHandler}
 					onEditing={selectMainTaskToEditHandler}
-					onDeleteMainTask={(mainTaskId: string) => {}}
+					onDeleteMainTask={selectMainTaskToDeleteHandler}
 					onDeleteAllDone={() => {}}
 				/>
 			</ListContainer>

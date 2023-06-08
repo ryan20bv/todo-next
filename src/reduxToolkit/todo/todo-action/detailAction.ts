@@ -29,11 +29,11 @@ export const addNewSubTodoAction =
 
 // checked
 export const deleteSubTodoAction =
-	(subTodo_Id: string) => async (dispatch: any, getState: any) => {
+	(subTaskToDelete: ISubTask) => async (dispatch: any, getState: any) => {
 		let { selectedTodo } = getState().todoReducer;
 		let copyOfTodoDetails: IMainTask = { ...selectedTodo };
 		let updatedTodoDetails = selectedTodo.subTaskList.filter(
-			(subTask: ISubTask) => subTask.subTaskId !== subTodo_Id
+			(subTask: ISubTask) => subTask.subTaskId !== subTaskToDelete.subTaskId
 		);
 
 		copyOfTodoDetails.subTaskList = [...updatedTodoDetails];

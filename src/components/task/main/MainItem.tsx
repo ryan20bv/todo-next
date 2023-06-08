@@ -8,7 +8,7 @@ interface propsType {
 	mainTask: IMainTask;
 	index: number;
 	onEditing: (task: IMainTask) => void;
-	onDeleteMainTask: (mainTaskId: string) => void;
+	onDeleteMainTask: (mainTask: IMainTask) => void;
 	onSeeSubTaskPage: (mainTask: IMainTask) => void;
 }
 
@@ -34,8 +34,8 @@ const MainItem: React.FC<propsType> = ({
 		// 	router.push(`${router.asPath}/${str}`);
 		// }
 	};
-	const deleteHandler = (id: string) => {
-		onDeleteMainTask(id);
+	const deleteHandler = (mainTask: IMainTask) => {
+		onDeleteMainTask(mainTask);
 	};
 
 	let summaryName = mainTask.mainTaskName;
@@ -93,7 +93,7 @@ const MainItem: React.FC<propsType> = ({
 						/>
 					</button>
 				)}
-				<button onClick={() => deleteHandler(mainTask.mainTaskId)}>
+				<button onClick={() => deleteHandler(mainTask)}>
 					<TrashIcon
 						className='text-red-600 h-6 hover:text-gray-400'
 						data-testid={`task_delete_button_${mainTask.mainTaskName}`}

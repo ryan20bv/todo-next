@@ -4,7 +4,8 @@ import { updateMainTaskListAction } from "../personal-action/personalTodoAction"
 // import from personalTodoSlice
 import {
 	updateIsSendingDataRed,
-	setMainTakToEditRed,
+	setMainTaskToEditRed,
+	setMainTaskToDeleteRed,
 } from "../personal-slice/personalTodoSlice";
 
 const formatDataToIMainTask = (dataToFormat: any) => {
@@ -17,7 +18,7 @@ const formatDataToIMainTask = (dataToFormat: any) => {
 	};
 	return formattedData;
 };
-
+// checked
 export const addMainTaskAction =
 	(enteredMainTaskName: string) => async (dispatch: any, getState: any) => {
 		dispatch(updateIsSendingDataRed({ isSendingData: true }));
@@ -68,17 +69,17 @@ export const addMainTaskAction =
 			console.log("addMainTaskAction", err);
 		}
 	};
-
+// checked
 export const selectedMainTaskToEditAction =
 	(mainTaskToEdit: IMainTask) => async (dispatch: any, getState: any) => {
-		dispatch(setMainTakToEditRed({ mainTaskToEdit }));
+		dispatch(setMainTaskToEditRed({ mainTaskToEdit }));
 	};
-
+// checked
 export const cancelEditMainTaskNameAction =
 	() => async (dispatch: any, getState: any) => {
-		dispatch(setMainTakToEditRed({ mainTaskToEdit: {} as IMainTask }));
+		dispatch(setMainTaskToEditRed({ mainTaskToEdit: {} as IMainTask }));
 	};
-
+// checked
 export const confirmEditMainTaskNameAction =
 	(enteredNewMainTaskName: string) => async (dispatch: any, getState: any) => {
 		if (!enteredNewMainTaskName || enteredNewMainTaskName.trim().length === 0) {
@@ -128,4 +129,11 @@ export const confirmEditMainTaskNameAction =
 		} catch (err) {
 			console.log("confirmEditMainTaskNameAction", err);
 		}
+	};
+
+// checked
+export const setMainTaskToDeleteAction =
+	(mainTask: IMainTask) => async (dispatch: any, getState: any) => {
+		console.log(mainTask);
+		dispatch(setMainTaskToDeleteRed({ mainTaskToDelete: mainTask }));
 	};

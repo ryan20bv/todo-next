@@ -6,7 +6,7 @@ import { ISubTask } from "@/DUMMY_DATA/MODEL";
 interface PropsType {
 	subTask: ISubTask;
 	isDoneHandler: (id: string) => void;
-	onDeleteSubTodo: (id: string) => void;
+	onDeleteSubTodo: (subTask: ISubTask) => void;
 	onEditingSubTask: (subTask: ISubTask) => void;
 }
 
@@ -21,8 +21,8 @@ const SubItem: React.FC<PropsType> = ({
 	const isDoneDetailHandler = (subTaskId: string) => {
 		isDoneHandler(subTaskId);
 	};
-	const deleteDetailHandler = (subTodo_Id: string) => {
-		onDeleteSubTodo(subTodo_Id);
+	const deleteDetailHandler = (subTask: ISubTask) => {
+		onDeleteSubTodo(subTask);
 	};
 	const onEditingSubTaskHandler = (subTask: ISubTask) => {
 		onEditingSubTask(subTask);
@@ -55,7 +55,7 @@ const SubItem: React.FC<PropsType> = ({
 					</button>
 				)}
 
-				<button onClick={() => deleteDetailHandler(subTask.subTaskId)}>
+				<button onClick={() => deleteDetailHandler(subTask)}>
 					<TrashIcon
 						className='text-red-600 h-6 hover:text-gray-400'
 						data-testid={`detail_delete_button_${subTask.subTaskId}`}

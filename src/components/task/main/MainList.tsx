@@ -6,7 +6,7 @@ import { IMainTask } from "@/DUMMY_DATA/MODEL";
 interface PropsTypes {
 	mainTaskList: IMainTask[];
 	onEditing: (mainTask: IMainTask) => void;
-	onDeleteMainTask: (mainTaskId: string) => void;
+	onDeleteMainTask: (mainTask: IMainTask) => void;
 	onSeeSubTaskPage: (mainTask: IMainTask) => void;
 	onDeleteAllDone: () => void;
 }

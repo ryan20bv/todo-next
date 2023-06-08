@@ -96,10 +96,10 @@ export const updateLocaleStorageAction =
 	}; */
 // checked
 export const deleteMainTodoAction =
-	(id: string) => async (dispatch: any, getState: any) => {
+	(mainTask: IMainTask) => async (dispatch: any, getState: any) => {
 		const { mainTodoList, selectedTab } = getState().todoReducer;
 		const updatedTodoList = mainTodoList.filter(
-			(todo: IMainTask) => todo.mainTaskId !== id
+			(todo: IMainTask) => todo.mainTaskId !== mainTask.mainTaskId
 		);
 		await dispatch(deleteTodoRed({ updatedTodoList }));
 		dispatch(updateLocaleStorageAction());
