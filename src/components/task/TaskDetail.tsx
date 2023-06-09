@@ -44,7 +44,6 @@ const TaskDetail = () => {
 	};
 	// checked
 	const deleteSubTodoHandler = (subTask: ISubTask) => {
-		// console.log(subTodo_Id);
 		dispatch(deleteSubTodoAction(subTask));
 	};
 

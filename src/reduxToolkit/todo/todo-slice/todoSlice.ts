@@ -73,7 +73,6 @@ export const {
 	updateFirstLoadRed,
 	setSelectedTodoRed,
 	addNewTodoRed,
-	// updateFilteredTodoListRed,
 	updateTodoDoneStatusRed,
 	deleteTodoRed,
 	deleteAllDoneRed,

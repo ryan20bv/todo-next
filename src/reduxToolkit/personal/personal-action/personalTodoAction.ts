@@ -23,11 +23,10 @@ export const getRawDataAction =
 				},
 			};
 			const response = await fetch(url, options);
-			// console.log(response);
+
 			const data = await response.json();
-			// console.log(data);
+
 			if (!response.ok) {
-				// console.log(data);
 				if (data.message === "Authentication failed!") {
 					signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
 				}
@@ -38,7 +37,6 @@ export const getRawDataAction =
 				categoryName: data[0].categoryName,
 				creatorId: userId,
 			};
-			// console.log(data);
 
 			await dispatch(getRawDataRed({ rawData: data }));
 			dispatch(setCurrentCategoryAction(initialCategory));
@@ -51,10 +49,9 @@ export const getRawDataAction =
 export const getUserCategoryListAction =
 	() => async (dispatch: any, getState: any) => {
 		const { rawData } = getState().personalTodoReducer;
-		// console.log(rawData);
+
 		const categoryList: ICategory[] = [];
 		rawData.forEach((item: any) => {
-			// console.log(item);
 			const indivCategory: ICategory = {
 				categoryId: item._id,
 				categoryName: item.categoryName,
@@ -68,11 +65,10 @@ export const getUserCategoryListAction =
 export const setCurrentCategoryAction =
 	(category: ICategory) => async (dispatch: any, getState: any) => {
 		const { rawData } = getState().personalTodoReducer;
-		// const currentMainTaskList = [];
+
 		const foundCategoryItems = rawData.find(
 			(item: any) => item._id === category.categoryId
 		);
-		// console.log(foundCategoryItems);
 
 		const currentMainTaskList = foundCategoryItems.mainTaskList.map(
 			(item: any) => {
@@ -96,7 +92,7 @@ export const setCurrentCategoryAction =
 				};
 			}
 		);
-		// console.log(currentMainTaskList);
+
 		await dispatch(setCurrentCategoryRed({ currentCategory: category }));
 		dispatch(setMainTaskListAction(currentMainTaskList));
 	};

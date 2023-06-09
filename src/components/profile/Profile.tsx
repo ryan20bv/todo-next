@@ -24,8 +24,9 @@ import LoadingPage from "../ui/LoadingPage";
 const ProfilePage = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const { isAuthenticated, isSendingData, authError, authData, isShowingModal } =
-		useAppSelector((state: RootState) => state.authReducer);
+	const { isSendingData, authError, authData, isShowingModal } = useAppSelector(
+		(state: RootState) => state.authReducer
+	);
 	const currPassInputRef = useRef<HTMLInputElement>(null);
 	const newPassInputRef = useRef<HTMLInputElement>(null);
 	const confPassInputRef = useRef<HTMLInputElement>(null);
@@ -36,9 +37,7 @@ const ProfilePage = () => {
 	const [showCurrentPassword, setShowCurrentPassword] = useState<boolean>(false);
 	const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
-	// const { data: session, status } = useSession();
-	// console.log(session);
-	// console.log(status);
+
 	useEffect(() => {
 		const checkForSession = async () => {
 			const session = await getSession();

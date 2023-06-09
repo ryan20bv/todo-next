@@ -45,24 +45,16 @@ export const addMainTaskAction =
 				},
 				body: JSON.stringify(bodyData),
 			};
-			// console.log(options);
+
 			const response = await fetch(url, options);
-			// console.log(response);
 			const data = await response.json();
-			// console.log(data);
+
 			if (!response.ok) {
 				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 				return;
 			}
 			console.log(data);
 			if (data.message === "new Task Added!") {
-				// const newMainTask: IMainTask = {
-				// 	categoryId: data.newTask.category_id,
-				// 	mainTaskId: data.newTask._id,
-				// 	mainTaskName: data.newTask.mainTaskName,
-				// 	isAllSubTaskDone: data.newTask.isAllSubTaskDone,
-				// 	subTaskList: data.newTask.subTaskList,
-				// };
 				const newMainTask = formatDataToIMainTask(data.newTask);
 				const addNewMainTaskList: IMainTask[] = [...mainTaskList, newMainTask];
 				dispatch(updateMainTaskListAction(addNewMainTaskList));
@@ -167,7 +159,7 @@ export const confirmDeleteMainTaskAction =
 				return;
 			}
 			const data = await response.json();
-			console.log(data);
+
 			const { message } = data;
 			if (message === "delete success") {
 				const updatedMainTaskList = mainTaskList.filter(

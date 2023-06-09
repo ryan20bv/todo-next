@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
-import Link from "next/link";
+
 import { useRouter } from "next/router";
-import { signIn } from "next-auth/react";
+
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import {
 	useAppDispatch,
@@ -23,14 +23,13 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 		(state: RootState) => state.authReducer
 	);
 	const Router = useRouter();
-	const [errorMessage, setErrorMessage] = useState<string>("");
+
 	const emailInputRef = useRef<HTMLInputElement>(null);
 	const passwordInputRef = useRef<HTMLInputElement>(null);
-	const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
+
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const submitLoginFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		setErrorMessage("");
 
 		const enteredEmail = emailInputRef.current?.value;
 		const enteredPassword = passwordInputRef.current?.value;
@@ -40,7 +39,6 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 			enteredEmail.trim() === "" ||
 			!enteredEmail.includes("@")
 		) {
-			// setErrorMessage("Invalid email!");
 			dispatch(authErrorAction("Invalid email!"));
 			return;
 		}
@@ -49,35 +47,11 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 			enteredPassword.trim() === "" ||
 			enteredPassword.length < 6
 		) {
-			// console.log("Invalid form");
-			// setErrorMessage("Invalid password. Min of 6 characters required!");
 			dispatch(authErrorAction("Invalid password. Min of 6 characters required!"));
 			return;
 		}
 
 		dispatch(logInAction(enteredEmail, enteredPassword));
-		// const loginHandler = async () => {
-		// 	let result;
-
-		// try {
-		// 	result = await signIn("credentials", {
-		// 		redirect: false,
-		// 		email: enteredEmail,
-		// 		password: enteredPassword,
-		// 	});
-		// 	console.log(result);
-		// 	if (!result?.ok) {
-		// 		throw new Error("Invalid Email or password!");
-		// 	}
-		// 	Router.replace("/t");
-		// 	setIsLoggingIn(false);
-		// } catch (err: any) {
-		// 	console.log(err.message);
-		// 	setErrorMessage(err.message);
-		// 	setIsLoggingIn(false);
-		// }
-		// };
-		// loginHandler();
 	};
 
 	const toggleShowPasswordHandler = () => {

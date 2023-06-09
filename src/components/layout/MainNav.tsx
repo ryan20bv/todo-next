@@ -1,13 +1,10 @@
 import React from "react";
-import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
-import { logoutAuthAction } from "@/reduxToolkit/auth/auth-action/authAction";
-import { resetPersonalTodoStateAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 import { useRouter } from "next/router";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 const MainNav = () => {
 	const router = useRouter();
-	const dispatch = useAppDispatch();
+
 	const { data: session } = useSession();
 
 	const goToLoginHandler = () => {

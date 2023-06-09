@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import { getSession, useSession, signOut } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -11,25 +11,22 @@ import {
 	authDataAction,
 	logoutAuthAction,
 } from "@/reduxToolkit/auth/auth-action/authAction";
-import { getRawDataAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
+
 import LoadingPage from "@/components/ui/LoadingPage";
 
 const Index = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const [isFetchingData, setIsFetchingData] = useState<boolean>(true);
-	const { isAuthenticated, isSendingData, authError, authData } = useAppSelector(
-		(state: RootState) => state.authReducer
-	);
 
-	const { rawData, currentCategory } = useAppSelector(
+	const { currentCategory } = useAppSelector(
 		(state: RootState) => state.personalTodoReducer
 	);
 
 	useEffect(() => {
 		const checkForSession = async () => {
 			const session = await getSession();
-			// console.log(session);
+
 			if (!session) {
 				dispatch(logoutAuthAction());
 				router.push("/n");
@@ -44,23 +41,13 @@ const Index = () => {
 					expires: session.expires,
 				};
 				await dispatch(authDataAction(newData));
-				// await dispatch(getRawDataAction(newData.userId, newData.apiToken));
+
 				setIsFetchingData(false);
 			}
 		};
 		checkForSession();
 	}, [dispatch, router]);
 
-	// useEffect(() => {
-	// 	if (isAuthenticated) {
-	// 		if (Object.keys(authData).length !== 0) {
-	// 			const { userId, apiToken } = authData;
-	// 			dispatch(getRawDataAction(userId, apiToken));
-	// 		}
-	// 	}
-	// }, [dispatch, isAuthenticated, authData]);
-
-	// return <PersonalPage />;
 	if (!isFetchingData) {
 		if (Object.keys(currentCategory).length !== 0) {
 			let str = currentCategory.categoryName;

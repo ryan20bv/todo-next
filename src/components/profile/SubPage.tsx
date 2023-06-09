@@ -36,7 +36,7 @@ const SubPage = () => {
 				<SubList
 					subTaskList={selectedMainTask.subTaskList}
 					isDoneHandler={(id: string) => {}}
-					onDeleteSubTodo={(id: string) => {}}
+					onDeleteSubTodo={(subTask: ISubTask) => {}}
 					onEditingSubTask={(subTask: ISubTask) => {}}
 					onDeleteAllDone={() => {}}
 				/>

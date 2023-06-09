@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useSession, getSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
 import LoginForm from "./LoginForm";

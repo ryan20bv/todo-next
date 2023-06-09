@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import {
 	useAppDispatch,
@@ -28,7 +28,7 @@ import CardHeader from "@/components/ui/CardHeader";
 import AddForm from "@/components/ui/AddForm";
 import EditForm from "@/components/ui/EditForm";
 import ListContainer from "@/components/ui/ListContainer";
-import Summary from "@/components/ui/Summary";
+
 import MainList from "../task/main/MainList";
 import SendingData from "../ui/SendingData";
 
@@ -48,15 +48,11 @@ const MainPage = () => {
 		currentCategory,
 		categoryList,
 		mainTaskList,
-		selectedMainTask,
+
 		isSendingData,
 		mainTaskToEdit,
 		mainTaskToDelete,
 	} = useAppSelector((state: RootState) => state.personalTodoReducer);
-	const { authData } = useAppSelector((state: RootState) => state.authReducer);
-	// console.log(mainTaskList);
-
-	// mainTaskList.forEach((mainTask) => console.log(mainTask));
 
 	const toggleShowCategoryList = () => {
 		setShowListOfCategories((prevState) => !prevState);
@@ -66,10 +62,6 @@ const MainPage = () => {
 		console.log(category);
 		dispatch(setCurrentCategoryAction(category));
 		toggleShowCategoryList();
-		// setCategoryTitle({
-		// 	categoryName: name,
-		// 	categoryId: categoryId,
-		// });
 	};
 	// checked
 	const goToSubTaskPageHandler = (mainTask: IMainTask) => {
@@ -103,7 +95,6 @@ const MainPage = () => {
 
 	// checked
 	const selectMainTaskToDeleteHandler = (selectedMainTask: IMainTask) => {
-		// console.log(selectedMainTask);
 		dispatch(setMainTaskToDeleteAction(selectedMainTask));
 		setShowModal(true);
 	};
@@ -115,7 +106,7 @@ const MainPage = () => {
 	// !working
 	const confirmDeleteMainTaskHandler = async () => {
 		const data = await dispatch(confirmDeleteMainTaskAction());
-		console.log(data);
+
 		if (data && data.message === "success") {
 			setShowModal(false);
 		}
@@ -144,7 +135,7 @@ const MainPage = () => {
 					</ul>
 				</section>
 			)}
-			{/* <SendingData /> */}
+
 			{isSendingData && <SendingData />}
 			{!isSendingData && !isEditing && (
 				<AddForm

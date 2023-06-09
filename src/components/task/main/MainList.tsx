@@ -45,7 +45,6 @@ const MainList: React.FC<PropsTypes> = ({
 					)}
 					{todoLength > 0 &&
 						filteredTodoList.map((mainTask, index) => (
-							// <li key={mainTask.mainTaskId}>{mainTask.mainTaskName}</li>
 							<MainItem
 								key={mainTask.mainTaskId}
 								mainTask={mainTask}

@@ -1,10 +1,9 @@
-import { Fragment } from "react";
 import { Session } from "next-auth";
 import Layout from "@/components/layout/Layout";
 import Head from "next/head";
 import { Provider as ReduxProvider } from "react-redux";
 import { SessionProvider } from "next-auth/react";
-// import AuthenticationProvider from "../loginContext/authentication-provider";
+
 import { indexStore, persistor } from "@/reduxToolkit/indexStore/indexStore";
 import { PersistGate } from "redux-persist/integration/react";
 import "@/styles/globals.css";
@@ -16,9 +15,6 @@ export default function App({
 }: AppProps<{
 	session: Session;
 }>) {
-	const { isAuthenticated } = indexStore.getState().authReducer;
-	// console.log(isAuthenticated);
-
 	return (
 		<SessionProvider session={pageProps.session}>
 			<ReduxProvider store={indexStore}>

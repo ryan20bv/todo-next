@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ICategory, IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
+import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
 
 interface IPersonalTodoState {
 	categoryList: ICategory[];
