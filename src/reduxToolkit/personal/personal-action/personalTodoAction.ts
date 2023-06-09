@@ -76,22 +76,22 @@ export const setCurrentCategoryAction =
 
 		const currentMainTaskList = foundCategoryItems.mainTaskList.map(
 			(item: any) => {
-				const formattedSubTaskList: ISubTask[] = item._id.subTaskList.map(
+				const formattedSubTaskList: ISubTask[] = item.subTaskList.map(
 					(subItem: any) => {
 						return {
-							mainTaskId: subItem._id.mainTask_id,
-							subTaskId: subItem._id._id,
-							subTaskName: subItem._id.subTaskName,
-							isDone: subItem._id.isDone,
+							mainTaskId: subItem.mainTask_id,
+							subTaskId: subItem._id,
+							subTaskName: subItem.subTaskName,
+							isDone: subItem.isDone,
 						};
 					}
 				);
 
 				return {
 					categoryId: category.categoryId,
-					mainTaskId: item._id._id,
-					mainTaskName: item._id.mainTaskName,
-					isAllSubTaskDone: item._id.isAllSubTaskDone,
+					mainTaskId: item._id,
+					mainTaskName: item.mainTaskName,
+					isAllSubTaskDone: item.isAllSubTaskDone,
 					subTaskList: formattedSubTaskList,
 				};
 			}
