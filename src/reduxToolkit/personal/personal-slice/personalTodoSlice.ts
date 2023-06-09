@@ -51,6 +51,9 @@ const personalTodoSlice = createSlice({
 			state.currentCategory = {} as ICategory;
 			state.mainTaskList = [];
 			state.selectedMainTask = {} as IMainTask;
+			state.isSendingData = false;
+			state.mainTaskToEdit = {} as IMainTask;
+			state.mainTaskToDelete = {} as IMainTask;
 		},
 		updateMainTaskListRed(state, action) {
 			state.mainTaskList = action.payload.newMainTaskList;

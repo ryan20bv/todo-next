@@ -73,25 +73,25 @@ export const setCurrentCategoryAction =
 			(item: any) => item._id === category.categoryId
 		);
 		// console.log(foundCategoryItems);
-		// console.log(foundCategoryItems.mainTaskList);
+
 		const currentMainTaskList = foundCategoryItems.mainTaskList.map(
 			(item: any) => {
-				const formattedSubTaskList: ISubTask[] = item.subTaskList.map(
+				const formattedSubTaskList: ISubTask[] = item._id.subTaskList.map(
 					(subItem: any) => {
 						return {
-							mainTaskId: subItem.mainTask_id,
-							subTaskId: subItem._id,
-							subTaskName: subItem.subTaskName,
-							isDone: subItem.isDone,
+							mainTaskId: subItem._id.mainTask_id,
+							subTaskId: subItem._id._id,
+							subTaskName: subItem._id.subTaskName,
+							isDone: subItem._id.isDone,
 						};
 					}
 				);
 
 				return {
 					categoryId: category.categoryId,
-					mainTaskId: item._id,
-					mainTaskName: item.mainTaskName,
-					isAllSubTaskDone: item.isAllSubTaskDone,
+					mainTaskId: item._id._id,
+					mainTaskName: item._id.mainTaskName,
+					isAllSubTaskDone: item._id.isAllSubTaskDone,
 					subTaskList: formattedSubTaskList,
 				};
 			}

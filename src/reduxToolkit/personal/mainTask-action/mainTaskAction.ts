@@ -14,8 +14,9 @@ const formatDataToIMainTask = (dataToFormat: any) => {
 		mainTaskId: dataToFormat._id,
 		mainTaskName: dataToFormat.mainTaskName,
 		isAllSubTaskDone: dataToFormat.isAllSubTaskDone,
-		subTaskList: dataToFormat.subTaskList,
+		subTaskList: [...dataToFormat.subTaskList],
 	};
+
 	return formattedData;
 };
 // checked
@@ -53,14 +54,16 @@ export const addMainTaskAction =
 				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 				return;
 			}
+			console.log(data);
 			if (data.message === "new Task Added!") {
-				const newMainTask: IMainTask = {
-					categoryId: data.newTask.category_id,
-					mainTaskId: data.newTask._id,
-					mainTaskName: data.newTask.mainTaskName,
-					isAllSubTaskDone: data.newTask.isAllSubTaskDone,
-					subTaskList: data.newTask.subTaskList,
-				};
+				// const newMainTask: IMainTask = {
+				// 	categoryId: data.newTask.category_id,
+				// 	mainTaskId: data.newTask._id,
+				// 	mainTaskName: data.newTask.mainTaskName,
+				// 	isAllSubTaskDone: data.newTask.isAllSubTaskDone,
+				// 	subTaskList: data.newTask.subTaskList,
+				// };
+				const newMainTask = formatDataToIMainTask(data.newTask);
 				const addNewMainTaskList: IMainTask[] = [...mainTaskList, newMainTask];
 				dispatch(updateMainTaskListAction(addNewMainTaskList));
 				dispatch(updateIsSendingDataRed({ isSendingData: false }));
