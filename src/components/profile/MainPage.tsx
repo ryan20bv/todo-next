@@ -19,6 +19,7 @@ import {
 	cancelEditMainTaskNameAction,
 	confirmEditMainTaskNameAction,
 	setMainTaskToDeleteAction,
+	confirmDeleteMainTaskAction,
 } from "@/reduxToolkit/personal/mainTask-action/mainTaskAction";
 
 // component import
@@ -31,12 +32,15 @@ import Summary from "@/components/ui/Summary";
 import MainList from "../task/main/MainList";
 import SendingData from "../ui/SendingData";
 
+import ConfirmationModal from "../ui/ConfirmationModal";
+
 // types
 import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
 
 const MainPage = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
+	const [showModal, setShowModal] = useState<boolean>(false);
 	const [showListOfCategories, setShowListOfCategories] =
 		useState<boolean>(false);
 	const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -47,6 +51,7 @@ const MainPage = () => {
 		selectedMainTask,
 		isSendingData,
 		mainTaskToEdit,
+		mainTaskToDelete,
 	} = useAppSelector((state: RootState) => state.personalTodoReducer);
 	const { authData } = useAppSelector((state: RootState) => state.authReducer);
 	// console.log(mainTaskList);
@@ -95,11 +100,25 @@ const MainPage = () => {
 		dispatch(confirmEditMainTaskNameAction(newTaskName));
 		setIsEditing(false);
 	};
-	// !working on
 
+	// checked
 	const selectMainTaskToDeleteHandler = (selectedMainTask: IMainTask) => {
 		// console.log(selectedMainTask);
 		dispatch(setMainTaskToDeleteAction(selectedMainTask));
+		setShowModal(true);
+	};
+	// checked
+	const cancelDeleteMainTaskHandler = () => {
+		dispatch(setMainTaskToDeleteAction({} as IMainTask));
+		setShowModal(false);
+	};
+	// !working
+	const confirmDeleteMainTaskHandler = async () => {
+		const data = await dispatch(confirmDeleteMainTaskAction());
+		console.log(data);
+		if (data && data.message === "success") {
+			setShowModal(false);
+		}
 	};
 
 	return (
@@ -149,6 +168,14 @@ const MainPage = () => {
 					onDeleteAllDone={() => {}}
 				/>
 			</ListContainer>
+			{showModal && (
+				<ConfirmationModal
+					message={`Are you sure you want to delete ${mainTaskToDelete.mainTaskName}`}
+					onCloseModal={cancelDeleteMainTaskHandler}
+					onConfirm={confirmDeleteMainTaskHandler}
+					isSendingData={isSendingData}
+				/>
+			)}
 		</Card>
 	);
 };

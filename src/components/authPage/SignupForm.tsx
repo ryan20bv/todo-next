@@ -26,7 +26,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 				email: emailInput,
 				password: passwordInput,
 			});
-			console.log(result);
+
 			if (!result?.ok) {
 				throw new Error("Invalid Email or password!");
 			}
