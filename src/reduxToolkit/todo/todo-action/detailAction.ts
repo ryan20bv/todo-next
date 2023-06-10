@@ -98,7 +98,7 @@ export const toggleSubTodoIsDoneAction =
 			})
 		);
 		let subTaskIndex = copyOfSubTodoList.findIndex(
-			(subTodo: ISubTask) => subTodo.subTaskId === subTodo_id
+			(subTodo: ISubTask) => subTodo._id === subTodo_id
 		);
 
 		copyOfSubTodoList[subTaskIndex].isDone =
