@@ -20,6 +20,17 @@ const formatDataToISubTask = (dataToFormat: any) => {
 
 	return formattedData;
 };
+const formatDataToIMainTask = (dataToFormat: any) => {
+	const formattedData: IMainTask = {
+		categoryId: dataToFormat.category_id,
+		mainTaskId: dataToFormat._id,
+		mainTaskName: dataToFormat.mainTaskName,
+		isAllSubTaskDone: dataToFormat.isAllSubTaskDone,
+		subTaskList: [...dataToFormat.subTaskList],
+	};
+
+	return formattedData;
+};
 
 export const addSubTaskAction =
 	(enteredSubTaskName: string) => async (dispatch: any, getState: any) => {
@@ -117,9 +128,12 @@ export const confirmDeleteSubTaskAction =
 				return;
 			}
 			const data = await response.json();
-
-			const { message } = data;
+			// !working on this
+			const { updatedMainTask, message } = data;
 			if (message === "delete success") {
+				/* console.log(updatedMainTask);
+				const formattedUpdatedMainTask: IMainTask =
+					formatDataToIMainTask(updatedMainTask); */
 				const copyOfSelectedMainTask: IMainTask = { ...selectedMainTask };
 				const updatedSubTaskList = selectedMainTask.subTaskList.filter(
 					(subTask: ISubTask) => subTask.subTaskId !== subTaskToDelete.subTaskId
@@ -128,7 +142,7 @@ export const confirmDeleteSubTaskAction =
 
 				dispatch(setSelectedMainTaskAction(copyOfSelectedMainTask));
 				const indexOfSelectedMainTask = mainTaskList.findIndex(
-					(item: IMainTask) => item.mainTaskId === selectedMainTask.mainTaskId
+					(item: IMainTask) => item.mainTaskId === copyOfSelectedMainTask.mainTaskId
 				);
 
 				const copyOfMainTaskList: IMainTask[] = [];
