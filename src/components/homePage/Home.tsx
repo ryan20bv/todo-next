@@ -61,8 +61,8 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 		setIsEditing(false);
 	};
 	// checked
-	const deleteMainTaskHandler = (mainTaskId: string) => {
-		dispatch(deleteMainTodoAction(mainTaskId));
+	const deleteMainTaskHandler = (mainTask: IMainTask) => {
+		dispatch(deleteMainTodoAction(mainTask));
 	};
 	// checked
 	const goToSubTaskPageHandler = (selectedTask: IMainTask) => {

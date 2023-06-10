@@ -26,12 +26,11 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 				email: emailInput,
 				password: passwordInput,
 			});
-			console.log(result);
+
 			if (!result?.ok) {
 				throw new Error("Invalid Email or password!");
 			}
 			Router.replace("/t");
-			// setIsSigningUp(false);
 		} catch (err: any) {
 			console.log(err.message);
 			setIsSigningUp(false);
@@ -81,7 +80,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 				email: enteredEmail,
 				password: enteredPassword,
 			};
-			// console.log(inputData);
+
 			const url = `/api/auth/signup`;
 			const options = {
 				method: "POST",
@@ -92,9 +91,9 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 			};
 			try {
 				const response = await fetch(url, options);
-				// console.log(response);
+
 				const data = await response.json();
-				// console.log(data);
+
 				if (!response.ok) {
 					throw new Error(data.message || "Something went wrong!");
 				}
@@ -102,9 +101,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 				if (data.newUser.message === "sign-in success") {
 					loginHandler(enteredEmail, enteredPassword);
 				}
-				// setIsSigningUp(false);
 			} catch (err: any) {
-				// console.log("94", err.message);
 				setErrorMessage(err.message);
 				setIsDataValid(false);
 				setIsSigningUp(false);
@@ -225,58 +222,7 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 						</div>
 					</div>
 				</div>
-				{/* <div className='flex flex-col'>
-					<label htmlFor='fName'>First Name</label>
-					<input
-						type='text'
-						name='fName'
-						id='fName'
-						required
-						autoComplete='off'
-						ref={fNameInputRef}
-					/>
-				</div> */}
-				{/* <div className='flex flex-col'>
-					<label htmlFor='lName'>Last Name</label>
-					<input
-						type='text'
-						name='lName'
-						id='lName'
-						required
-						autoComplete='off'
-						ref={lNameInputRef}
-					/>
-				</div> */}
-				{/* <div className='flex flex-col'>
-					<label htmlFor='email'>Email Address</label>
-					<input
-						type='email'
-						name='email'
-						id='email'
-						required
-						autoComplete='off'
-						ref={emailInputRef}
-					/>
-				</div> */}
-				{/* <div className='flex flex-col'>
-					<label htmlFor='password'>Password</label>
-					<input
-						type='password'
-						name='password'
-						id='password'
-						required
-						autoComplete='off'
-						min={6}
-						ref={passwordInputRef}
-					/>
-				</div> */}
-				{/* {!isDataValid && <p>Fill up the form properly!</p>}
-				<button>SIGN UP</button> */}
 			</form>
-			{/* <div>
-				<p>Already a user?</p>
-				<button onClick={onToggle}>LOGIN</button>
-			</div> */}
 
 			<div className='flex items-center justify-center  my-4'>
 				<hr className='border-2 border-black w-16 ' />

@@ -8,7 +8,7 @@ interface propsType {
 	mainTask: IMainTask;
 	index: number;
 	onEditing: (task: IMainTask) => void;
-	onDeleteMainTask: (mainTaskId: string) => void;
+	onDeleteMainTask: (mainTask: IMainTask) => void;
 	onSeeSubTaskPage: (mainTask: IMainTask) => void;
 }
 
@@ -24,18 +24,9 @@ const MainItem: React.FC<propsType> = ({
 	};
 	const seeSubTaskHandler = (selectedTask: IMainTask) => {
 		onSeeSubTaskPage(selectedTask);
-		// if (!isAuthenticated) {
-		// 	dispatch(setSelectedTodoAction(selectedTask));
-		// 	router.push(`/n/${selectedTask.mainTaskId}`);
-		// } else {
-		// 	dispatch(setSelectedMainTaskAction(selectedTask));
-		// 	let str = selectedTask.mainTaskName;
-		// 	str = str.replace(/\s+/g, "-").toLowerCase();
-		// 	router.push(`${router.asPath}/${str}`);
-		// }
 	};
-	const deleteHandler = (id: string) => {
-		onDeleteMainTask(id);
+	const deleteHandler = (mainTask: IMainTask) => {
+		onDeleteMainTask(mainTask);
 	};
 
 	let summaryName = mainTask.mainTaskName;
@@ -61,15 +52,6 @@ const MainItem: React.FC<propsType> = ({
 			className='flex px-1 w-full justify-between items-center '
 		>
 			<section className='flex items-center'>
-				{/* <input
-					type='checkbox'
-					name=''
-					id=''
-					checked={task.isDone ? true : false}
-					onChange={() => setIsDoneHandler(task._id)}
-					className='cursor-pointer bg-black'
-				/> */}
-
 				<h3
 					className={`${setDone} pl-2 pr-1 cursor-pointer `}
 					onClick={() => seeSubTaskHandler(mainTask)}
@@ -82,18 +64,14 @@ const MainItem: React.FC<propsType> = ({
 			</section>
 			<section>
 				{!mainTask.isAllSubTaskDone && (
-					<button
-						onClick={() => setIsEditingHandler(mainTask)}
-						// data-testid={`task_edit_button_${task.name}`}
-						// title={`task_edit_button_${task.name}`}
-					>
+					<button onClick={() => setIsEditingHandler(mainTask)}>
 						<PencilSquareIcon
 							className='text-blue-600 h-6 hover:text-gray-400'
 							data-testid={`task_edit_button_${mainTask.mainTaskName}`}
 						/>
 					</button>
 				)}
-				<button onClick={() => deleteHandler(mainTask.mainTaskId)}>
+				<button onClick={() => deleteHandler(mainTask)}>
 					<TrashIcon
 						className='text-red-600 h-6 hover:text-gray-400'
 						data-testid={`task_delete_button_${mainTask.mainTaskName}`}

@@ -1,36 +1,58 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useState } from "react";
+import { useRouter } from "next/router";
 import {
 	useAppDispatch,
 	useAppSelector,
 	RootState,
 } from "@/reduxToolkit/indexStore/indexStore";
-import {
-	authDataAction,
-	clearAuthDataAction,
-} from "@/reduxToolkit/auth/auth-action/authAction";
-import { setCurrentCategoryAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 
+// import from personalTodoAction
+import {
+	setCurrentCategoryAction,
+	setSelectedMainTaskAction,
+} from "@/reduxToolkit/personal/personal-action/personalTodoAction";
+
+// import from mainTaskAction
+import {
+	addMainTaskAction,
+	selectedMainTaskToEditAction,
+	cancelEditMainTaskNameAction,
+	confirmEditMainTaskNameAction,
+	setMainTaskToDeleteAction,
+	confirmDeleteMainTaskAction,
+} from "@/reduxToolkit/personal/mainTask-action/mainTaskAction";
+
+// component import
 import Card from "@/components/ui/Card";
 import CardHeader from "@/components/ui/CardHeader";
 import AddForm from "@/components/ui/AddForm";
 import EditForm from "@/components/ui/EditForm";
 import ListContainer from "@/components/ui/ListContainer";
-import Summary from "@/components/ui/Summary";
-import MainList from "../task/main/MainList";
 
+import MainList from "../task/main/MainList";
+import SendingData from "../ui/SendingData";
+
+import ConfirmationModal from "../ui/ConfirmationModal";
+
+// types
 import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
 
 const MainPage = () => {
 	const dispatch = useAppDispatch();
+	const router = useRouter();
+	const [showModal, setShowModal] = useState<boolean>(false);
 	const [showListOfCategories, setShowListOfCategories] =
 		useState<boolean>(false);
-	const { currentCategory, categoryList, mainTaskList } = useAppSelector(
-		(state: RootState) => state.personalTodoReducer
-	);
-	// console.log(mainTaskList);
+	const [isEditing, setIsEditing] = useState<boolean>(false);
+	const {
+		currentCategory,
+		categoryList,
+		mainTaskList,
 
-	// mainTaskList.forEach((mainTask) => console.log(mainTask));
+		isSendingData,
+		mainTaskToEdit,
+		mainTaskToDelete,
+	} = useAppSelector((state: RootState) => state.personalTodoReducer);
 
 	const toggleShowCategoryList = () => {
 		setShowListOfCategories((prevState) => !prevState);
@@ -40,13 +62,56 @@ const MainPage = () => {
 		console.log(category);
 		dispatch(setCurrentCategoryAction(category));
 		toggleShowCategoryList();
-		// setCategoryTitle({
-		// 	categoryName: name,
-		// 	categoryId: categoryId,
-		// });
+	};
+	// checked
+	const goToSubTaskPageHandler = (mainTask: IMainTask) => {
+		dispatch(setSelectedMainTaskAction(mainTask));
+		let formattedName = mainTask.mainTaskName;
+		formattedName = formattedName.replace(/\s+/g, "-").toLowerCase();
+		router.push(`${router.asPath}/${formattedName}`);
+	};
+	// checked
+	const addNewMainTaskHandler = (enteredMainTaskName: string) => {
+		dispatch(addMainTaskAction(enteredMainTaskName));
 	};
 
-	// const title = <h1>{categoryTitle.categoryName}</h1>;
+	// checked
+	const selectMainTaskToEditHandler = (selectedMainTask: IMainTask) => {
+		setIsEditing(true);
+		dispatch(selectedMainTaskToEditAction(selectedMainTask));
+	};
+
+	// checked
+	const cancelEditingMainTaskNameHandler = () => {
+		setIsEditing(false);
+		dispatch(cancelEditMainTaskNameAction());
+	};
+
+	// checked
+	const confirmEditMainTaskNameHandler = (newTaskName: string) => {
+		dispatch(confirmEditMainTaskNameAction(newTaskName));
+		setIsEditing(false);
+	};
+
+	// checked
+	const selectMainTaskToDeleteHandler = (selectedMainTask: IMainTask) => {
+		dispatch(setMainTaskToDeleteAction(selectedMainTask));
+		setShowModal(true);
+	};
+	// checked
+	const cancelDeleteMainTaskHandler = () => {
+		dispatch(setMainTaskToDeleteAction({} as IMainTask));
+		setShowModal(false);
+	};
+	// !working
+	const confirmDeleteMainTaskHandler = async () => {
+		const data = await dispatch(confirmDeleteMainTaskAction());
+
+		if (data && data.message === "success") {
+			setShowModal(false);
+		}
+	};
+
 	return (
 		<Card>
 			<CardHeader
@@ -70,19 +135,38 @@ const MainPage = () => {
 					</ul>
 				</section>
 			)}
-			<AddForm
-				onAddHandler={() => console.log("here")}
-				placeHolder='add todo'
-			/>
+
+			{isSendingData && <SendingData />}
+			{!isSendingData && !isEditing && (
+				<AddForm
+					onAddHandler={addNewMainTaskHandler}
+					placeHolder='add todo'
+				/>
+			)}
+			{!isSendingData && isEditing && (
+				<EditForm
+					itemToEdit={mainTaskToEdit.mainTaskName}
+					confirmEditing={confirmEditMainTaskNameHandler}
+					onCancelEditing={cancelEditingMainTaskNameHandler}
+				/>
+			)}
 			<ListContainer>
 				<MainList
 					mainTaskList={mainTaskList}
-					onEditing={(mainTask: IMainTask) => {}}
-					onDeleteMainTask={(mainTaskId: string) => {}}
-					onSeeSubTaskPage={(mainTask: IMainTask) => {}}
+					onSeeSubTaskPage={goToSubTaskPageHandler}
+					onEditing={selectMainTaskToEditHandler}
+					onDeleteMainTask={selectMainTaskToDeleteHandler}
 					onDeleteAllDone={() => {}}
 				/>
 			</ListContainer>
+			{showModal && (
+				<ConfirmationModal
+					message={`Are you sure you want to delete ${mainTaskToDelete.mainTaskName}`}
+					onCloseModal={cancelDeleteMainTaskHandler}
+					onConfirm={confirmDeleteMainTaskHandler}
+					isSendingData={isSendingData}
+				/>
+			)}
 		</Card>
 	);
 };

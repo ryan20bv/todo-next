@@ -1,16 +1,3 @@
-// export interface ITodoDetails {
-// 	_id: string;
-// 	item: string;
-// 	isDone: boolean;
-// }
-
-// export interface ITask {
-// 	_id: string;
-// 	name: string;
-// 	isDone: boolean;
-// 	details: ITodoDetails[];
-// }
-
 export interface ICategory {
 	categoryId: string;
 	creatorId: string;
@@ -30,4 +17,9 @@ export interface ISubTask {
 	subTaskId: string;
 	subTaskName: string;
 	isDone: boolean;
+}
+
+export interface IUpdateMainTaskName {
+	enteredNewMainTaskName: string;
+	mainTask_id: string;
 }

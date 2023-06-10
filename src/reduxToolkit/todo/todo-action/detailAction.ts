@@ -1,8 +1,5 @@
 import { IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
-import {
-	updateIsLoadingRed,
-	setSubTaskToEditRed,
-} from "../todo-slice/detailSlice";
+import { setSubTaskToEditRed } from "../todo-slice/detailSlice";
 
 import { updateTodoListAction, setSelectedTodoAction } from "./todoAction";
 import { v4 as uuidv4 } from "uuid";
@@ -29,11 +26,11 @@ export const addNewSubTodoAction =
 
 // checked
 export const deleteSubTodoAction =
-	(subTodo_Id: string) => async (dispatch: any, getState: any) => {
+	(subTaskToDelete: ISubTask) => async (dispatch: any, getState: any) => {
 		let { selectedTodo } = getState().todoReducer;
 		let copyOfTodoDetails: IMainTask = { ...selectedTodo };
 		let updatedTodoDetails = selectedTodo.subTaskList.filter(
-			(subTask: ISubTask) => subTask.subTaskId !== subTodo_Id
+			(subTask: ISubTask) => subTask.subTaskId !== subTaskToDelete.subTaskId
 		);
 
 		copyOfTodoDetails.subTaskList = [...updatedTodoDetails];
@@ -72,7 +69,7 @@ export const confirmSubTodoEditingAction =
 		let { selectedTodo } = getState().todoReducer;
 		let { subTaskToEdit } = getState().detailReducer;
 		let copyOfSelectedTodo: IMainTask = { ...selectedTodo };
-		// let copyOfSubTodoList: ISubTask[] = [...selectedTodo.subTaskList];
+
 		let copyOfSubTodoList: ISubTask[] = selectedTodo.subTaskList.map(
 			(subTodo: ISubTask) => ({
 				...subTodo,
@@ -123,15 +120,6 @@ export const deleteAllDoneDetailAction =
 			);
 
 		copyOfSelectedTodo.subTaskList = [...updatedSubTaskListAfterDeleteAllDone];
-
-		// let copyOfTodoDetails: ITask = { ...todoDetails };
-		// let updatedDetailsAfterDeleteAllDone = todoDetails.details.filter(
-		// 	(detail: ITodoDetails) => detail.isDone === false
-		// );
-
-		// copyOfTodoDetails.details = updatedDetailsAfterDeleteAllDone;
-		// dispatch(updateTodoDetailsRed({ updatedTodoDetails: copyOfTodoDetails }));
-		// dispatch(updateLisOfTodoAction(copyOfTodoDetails));
 
 		await dispatch(updateLisOfTodoAction(copyOfSelectedTodo));
 		dispatch(setSelectedTodoAction(copyOfSelectedTodo));

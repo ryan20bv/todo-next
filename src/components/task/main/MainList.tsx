@@ -6,7 +6,7 @@ import { IMainTask } from "@/DUMMY_DATA/MODEL";
 interface PropsTypes {
 	mainTaskList: IMainTask[];
 	onEditing: (mainTask: IMainTask) => void;
-	onDeleteMainTask: (mainTaskId: string) => void;
+	onDeleteMainTask: (mainTask: IMainTask) => void;
 	onSeeSubTaskPage: (mainTask: IMainTask) => void;
 	onDeleteAllDone: () => void;
 }
@@ -45,7 +45,6 @@ const MainList: React.FC<PropsTypes> = ({
 					)}
 					{todoLength > 0 &&
 						filteredTodoList.map((mainTask, index) => (
-							// <li key={mainTask.mainTaskId}>{mainTask.mainTaskName}</li>
 							<MainItem
 								key={mainTask.mainTaskId}
 								mainTask={mainTask}

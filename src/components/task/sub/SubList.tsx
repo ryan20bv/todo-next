@@ -6,7 +6,7 @@ import { ISubTask } from "@/DUMMY_DATA/MODEL";
 interface PropsType {
 	subTaskList: ISubTask[];
 	isDoneHandler: (id: string) => void;
-	onDeleteSubTodo: (id: string) => void;
+	onDeleteSubTodo: (subTask: ISubTask) => void;
 	onEditingSubTask: (subTask: ISubTask) => void;
 	onDeleteAllDone: () => void;
 }
@@ -57,7 +57,7 @@ const SubList: React.FC<PropsType> = ({
 				</div>
 			</div>
 			<Summary
-				length={3}
+				length={length}
 				onSelectTab={updateSelectedTabHandler}
 				selectedTab={selectedTab}
 				onDeleteAllDone={onDeleteAllDone}
