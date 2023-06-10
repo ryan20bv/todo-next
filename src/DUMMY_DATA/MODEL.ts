@@ -1,20 +1,23 @@
 export interface ICategory {
-	categoryId: string;
-	creatorId: string;
+	_id: string;
+	creator_id: string;
 	categoryName: string;
+	mainTaskList: IMainTask[];
 }
 
 export interface IMainTask {
-	categoryId: string;
-	mainTaskId: string;
+	_id: string;
+	creator_id: string;
+	category_id: string;
 	mainTaskName: string;
-	subTaskList: ISubTask[];
 	isAllSubTaskDone: boolean;
+	subTaskList: ISubTask[];
 }
 
 export interface ISubTask {
-	mainTaskId: string;
-	subTaskId: string;
+	_id: string;
+	creator_id: string;
+	mainTask_id: string;
 	subTaskName: string;
 	isDone: boolean;
 }

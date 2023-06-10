@@ -35,13 +35,13 @@ const SubItem: React.FC<PropsType> = ({
 					className='mr-6'
 					type='checkbox'
 					// name={`detail_input_button${detail.item}`}
-					id={`detail_input_button_${subTask.subTaskId}`}
+					id={`detail_input_button_${subTask._id}`}
 					checked={subTask.isDone ? true : false}
-					onChange={() => isDoneDetailHandler(subTask.subTaskId)}
+					onChange={() => isDoneDetailHandler(subTask._id)}
 					// data-testid={`detail_input_button${detail.item}`}
 				/>
 				<li className={`${setDone} pl-0 pr-1`}>
-					<p data-testid={`detail_${subTask.subTaskId}`}>{subTask.subTaskName}</p>
+					<p data-testid={`detail_${subTask._id}`}>{subTask.subTaskName}</p>
 				</li>
 			</section>
 
@@ -50,7 +50,7 @@ const SubItem: React.FC<PropsType> = ({
 					<button onClick={() => onEditingSubTaskHandler(subTask)}>
 						<PencilSquareIcon
 							className='text-blue-600 h-6 hover:text-gray-400'
-							data-testid={`detail_edit_button_${subTask.subTaskId}`}
+							data-testid={`detail_edit_button_${subTask._id}`}
 						/>
 					</button>
 				)}
@@ -58,7 +58,7 @@ const SubItem: React.FC<PropsType> = ({
 				<button onClick={() => deleteDetailHandler(subTask)}>
 					<TrashIcon
 						className='text-red-600 h-6 hover:text-gray-400'
-						data-testid={`detail_delete_button_${subTask.subTaskId}`}
+						data-testid={`detail_delete_button_${subTask._id}`}
 					/>
 				</button>
 			</section>

@@ -4,7 +4,6 @@ import { IMainTask } from "@/DUMMY_DATA/MODEL";
 interface ITodoState {
 	mainTodoList: IMainTask[];
 	firstLoad: boolean;
-
 	mainTodoToEdit: IMainTask;
 	selectedTodo: IMainTask;
 }

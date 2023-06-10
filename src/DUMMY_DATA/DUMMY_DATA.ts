@@ -2,78 +2,90 @@ import { IMainTask } from "./MODEL";
 
 export const DUMMY_TODOS: IMainTask[] = [
 	{
-		categoryId: "Todo next js",
-		mainTaskId: "t1",
+		_id: "t1",
+		creator_id: "public",
+		category_id: "Todo next js",
 		mainTaskName: "Study",
 		isAllSubTaskDone: false,
 		subTaskList: [
 			{
-				mainTaskId: "t1",
-				subTaskId: "s1",
+				_id: "s1",
+				creator_id: "public",
+				mainTask_id: "t1",
 				subTaskName: "OOP Javascript",
 				isDone: false,
 			},
 			{
-				mainTaskId: "t1",
-				subTaskId: "s2",
+				_id: "s2",
+				creator_id: "public",
+				mainTask_id: "t1",
 				subTaskName: "Science Books",
 				isDone: false,
 			},
 			{
-				mainTaskId: "t1",
-				subTaskId: "s3",
+				_id: "s3",
+				creator_id: "public",
+				mainTask_id: "t1",
 				subTaskName: "English Language",
 				isDone: true,
 			},
 		],
 	},
 	{
-		categoryId: "Todo next js",
-		mainTaskId: "t2",
+		_id: "t2",
+		creator_id: "public",
+		category_id: "Todo next js",
 		mainTaskName: "Exercise",
 		isAllSubTaskDone: false,
 		subTaskList: [
 			{
-				mainTaskId: "t2",
-				subTaskId: "e1",
+				_id: "e1",
+				creator_id: "public",
+				mainTask_id: "t2",
 				subTaskName: "Walk the dog",
 				isDone: true,
 			},
 			{
-				mainTaskId: "t2",
-				subTaskId: "e2",
+				_id: "e2",
+				creator_id: "public",
+				mainTask_id: "t2",
 				subTaskName: "Jogging",
 				isDone: false,
 			},
 			{
-				mainTaskId: "t2",
-				subTaskId: "e3",
+				_id: "e3",
+				creator_id: "public",
+				mainTask_id: "t2",
 				subTaskName: "Swim",
 				isDone: false,
 			},
 		],
 	},
 	{
-		categoryId: "Todo next js",
-		mainTaskId: "t3",
+		_id: "t3",
+		creator_id: "public",
+		category_id: "Todo next js",
 		mainTaskName: "House Hold Chore",
 		isAllSubTaskDone: false,
 		subTaskList: [
 			{
-				mainTaskId: "t3",
-				subTaskId: "h1",
+				_id: "h1",
+				creator_id: "public",
+				mainTask_id: "t3",
 				subTaskName: "Sweep the Room",
 				isDone: false,
 			},
 			{
-				mainTaskId: "t3",
-				subTaskId: "h2",
+				_id: "h2",
+				creator_id: "public",
+				mainTask_id: "t3",
 				subTaskName: "Wash the dishes",
 				isDone: true,
 			},
 			{
-				mainTaskId: "t3",
-				subTaskId: "h3",
+				_id: "h3",
+				creator_id: "public",
+				mainTask_id: "t3",
 				subTaskName: "Lawn the grass",
 				isDone: true,
 			},
@@ -84,70 +96,3 @@ export const DUMMY_TODOS: IMainTask[] = [
 export const getAllTasks = () => {
 	return DUMMY_TODOS;
 };
-
-/* {
-		_id: "t1",
-		name: "Study",
-		isDone: false,
-		details: [
-			{
-				_id: "s1",
-				item: "OOP Javascript",
-				isDone: false,
-			},
-			{
-				_id: "s2",
-				item: "Science Books",
-				isDone: false,
-			},
-			{
-				_id: "s3",
-				item: "English Language",
-				isDone: true,
-			},
-		],
-	},
-	{
-		_id: "t2",
-		name: "Exercise",
-		isDone: false,
-		details: [
-			{
-				_id: "e1",
-				item: "Walk the dog",
-				isDone: true,
-			},
-			{
-				_id: "e2",
-				item: "Jogging",
-				isDone: false,
-			},
-			{
-				_id: "e3",
-				item: "Swim",
-				isDone: false,
-			},
-		],
-	},
-	{
-		_id: "t3",
-		name: "House Hold Chore",
-		isDone: false,
-		details: [
-			{
-				_id: "h1",
-				item: "Sweep the Room",
-				isDone: false,
-			},
-			{
-				_id: "h2",
-				item: "Wash the dishes",
-				isDone: true,
-			},
-			{
-				_id: "h3",
-				item: "Lawn the grass",
-				isDone: true,
-			},
-		],
-	}, */

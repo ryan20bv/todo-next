@@ -45,7 +45,7 @@ const SubList: React.FC<PropsType> = ({
 						<ul className='py-2 px-2 list-disc h-full'>
 							{filteredList.map((subTask) => (
 								<SubItem
-									key={subTask.subTaskId}
+									key={subTask._id}
 									subTask={subTask}
 									isDoneHandler={isDoneHandler}
 									onDeleteSubTodo={onDeleteSubTodo}
