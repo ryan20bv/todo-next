@@ -4,6 +4,8 @@ import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
 import { logoutAuthAction } from "@/reduxToolkit/auth/auth-action/authAction";
 import { resetPersonalTodoStateAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 
+import { signOut } from "next-auth/react";
+
 const LoggingOut = () => {
 	const dispatch = useAppDispatch();
 	useEffect(() => {
