@@ -4,6 +4,8 @@ import {
 	updateMainTaskListAction,
 	setSelectedMainTaskAction,
 } from "../personal-action/personalTodoAction";
+// import reducer
+import { updateIsSendingDataRed } from "../personal-slice/personalTodoSlice";
 
 const formatDataToISubTask = (dataToFormat: any) => {
 	const formattedData: ISubTask = {
@@ -22,6 +24,7 @@ export const addSubTaskAction =
 			console.log("no entered new Name");
 			return;
 		}
+		dispatch(updateIsSendingDataRed({ isSendingData: true }));
 
 		const { mainTaskList, selectedMainTask } = getState().personalTodoReducer;
 		const { authData } = getState().authReducer;
@@ -42,6 +45,10 @@ export const addSubTaskAction =
 			};
 
 			const response = await fetch(url, options);
+			if (!response.ok) {
+				dispatch(updateIsSendingDataRed({ isSendingData: false }));
+				return;
+			}
 
 			const data = await response.json();
 
@@ -68,6 +75,7 @@ export const addSubTaskAction =
 				copyOfMainTaskList[indexOfSelectedMainTask] = copyOfSelectedMainTask;
 
 				dispatch(updateMainTaskListAction(copyOfMainTaskList));
+				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 			}
 		} catch (err) {
 			console.log("addSubTaskAction", err);

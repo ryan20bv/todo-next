@@ -12,6 +12,9 @@ import CardHeader from "@/components/ui/CardHeader";
 import AddForm from "@/components/ui/AddForm";
 import ListContainer from "@/components/ui/ListContainer";
 import SubList from "../task/sub/SubList";
+import SendingData from "../ui/SendingData";
+
+// import type & interface
 import { ISubTask } from "@/DUMMY_DATA/MODEL";
 
 // import action from subtaskAction
@@ -20,7 +23,7 @@ import { addSubTaskAction } from "@/reduxToolkit/personal/subTask-action/subTask
 const SubPage = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const { selectedMainTask } = useAppSelector(
+	const { selectedMainTask, isSendingData } = useAppSelector(
 		(state: RootState) => state.personalTodoReducer
 	);
 	const backArrowHandler = () => {
@@ -38,10 +41,13 @@ const SubPage = () => {
 				iconFunction={backArrowHandler}
 				from='sub_page'
 			/>
-			<AddForm
-				onAddHandler={addSubTaskHandler}
-				placeHolder='add details'
-			/>
+			{isSendingData && <SendingData />}
+			{!isSendingData && (
+				<AddForm
+					onAddHandler={addSubTaskHandler}
+					placeHolder='add details'
+				/>
+			)}
 			<ListContainer>
 				<SubList
 					subTaskList={selectedMainTask.subTaskList}

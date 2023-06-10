@@ -32,10 +32,10 @@ const ConfirmationModal: React.FC<propsTypes> = ({
 							className='absolute top-[30%] border z-10
 				border-black bg-white p-4 rounded-xl mx-6 flex flex-col justify-center'
 						>
-							<p>{message}</p>
-							<div className='flex justify-around'>
-								{!isSendingData && (
-									<>
+							{!isSendingData && (
+								<>
+									<p>{message}</p>
+									<div className='flex justify-around'>
 										<button
 											className='bg-green-400 px-4 py-1 rounded-md mt-4'
 											onClick={confirmHandler}
@@ -48,10 +48,10 @@ const ConfirmationModal: React.FC<propsTypes> = ({
 										>
 											No
 										</button>
-									</>
-								)}
-								{isSendingData && <p>Deleting...</p>}
-							</div>
+									</div>
+								</>
+							)}
+							{isSendingData && <p>Deleting...</p>}
 						</div>
 					</main>,
 					notificationPortal
