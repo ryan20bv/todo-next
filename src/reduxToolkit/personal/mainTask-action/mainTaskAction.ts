@@ -53,7 +53,7 @@ export const addMainTaskAction =
 				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 				return;
 			}
-			console.log(data);
+
 			if (data.message === "new Task Added!") {
 				const newMainTask = formatDataToIMainTask(data.newTask);
 				const addNewMainTaskList: IMainTask[] = [...mainTaskList, newMainTask];
@@ -132,7 +132,7 @@ export const setMainTaskToDeleteAction =
 		dispatch(setMainTaskToDeleteRed({ mainTaskToDelete: mainTask }));
 	};
 
-// !working on
+// checked
 export const confirmDeleteMainTaskAction =
 	() => async (dispatch: any, getState: any) => {
 		const { mainTaskList, mainTaskToDelete } = getState().personalTodoReducer;

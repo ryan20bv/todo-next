@@ -40,7 +40,8 @@ import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
 const MainPage = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const [showModal, setShowModal] = useState<boolean>(false);
+	const [showConfirmationModal, setShowConfirmationModal] =
+		useState<boolean>(false);
 	const [showListOfCategories, setShowListOfCategories] =
 		useState<boolean>(false);
 	const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -48,7 +49,6 @@ const MainPage = () => {
 		currentCategory,
 		categoryList,
 		mainTaskList,
-
 		isSendingData,
 		mainTaskToEdit,
 		mainTaskToDelete,
@@ -96,19 +96,19 @@ const MainPage = () => {
 	// checked
 	const selectMainTaskToDeleteHandler = (selectedMainTask: IMainTask) => {
 		dispatch(setMainTaskToDeleteAction(selectedMainTask));
-		setShowModal(true);
+		setShowConfirmationModal(true);
 	};
 	// checked
 	const cancelDeleteMainTaskHandler = () => {
 		dispatch(setMainTaskToDeleteAction({} as IMainTask));
-		setShowModal(false);
+		setShowConfirmationModal(false);
 	};
-	// !working
+	// checked
 	const confirmDeleteMainTaskHandler = async () => {
 		const data = await dispatch(confirmDeleteMainTaskAction());
 
 		if (data && data.message === "success") {
-			setShowModal(false);
+			setShowConfirmationModal(false);
 		}
 	};
 
@@ -159,7 +159,7 @@ const MainPage = () => {
 					onDeleteAllDone={() => {}}
 				/>
 			</ListContainer>
-			{showModal && (
+			{showConfirmationModal && (
 				<ConfirmationModal
 					message={`Are you sure you want to delete ${mainTaskToDelete.mainTaskName}`}
 					onCloseModal={cancelDeleteMainTaskHandler}

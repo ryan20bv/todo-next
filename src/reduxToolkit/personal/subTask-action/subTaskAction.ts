@@ -5,7 +5,10 @@ import {
 	setSelectedMainTaskAction,
 } from "../personal-action/personalTodoAction";
 // import reducer
-import { updateIsSendingDataRed } from "../personal-slice/personalTodoSlice";
+import {
+	updateIsSendingDataRed,
+	setSubTaskToDeleteRed,
+} from "../personal-slice/personalTodoSlice";
 
 const formatDataToISubTask = (dataToFormat: any) => {
 	const formattedData: ISubTask = {
@@ -79,5 +82,67 @@ export const addSubTaskAction =
 			}
 		} catch (err) {
 			console.log("addSubTaskAction", err);
+		}
+	};
+// checked
+export const selectedSubTaskToDeleteAction =
+	(subTask: ISubTask) => async (dispatch: any, getState: any) => {
+		dispatch(setSubTaskToDeleteRed({ subTaskToDelete: subTask }));
+	};
+// ! working on
+export const confirmDeleteSubTaskAction =
+	() => async (dispatch: any, getState: any) => {
+		const { subTaskToDelete, selectedMainTask, mainTaskList } =
+			getState().personalTodoReducer;
+		const { authData } = getState().authReducer;
+		dispatch(updateIsSendingDataRed({ isSendingData: true }));
+		try {
+			const bodyData = {};
+			const url =
+				process.env.NEXT_PUBLIC_BACK_END_URL +
+				"/api/subtask/deleteSubTask/" +
+				subTaskToDelete.subTaskId;
+			const options = {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + authData.apiToken,
+				},
+				body: JSON.stringify(bodyData),
+			};
+
+			const response = await fetch(url, options);
+			if (!response.ok) {
+				dispatch(updateIsSendingDataRed({ isSendingData: false }));
+				return;
+			}
+			const data = await response.json();
+
+			const { message } = data;
+			if (message === "delete success") {
+				const copyOfSelectedMainTask: IMainTask = { ...selectedMainTask };
+				const updatedSubTaskList = selectedMainTask.subTaskList.filter(
+					(subTask: ISubTask) => subTask.subTaskId !== subTaskToDelete.subTaskId
+				);
+				copyOfSelectedMainTask.subTaskList = [...updatedSubTaskList];
+
+				dispatch(setSelectedMainTaskAction(copyOfSelectedMainTask));
+				const indexOfSelectedMainTask = mainTaskList.findIndex(
+					(item: IMainTask) => item.mainTaskId === selectedMainTask.mainTaskId
+				);
+
+				const copyOfMainTaskList: IMainTask[] = [];
+				mainTaskList.forEach((mainTask: IMainTask) =>
+					copyOfMainTaskList.push(mainTask)
+				);
+				copyOfMainTaskList[indexOfSelectedMainTask] = copyOfSelectedMainTask;
+
+				dispatch(updateMainTaskListAction(copyOfMainTaskList));
+				dispatch(updateIsSendingDataRed({ isSendingData: false }));
+				return { message: "success" };
+			}
+		} catch (err) {
+			console.log("confirmDeleteSubTaskAction", err);
+			dispatch(updateIsSendingDataRed({ isSendingData: false }));
 		}
 	};

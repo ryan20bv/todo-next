@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
+import { ICategory, IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 
 interface IPersonalTodoState {
 	categoryList: ICategory[];
@@ -10,6 +10,7 @@ interface IPersonalTodoState {
 	isSendingData: boolean;
 	mainTaskToEdit: IMainTask;
 	mainTaskToDelete: IMainTask;
+	subTaskToDelete: ISubTask;
 }
 
 const initialPersonalState: IPersonalTodoState = {
@@ -21,6 +22,7 @@ const initialPersonalState: IPersonalTodoState = {
 	isSendingData: false,
 	mainTaskToEdit: {} as IMainTask,
 	mainTaskToDelete: {} as IMainTask,
+	subTaskToDelete: {} as ISubTask,
 };
 
 const personalTodoSlice = createSlice({
@@ -54,6 +56,7 @@ const personalTodoSlice = createSlice({
 			state.isSendingData = false;
 			state.mainTaskToEdit = {} as IMainTask;
 			state.mainTaskToDelete = {} as IMainTask;
+			state.subTaskToDelete = {} as ISubTask;
 		},
 		updateMainTaskListRed(state, action) {
 			state.mainTaskList = action.payload.newMainTaskList;
@@ -63,6 +66,9 @@ const personalTodoSlice = createSlice({
 		},
 		setMainTaskToDeleteRed(state, action) {
 			state.mainTaskToDelete = action.payload.mainTaskToDelete;
+		},
+		setSubTaskToDeleteRed(state, action) {
+			state.subTaskToDelete = action.payload.subTaskToDelete;
 		},
 	},
 });
@@ -78,6 +84,7 @@ export const {
 	updateMainTaskListRed,
 	setMainTaskToEditRed,
 	setMainTaskToDeleteRed,
+	setSubTaskToDeleteRed,
 } = personalTodoSlice.actions;
 
 export default personalTodoSlice;
