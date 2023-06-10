@@ -1,5 +1,12 @@
 import React from "react";
 import { useRouter } from "next/router";
+import {
+	useAppDispatch,
+	useAppSelector,
+	RootState,
+} from "@/reduxToolkit/indexStore/indexStore";
+
+// import component
 import Card from "@/components/ui/Card";
 import CardHeader from "@/components/ui/CardHeader";
 import AddForm from "@/components/ui/AddForm";
@@ -7,13 +14,11 @@ import ListContainer from "@/components/ui/ListContainer";
 import SubList from "../task/sub/SubList";
 import { ISubTask } from "@/DUMMY_DATA/MODEL";
 
-import {
-	useAppDispatch,
-	useAppSelector,
-	RootState,
-} from "@/reduxToolkit/indexStore/indexStore";
+// import action from subtaskAction
+import { addSubTaskAction } from "@/reduxToolkit/personal/subTask-action/subTaskAction";
 
 const SubPage = () => {
+	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const { selectedMainTask } = useAppSelector(
 		(state: RootState) => state.personalTodoReducer
@@ -21,6 +26,11 @@ const SubPage = () => {
 	const backArrowHandler = () => {
 		router.back();
 	};
+
+	const addSubTaskHandler = (enteredSubTaskName: string) => {
+		dispatch(addSubTaskAction(enteredSubTaskName));
+	};
+
 	return (
 		<Card>
 			<CardHeader
@@ -29,7 +39,7 @@ const SubPage = () => {
 				from='sub_page'
 			/>
 			<AddForm
-				onAddHandler={() => {}}
+				onAddHandler={addSubTaskHandler}
 				placeHolder='add details'
 			/>
 			<ListContainer>
