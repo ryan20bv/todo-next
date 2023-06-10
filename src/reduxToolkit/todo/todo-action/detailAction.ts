@@ -30,7 +30,7 @@ export const deleteSubTodoAction =
 		let { selectedTodo } = getState().todoReducer;
 		let copyOfTodoDetails: IMainTask = { ...selectedTodo };
 		let updatedTodoDetails = selectedTodo.subTaskList.filter(
-			(subTask: ISubTask) => subTask.subTaskId !== subTaskToDelete.subTaskId
+			(subTask: ISubTask) => subTask._id !== subTaskToDelete._id
 		);
 
 		copyOfTodoDetails.subTaskList = [...updatedTodoDetails];
@@ -43,7 +43,7 @@ export const updateLisOfTodoAction =
 		let { mainTodoList } = getState().todoReducer;
 		let copyOfMainTodoList = [...mainTodoList];
 		const todoDetailsIndex = copyOfMainTodoList.findIndex(
-			(todo: IMainTask) => todo.mainTaskId === updatedTodo.mainTaskId
+			(todo: IMainTask) => todo._id === updatedTodo._id
 		);
 		let mainTodoIsDone: boolean = updatedTodo.subTaskList.every(
 			(detail: ISubTask) => detail.isDone === true

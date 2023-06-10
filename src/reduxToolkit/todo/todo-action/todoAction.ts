@@ -106,7 +106,7 @@ export const confirmEditAction =
 	(newTaskName: string) => async (dispatch: any, getState: any) => {
 		const { mainTodoList, mainTodoToEdit } = getState().todoReducer;
 		let indexToEdit = mainTodoList.findIndex(
-			(todo: IMainTask) => todo.mainTaskId === mainTodoToEdit.mainTaskId
+			(todo: IMainTask) => todo._id === mainTodoToEdit._id
 		);
 
 		let copyOfTodoList = [...mainTodoList];
