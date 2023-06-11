@@ -90,7 +90,7 @@ export const confirmEditMainTaskNameAction =
 			const url =
 				process.env.NEXT_PUBLIC_BACK_END_URL +
 				"/api/mainTask/editMainTask/" +
-				mainTaskToEdit.mainTaskId;
+				mainTaskToEdit._id;
 			const options = {
 				method: "PATCH",
 				headers: {
@@ -111,13 +111,13 @@ export const confirmEditMainTaskNameAction =
 			const { updatedMainTask, message } = data;
 			if (message === "update success") {
 				const indexOfMainTask = mainTaskList.findIndex((item: IMainTask) => {
-					return item.mainTaskId === updatedMainTask._id;
+					return item._id === updatedMainTask._id;
 				});
 
 				const copyOfMainTaskList = [...mainTaskList];
-				const formattedUpdatedMainTask: IMainTask =
-					formatDataToIMainTask(updatedMainTask);
-				copyOfMainTaskList[indexOfMainTask] = formattedUpdatedMainTask;
+				// const formattedUpdatedMainTask: IMainTask =
+				// 	formatDataToIMainTask(updatedMainTask);
+				copyOfMainTaskList[indexOfMainTask] = updatedMainTask;
 				dispatch(updateMainTaskListAction(copyOfMainTaskList));
 			}
 			dispatch(updateIsSendingDataRed({ isSendingData: false }));
