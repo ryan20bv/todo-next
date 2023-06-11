@@ -77,7 +77,7 @@ export const confirmSubTodoEditingAction =
 		);
 
 		let subTaskIndex = copyOfSubTodoList.findIndex(
-			(subTodo: ISubTask) => subTodo.subTaskId === subTaskToEdit.subTaskId
+			(subTodo: ISubTask) => subTodo._id === subTaskToEdit._id
 		);
 
 		copyOfSubTodoList[subTaskIndex].subTaskName = newSubTodoName;

@@ -40,7 +40,7 @@ const TaskDetail = () => {
 	};
 	// checked
 	const addSubTodoHandler = (newSubTodoName: string) => {
-		dispatch(addNewSubTodoAction(newSubTodoName, selectedTodo.mainTaskId));
+		dispatch(addNewSubTodoAction(newSubTodoName));
 	};
 	// checked
 	const deleteSubTodoHandler = (subTask: ISubTask) => {
@@ -64,6 +64,7 @@ const TaskDetail = () => {
 	};
 	// checked
 	const isDoneHandler = (subTaskId: string) => {
+		cancelEditSubTaskHandler();
 		dispatch(toggleSubTodoIsDoneAction(subTaskId));
 	};
 
