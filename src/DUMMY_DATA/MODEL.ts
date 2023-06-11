@@ -1,3 +1,11 @@
+export interface IAuthData {
+	userId: string;
+	userName: string;
+	userEmail: string;
+	apiToken: string;
+	expires: string;
+}
+
 export interface ICategory {
 	_id: string;
 	creator_id: string;

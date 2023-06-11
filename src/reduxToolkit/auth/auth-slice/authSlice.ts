@@ -1,18 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IAuthData } from "@/DUMMY_DATA/MODEL";
 
-export type authDataType = {
-	userId: string;
-	userName: string;
-	userEmail: string;
-	apiToken: string;
-	expires: string;
-};
+// export type authDataType = {
+// 	userId: string;
+// 	userName: string;
+// 	userEmail: string;
+// 	apiToken: string;
+// 	expires: string;
+// };
 
 interface IAuthState {
 	authError: string;
 	isSendingData: boolean;
 	isAuthenticated: boolean;
-	authData: authDataType;
+	authData: IAuthData;
 	isShowingModal: boolean;
 }
 
@@ -20,7 +21,7 @@ const initialAuthState: IAuthState = {
 	authError: "",
 	isSendingData: false,
 	isAuthenticated: false,
-	authData: {} as authDataType,
+	authData: {} as IAuthData,
 	isShowingModal: false,
 };
 
@@ -47,7 +48,7 @@ const authSlice = createSlice({
 			state.authError = "";
 			state.isSendingData = false;
 			state.isAuthenticated = false;
-			state.authData = {} as authDataType;
+			state.authData = {} as IAuthData;
 			state.isShowingModal = false;
 		},
 	},

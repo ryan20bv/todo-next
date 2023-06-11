@@ -6,7 +6,7 @@ import {
 	toggleShowingModalState,
 	resetAuthStateRed,
 } from "../auth-slice/authSlice";
-import { authDataType } from "../auth-slice/authSlice";
+import { IAuthData } from "@/DUMMY_DATA/MODEL";
 import { signIn } from "next-auth/react";
 import { getRawDataAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 
@@ -40,7 +40,7 @@ export const clearErrorAction = () => async (dispatch: any, getState: any) => {
 };
 
 export const authDataAction =
-	(data: authDataType) => async (dispatch: any, getState: any) => {
+	(data: IAuthData) => async (dispatch: any, getState: any) => {
 		await dispatch(updateIsAuthDataState({ authData: data }));
 		await dispatch(updateIsAuthState({ isAuthenticated: true }));
 		dispatch(getRawDataAction(data.userId, data.apiToken));
@@ -48,7 +48,7 @@ export const authDataAction =
 
 export const clearAuthDataAction =
 	() => async (dispatch: any, getState: any) => {
-		dispatch(updateIsAuthDataState({ authData: {} as authDataType }));
+		dispatch(updateIsAuthDataState({ authData: {} as IAuthData }));
 		dispatch(clearErrorAction());
 	};
 
