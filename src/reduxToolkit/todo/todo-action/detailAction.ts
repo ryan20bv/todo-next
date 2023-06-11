@@ -6,14 +6,14 @@ import { v4 as uuidv4 } from "uuid";
 
 // checked
 export const addNewSubTodoAction =
-	(newSubTodoName: string, mainTodoId: string) =>
-	async (dispatch: any, getState: any) => {
+	(newSubTodoName: string) => async (dispatch: any, getState: any) => {
 		let { selectedTodo } = getState().todoReducer;
 		const newSubTodo: ISubTask = {
-			subTaskId: uuidv4(),
+			_id: uuidv4(),
+			creator_id: "public",
+			mainTask_id: selectedTodo._id,
 			subTaskName: newSubTodoName,
 			isDone: false,
-			mainTaskId: mainTodoId,
 		};
 
 		const copyOfTodoDetails: IMainTask = { ...selectedTodo };
