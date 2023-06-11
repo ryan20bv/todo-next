@@ -33,7 +33,7 @@ export const addMainTaskAction =
 		try {
 			const bodyData = {
 				enteredMainTaskName,
-				category_id: currentCategory.categoryId,
+				category_id: currentCategory._id,
 			};
 			const url =
 				process.env.NEXT_PUBLIC_BACK_END_URL + "/api/mainTask/createMainTask";
@@ -48,15 +48,15 @@ export const addMainTaskAction =
 
 			const response = await fetch(url, options);
 			const data = await response.json();
-
+			console.log(data);
 			if (!response.ok) {
 				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 				return;
 			}
 
 			if (data.message === "new Task Added!") {
-				const newMainTask = formatDataToIMainTask(data.newTask);
-				const addNewMainTaskList: IMainTask[] = [...mainTaskList, newMainTask];
+				// const newMainTask = formatDataToIMainTask(data.newTask);
+				const addNewMainTaskList: IMainTask[] = [...mainTaskList, data.newTask];
 				dispatch(updateMainTaskListAction(addNewMainTaskList));
 				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 			}

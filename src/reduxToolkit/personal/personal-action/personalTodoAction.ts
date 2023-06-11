@@ -7,7 +7,12 @@ import {
 	setSelectedMainTaskRed,
 	updateMainTaskListRed,
 } from "../personal-slice/personalTodoSlice";
-import { ICategory, IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
+import {
+	ICategory,
+	IMainTask,
+	ISubTask,
+	ICategorySummary,
+} from "@/DUMMY_DATA/MODEL";
 import { signOut } from "next-auth/react";
 // checked
 export const getRawDataAction =
@@ -25,7 +30,7 @@ export const getRawDataAction =
 			const response = await fetch(url, options);
 
 			const data = await response.json();
-
+			console.log(data);
 			if (!response.ok) {
 				if (data.message === "Authentication failed!") {
 					signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
@@ -33,9 +38,10 @@ export const getRawDataAction =
 				return;
 			}
 			const initialCategory: ICategory = {
-				categoryId: data[0]._id,
+				_id: data[0]._id,
 				categoryName: data[0].categoryName,
-				creatorId: userId,
+				creator_id: data[0].category_id,
+				mainTaskList: [...data[0].mainTaskList],
 			};
 
 			await dispatch(getRawDataRed({ rawData: data }));
@@ -50,12 +56,12 @@ export const getUserCategoryListAction =
 	() => async (dispatch: any, getState: any) => {
 		const { rawData } = getState().personalTodoReducer;
 
-		const categoryList: ICategory[] = [];
+		const categoryList: ICategorySummary[] = [];
 		rawData.forEach((item: any) => {
-			const indivCategory: ICategory = {
-				categoryId: item._id,
+			const indivCategory: ICategorySummary = {
+				_id: item._id,
 				categoryName: item.categoryName,
-				creatorId: item.creator_id,
+				creator_id: item.creator_id,
 			};
 			categoryList.push(indivCategory);
 		});
@@ -67,10 +73,11 @@ export const setCurrentCategoryAction =
 		const { rawData } = getState().personalTodoReducer;
 
 		const foundCategoryItems = rawData.find(
-			(item: any) => item._id === category.categoryId
+			(item: any) => item._id === category._id
 		);
-
-		const currentMainTaskList = foundCategoryItems.mainTaskList.map(
+		console.log("foundCategoryItems", foundCategoryItems);
+		const currentMainTaskList: IMainTask[] = [...foundCategoryItems.mainTaskList];
+		/* const currentMainTaskList = foundCategoryItems.mainTaskList.map(
 			(item: any) => {
 				const formattedSubTaskList: ISubTask[] = item.subTaskList.map(
 					(subItem: any) => {
@@ -91,14 +98,14 @@ export const setCurrentCategoryAction =
 					subTaskList: formattedSubTaskList,
 				};
 			}
-		);
+		); */
 
 		await dispatch(setCurrentCategoryRed({ currentCategory: category }));
 		dispatch(setMainTaskListAction(currentMainTaskList));
 	};
 // checked
 export const setMainTaskListAction =
-	(mainTaskList: IMainTask) => async (dispatch: any, getState: any) => {
+	(mainTaskList: IMainTask[]) => async (dispatch: any, getState: any) => {
 		dispatch(setMainTaskListRed({ mainTaskList: mainTaskList }));
 	};
 // checked

@@ -6,6 +6,12 @@ export interface IAuthData {
 	expires: string;
 }
 
+export interface ICategorySummary {
+	_id: string;
+	creator_id: string;
+	categoryName: string;
+}
+
 export interface ICategory {
 	_id: string;
 	creator_id: string;
