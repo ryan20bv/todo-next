@@ -8,17 +8,17 @@ import {
 	setMainTaskToDeleteRed,
 } from "../personal-slice/personalTodoSlice";
 
-const formatDataToIMainTask = (dataToFormat: any) => {
-	const formattedData: IMainTask = {
-		categoryId: dataToFormat.category_id,
-		mainTaskId: dataToFormat._id,
-		mainTaskName: dataToFormat.mainTaskName,
-		isAllSubTaskDone: dataToFormat.isAllSubTaskDone,
-		subTaskList: [...dataToFormat.subTaskList],
-	};
+// const formatDataToIMainTask = (dataToFormat: any) => {
+// 	const formattedData: IMainTask = {
+// 		categoryId: dataToFormat.category_id,
+// 		mainTaskId: dataToFormat._id,
+// 		mainTaskName: dataToFormat.mainTaskName,
+// 		isAllSubTaskDone: dataToFormat.isAllSubTaskDone,
+// 		subTaskList: [...dataToFormat.subTaskList],
+// 	};
 
-	return formattedData;
-};
+// 	return formattedData;
+// };
 // checked
 export const addMainTaskAction =
 	(enteredMainTaskName: string) => async (dispatch: any, getState: any) => {
@@ -143,7 +143,7 @@ export const confirmDeleteMainTaskAction =
 			const url =
 				process.env.NEXT_PUBLIC_BACK_END_URL +
 				"/api/mainTask/deleteMainTask/" +
-				mainTaskToDelete.mainTaskId;
+				mainTaskToDelete._id;
 			const options = {
 				method: "DELETE",
 				headers: {
@@ -163,8 +163,7 @@ export const confirmDeleteMainTaskAction =
 			const { message } = data;
 			if (message === "delete success") {
 				const updatedMainTaskList = mainTaskList.filter(
-					(mainTask: IMainTask) =>
-						mainTask.mainTaskId !== mainTaskToDelete.mainTaskId
+					(mainTask: IMainTask) => mainTask._id !== mainTaskToDelete._id
 				);
 				dispatch(updateMainTaskListAction(updatedMainTaskList));
 			}
