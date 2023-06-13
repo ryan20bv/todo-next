@@ -6,7 +6,7 @@ interface propsTypes {
 	message: string;
 	onCloseModal: () => void;
 	onConfirm: () => void;
-	// isDeletingData: boolean;
+	isDeletingData: boolean;
 	// isToggleUpdating: boolean;
 	isUpdatingData: boolean;
 	updateMessage: string;
@@ -15,7 +15,7 @@ const ConfirmationModal: React.FC<propsTypes> = ({
 	message,
 	onCloseModal,
 	onConfirm,
-	// isDeletingData,
+	isDeletingData,
 	// isToggleUpdating,
 	isUpdatingData,
 	updateMessage,
@@ -38,7 +38,7 @@ const ConfirmationModal: React.FC<propsTypes> = ({
 							className='absolute top-[40%] border z-10 w-[85%]
 				border-black bg-white bg-opacity-40 p-4 rounded-xl mx-6 flex flex-col justify-center items-center'
 						>
-							{!isUpdatingData && (
+							{isDeletingData && !isUpdatingData && (
 								<>
 									<p>{message}</p>
 									<div className='flex justify-around  w-[70%] mt-4'>

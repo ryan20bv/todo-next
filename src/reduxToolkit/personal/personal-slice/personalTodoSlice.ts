@@ -11,7 +11,7 @@ interface IPersonalTodoState {
 	mainTaskToEdit: IMainTask;
 	mainTaskToDelete: IMainTask;
 	subTaskToDelete: ISubTask;
-	// isDeletingData: boolean;
+	isDeletingData: boolean;
 	// isToggleUpdating: boolean;
 	isUpdatingData: boolean;
 	updateMessage: string;
@@ -27,7 +27,7 @@ const initialPersonalState: IPersonalTodoState = {
 	mainTaskToEdit: {} as IMainTask,
 	mainTaskToDelete: {} as IMainTask,
 	subTaskToDelete: {} as ISubTask,
-	// isDeletingData: false,
+	isDeletingData: false,
 	// isToggleUpdating: false,
 	isUpdatingData: false,
 	updateMessage: "",
@@ -37,6 +37,9 @@ const personalTodoSlice = createSlice({
 	name: "Personal Todo Slice",
 	initialState: initialPersonalState,
 	reducers: {
+		updateIsDeletingDataRed(state, action) {
+			state.isDeletingData = action.payload.isDeletingData;
+		},
 		updateIsSendingDataRed(state, action) {
 			state.isSendingData = action.payload.isSendingData;
 		},
@@ -71,7 +74,7 @@ const personalTodoSlice = createSlice({
 			state.mainTaskToEdit = {} as IMainTask;
 			state.mainTaskToDelete = {} as IMainTask;
 			state.subTaskToDelete = {} as ISubTask;
-			// state.isDeletingData = false;
+			state.isDeletingData = false;
 			// state.isToggleUpdating = false;
 			state.isUpdatingData = false;
 			state.updateMessage = "";
@@ -92,6 +95,7 @@ const personalTodoSlice = createSlice({
 });
 
 export const {
+	updateIsDeletingDataRed,
 	updateIsSendingDataRed,
 	updateMessageRed,
 	updateIsUpdatingRed,

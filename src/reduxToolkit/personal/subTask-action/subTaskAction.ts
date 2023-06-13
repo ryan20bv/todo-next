@@ -6,6 +6,7 @@ import {
 } from "../personal-action/personalTodoAction";
 // import reducer
 import {
+	updateIsDeletingDataRed,
 	updateIsSendingDataRed,
 	setSubTaskToDeleteRed,
 	updateMessageRed,
@@ -33,6 +34,22 @@ import {
 
 	return formattedData;
 }; */
+
+const updateMainTaskAndMainTaskListAction =
+	(updatedMainTask: IMainTask) => async (dispatch: any, getState: any) => {
+		const { mainTaskList } = getState().personalTodoReducer;
+		dispatch(setSelectedMainTaskAction(updatedMainTask));
+		const indexOfSelectedMainTask = mainTaskList.findIndex(
+			(item: IMainTask) => item._id === updatedMainTask._id
+		);
+
+		const copyOfMainTaskList: IMainTask[] = [];
+		mainTaskList.forEach((mainTask: IMainTask) =>
+			copyOfMainTaskList.push(mainTask)
+		);
+		copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
+		dispatch(updateMainTaskListAction(copyOfMainTaskList));
+	};
 
 export const addSubTaskAction =
 	(enteredSubTaskName: string) => async (dispatch: any, getState: any) => {
@@ -68,29 +85,20 @@ export const addSubTaskAction =
 
 			const data = await response.json();
 
-			const { newSubTask, message } = data;
+			const { updatedMainTask, message } = data;
 			if (message === "subTask Added!") {
-				// const formattedDataToSubTask = formatDataToISubTask(newSubTask);
-				const copyOfSubTaskList: ISubTask[] = [];
-				selectedMainTask.subTaskList.forEach((subTask: ISubTask) =>
-					copyOfSubTaskList.push(subTask)
-				);
-				copyOfSubTaskList.push(newSubTask);
-				const copyOfSelectedMainTask: IMainTask = { ...selectedMainTask };
+				await dispatch(updateMainTaskAndMainTaskListAction(updatedMainTask));
+				/* dispatch(setSelectedMainTaskAction(updatedMainTask));
 				const indexOfSelectedMainTask = mainTaskList.findIndex(
 					(item: IMainTask) => item._id === selectedMainTask._id
 				);
-
-				copyOfSelectedMainTask.subTaskList = [...copyOfSubTaskList];
-				dispatch(setSelectedMainTaskAction(copyOfSelectedMainTask));
-
 				const copyOfMainTaskList: IMainTask[] = [];
 				mainTaskList.forEach((mainTask: IMainTask) =>
 					copyOfMainTaskList.push(mainTask)
 				);
-				copyOfMainTaskList[indexOfSelectedMainTask] = copyOfSelectedMainTask;
+				copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
 
-				dispatch(updateMainTaskListAction(copyOfMainTaskList));
+				dispatch(updateMainTaskListAction(copyOfMainTaskList)); */
 				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 			}
 		} catch (err) {
@@ -101,7 +109,16 @@ export const addSubTaskAction =
 // checked
 export const selectedSubTaskToDeleteAction =
 	(subTask: ISubTask) => async (dispatch: any, getState: any) => {
+		dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+		dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
 		dispatch(setSubTaskToDeleteRed({ subTaskToDelete: subTask }));
+	};
+
+export const cancelDeleteSubTaskAction =
+	() => async (dispatch: any, getState: any) => {
+		dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+
+		dispatch(setSubTaskToDeleteRed({ subTaskToDelete: {} as ISubTask }));
 	};
 // checked
 export const confirmDeleteSubTaskAction =
@@ -109,6 +126,7 @@ export const confirmDeleteSubTaskAction =
 		const { subTaskToDelete, selectedMainTask, mainTaskList } =
 			getState().personalTodoReducer;
 		const { authData } = getState().authReducer;
+
 		dispatch(updateMessageRed({ updateMessage: "Deleting..." }));
 		dispatch(updateIsUpdatingRed({ isUpdatingData: true }));
 		try {
@@ -128,7 +146,7 @@ export const confirmDeleteSubTaskAction =
 
 			const response = await fetch(url, options);
 			if (!response.ok) {
-				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 				return;
 			}
 			const data = await response.json();
@@ -147,15 +165,15 @@ export const confirmDeleteSubTaskAction =
 				copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
 
 				dispatch(updateMainTaskListAction(copyOfMainTaskList));
-				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 			}
 		} catch (err) {
 			console.log("confirmDeleteSubTaskAction", err);
-			dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+			// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 		}
 		return { message: "done" };
 	};
-
+// checked
 export const toggleSubTaskIsDoneAction =
 	(subTaskId: string) => async (dispatch: any, getState: any) => {
 		const { mainTaskList } = getState().personalTodoReducer;
@@ -179,7 +197,7 @@ export const toggleSubTaskIsDoneAction =
 
 			const response = await fetch(url, options);
 			if (!response.ok) {
-				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 				throw new Error("Error connection in toggle subTask isDone");
 			}
 			const data = await response.json();
@@ -197,11 +215,73 @@ export const toggleSubTaskIsDoneAction =
 				);
 				copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
 				dispatch(updateMainTaskListAction(copyOfMainTaskList));
-				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 			}
 		} catch (err) {
 			console.log("toggleSubTaskIsDoneAction", err);
-			dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+			// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+		}
+		return { message: "done" };
+	};
+
+// checked
+export const deleteAllSubTaskIsDoneAction =
+	() => async (dispatch: any, getState: any) => {
+		const { selectedMainTask, mainTaskList } = getState().personalTodoReducer;
+		const { authData } = getState().authReducer;
+		let hasDoneSubTask: boolean = false;
+		hasDoneSubTask = selectedMainTask.subTaskList.every(
+			(subTask: ISubTask) => subTask.isDone === true
+		);
+		// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+		if (selectedMainTask.subTaskList.length <= 0 || !hasDoneSubTask) {
+			console.log("NO subTask done");
+			return { message: "done" };
+		}
+
+		dispatch(updateMessageRed({ updateMessage: "Deleting All done SubTask..." }));
+		dispatch(updateIsUpdatingRed({ isUpdatingData: true }));
+
+		try {
+			const bodyData = {};
+			const url =
+				process.env.NEXT_PUBLIC_BACK_END_URL +
+				"/api/subtask/deleteAllDone/" +
+				selectedMainTask._id;
+			const options = {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + authData.apiToken,
+				},
+				body: JSON.stringify(bodyData),
+			};
+
+			const response = await fetch(url, options);
+			if (!response.ok) {
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				return { message: "done" };
+			}
+			const data = await response.json();
+
+			const { updatedMainTask, message } = data;
+			if (message === "All Done deleted") {
+				dispatch(setSelectedMainTaskAction(updatedMainTask));
+				const indexOfSelectedMainTask = mainTaskList.findIndex(
+					(item: IMainTask) => item._id === updatedMainTask._id
+				);
+
+				const copyOfMainTaskList: IMainTask[] = [];
+				mainTaskList.forEach((mainTask: IMainTask) =>
+					copyOfMainTaskList.push(mainTask)
+				);
+				copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
+
+				dispatch(updateMainTaskListAction(copyOfMainTaskList));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+			}
+		} catch (err) {
+			console.log("deleteAllSubTaskIsDoneAction", err);
 		}
 		return { message: "done" };
 	};

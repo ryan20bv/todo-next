@@ -22,8 +22,10 @@ import { ISubTask } from "@/DUMMY_DATA/MODEL";
 import {
 	addSubTaskAction,
 	selectedSubTaskToDeleteAction,
+	cancelDeleteSubTaskAction,
 	confirmDeleteSubTaskAction,
 	toggleSubTaskIsDoneAction,
+	deleteAllSubTaskIsDoneAction,
 } from "@/reduxToolkit/personal/subTask-action/subTaskAction";
 
 const SubPage = () => {
@@ -35,7 +37,7 @@ const SubPage = () => {
 		selectedMainTask,
 		isSendingData,
 		subTaskToDelete,
-		// isDeletingData,
+		isDeletingData,
 		// isToggleUpdating,
 		isUpdatingData,
 		updateMessage,
@@ -54,7 +56,7 @@ const SubPage = () => {
 	};
 	// checked
 	const cancelDeleteSubTaskHandler = () => {
-		dispatch(selectedSubTaskToDeleteAction({} as ISubTask));
+		dispatch(cancelDeleteSubTaskAction());
 		setShowConfirmationModal(false);
 	};
 	// checked
@@ -69,6 +71,14 @@ const SubPage = () => {
 	const toggleIsDoneHandler = async (subTaskId: string) => {
 		setShowConfirmationModal(true);
 		const data = await dispatch(toggleSubTaskIsDoneAction(subTaskId));
+		if (data && data.message === "done") {
+			setShowConfirmationModal(false);
+		}
+	};
+	const deleteAllSubTaskIsDoneHandler = async () => {
+		setShowConfirmationModal(true);
+		const data = await dispatch(deleteAllSubTaskIsDoneAction());
+
 		if (data && data.message === "done") {
 			setShowConfirmationModal(false);
 		}
@@ -93,15 +103,15 @@ const SubPage = () => {
 					subTaskList={selectedMainTask.subTaskList}
 					onDeleteSubTodo={selectSubTaskToDeleteHandler}
 					isDoneHandler={toggleIsDoneHandler}
+					onDeleteAllDone={deleteAllSubTaskIsDoneHandler}
 					onEditingSubTask={(subTask: ISubTask) => {}}
-					onDeleteAllDone={() => {}}
 				/>
 			</ListContainer>
 			{showConfirmationModal && (
 				<ConfirmationModal
 					message={`Are you sure you want to delete ${subTaskToDelete.subTaskName}`}
 					onCloseModal={cancelDeleteSubTaskHandler}
-					// isDeletingData={isDeletingData}
+					isDeletingData={isDeletingData}
 					onConfirm={confirmDeleteMainTaskHandler}
 					// isToggleUpdating={isToggleUpdating}
 					isUpdatingData={isUpdatingData}
