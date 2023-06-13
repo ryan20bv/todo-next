@@ -6,6 +6,7 @@ import {
 	updateIsSendingDataRed,
 	setMainTaskToEditRed,
 	setMainTaskToDeleteRed,
+	updateIsDeletingDataRed,
 } from "../personal-slice/personalTodoSlice";
 
 // const formatDataToIMainTask = (dataToFormat: any) => {
@@ -62,6 +63,7 @@ export const addMainTaskAction =
 			}
 		} catch (err) {
 			console.log("addMainTaskAction", err);
+			dispatch(updateIsSendingDataRed({ isSendingData: false }));
 		}
 	};
 // checked
@@ -137,7 +139,8 @@ export const confirmDeleteMainTaskAction =
 	() => async (dispatch: any, getState: any) => {
 		const { mainTaskList, mainTaskToDelete } = getState().personalTodoReducer;
 		const { authData } = getState().authReducer;
-		dispatch(updateIsSendingDataRed({ isSendingData: true }));
+		dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
+
 		try {
 			const bodyData = {};
 			const url =
@@ -155,7 +158,8 @@ export const confirmDeleteMainTaskAction =
 
 			const response = await fetch(url, options);
 			if (!response.ok) {
-				dispatch(updateIsSendingDataRed({ isSendingData: false }));
+				dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+
 				return;
 			}
 			const data = await response.json();
@@ -167,10 +171,11 @@ export const confirmDeleteMainTaskAction =
 				);
 				dispatch(updateMainTaskListAction(updatedMainTaskList));
 			}
-			dispatch(updateIsSendingDataRed({ isSendingData: false }));
+			dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+
 			return { message: "success" };
 		} catch (err) {
 			console.log("confirmDeleteMainTaskAction", err);
-			dispatch(updateIsSendingDataRed({ isSendingData: false }));
+			dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
 		}
 	};

@@ -52,6 +52,7 @@ const MainPage = () => {
 		isSendingData,
 		mainTaskToEdit,
 		mainTaskToDelete,
+		isDeletingData,
 	} = useAppSelector((state: RootState) => state.personalTodoReducer);
 
 	const toggleShowCategoryList = () => {
@@ -123,9 +124,9 @@ const MainPage = () => {
 			{showListOfCategories && (
 				<section className='w-[93%] text-center bg-white  border-b-2 border-black absolute  top-20'>
 					<ul>
-						{categoryList.map((category) => (
+						{categoryList.map((category: ICategory) => (
 							<li
-								key={category.categoryId}
+								key={category._id}
 								onClick={() => selectNewCategory(category)}
 								className='py-1'
 							>
@@ -164,7 +165,7 @@ const MainPage = () => {
 					message={`Are you sure you want to delete ${mainTaskToDelete.mainTaskName}`}
 					onCloseModal={cancelDeleteMainTaskHandler}
 					onConfirm={confirmDeleteMainTaskHandler}
-					isSendingData={isSendingData}
+					isDeletingData={isDeletingData}
 				/>
 			)}
 		</Card>

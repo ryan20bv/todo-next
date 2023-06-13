@@ -6,13 +6,13 @@ interface propsTypes {
 	message: string;
 	onCloseModal: () => void;
 	onConfirm: () => void;
-	isSendingData: boolean;
+	isDeletingData: boolean;
 }
 const ConfirmationModal: React.FC<propsTypes> = ({
 	message,
 	onCloseModal,
 	onConfirm,
-	isSendingData,
+	isDeletingData,
 }) => {
 	const notificationPortal = document.getElementById("notificationPortal");
 	const confirmHandler = () => {
@@ -32,7 +32,7 @@ const ConfirmationModal: React.FC<propsTypes> = ({
 							className='absolute top-[30%] border z-10 w-[85%]
 				border-black bg-white p-4 rounded-xl mx-6 flex flex-col justify-center items-center'
 						>
-							{!isSendingData && (
+							{!isDeletingData && (
 								<>
 									<p>{message}</p>
 									<div className='flex justify-around  w-[70%] mt-4'>
@@ -51,7 +51,7 @@ const ConfirmationModal: React.FC<propsTypes> = ({
 									</div>
 								</>
 							)}
-							{isSendingData && <p>Deleting...</p>}
+							{isDeletingData && <p>Deleting...</p>}
 						</div>
 					</main>,
 					notificationPortal

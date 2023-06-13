@@ -1,13 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-	ICategory,
-	IMainTask,
-	ISubTask,
-	ICategorySummary,
-} from "@/DUMMY_DATA/MODEL";
+import { ICategory, IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 
 interface IPersonalTodoState {
-	categoryList: ICategorySummary[];
+	categoryList: ICategory[];
 	rawData: ICategory[];
 	currentCategory: ICategory;
 	mainTaskList: IMainTask[];
@@ -16,6 +11,7 @@ interface IPersonalTodoState {
 	mainTaskToEdit: IMainTask;
 	mainTaskToDelete: IMainTask;
 	subTaskToDelete: ISubTask;
+	isDeletingData: boolean;
 }
 
 const initialPersonalState: IPersonalTodoState = {
@@ -28,6 +24,7 @@ const initialPersonalState: IPersonalTodoState = {
 	mainTaskToEdit: {} as IMainTask,
 	mainTaskToDelete: {} as IMainTask,
 	subTaskToDelete: {} as ISubTask,
+	isDeletingData: false,
 };
 
 const personalTodoSlice = createSlice({
@@ -36,6 +33,9 @@ const personalTodoSlice = createSlice({
 	reducers: {
 		updateIsSendingDataRed(state, action) {
 			state.isSendingData = action.payload.isSendingData;
+		},
+		updateIsDeletingDataRed(state, action) {
+			state.isDeletingData = action.payload.isDeletingData;
 		},
 		getRawDataRed(state, action) {
 			state.rawData = action.payload.rawData;
@@ -62,6 +62,7 @@ const personalTodoSlice = createSlice({
 			state.mainTaskToEdit = {} as IMainTask;
 			state.mainTaskToDelete = {} as IMainTask;
 			state.subTaskToDelete = {} as ISubTask;
+			state.isDeletingData = false;
 		},
 		updateMainTaskListRed(state, action) {
 			state.mainTaskList = action.payload.newMainTaskList;
@@ -80,6 +81,7 @@ const personalTodoSlice = createSlice({
 
 export const {
 	updateIsSendingDataRed,
+	updateIsDeletingDataRed,
 	getRawDataRed,
 	setCurrentCategoryRed,
 	getUserCategoryListRed,

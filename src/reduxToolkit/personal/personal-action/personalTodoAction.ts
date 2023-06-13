@@ -7,12 +7,7 @@ import {
 	setSelectedMainTaskRed,
 	updateMainTaskListRed,
 } from "../personal-slice/personalTodoSlice";
-import {
-	ICategory,
-	IMainTask,
-	ISubTask,
-	ICategorySummary,
-} from "@/DUMMY_DATA/MODEL";
+import { ICategory, IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 import { signOut } from "next-auth/react";
 // checked
 export const getRawDataAction =
@@ -41,7 +36,6 @@ export const getRawDataAction =
 				_id: data[0]._id,
 				categoryName: data[0].categoryName,
 				creator_id: data[0].category_id,
-				mainTaskList: [...data[0].mainTaskList],
 			};
 
 			await dispatch(getRawDataRed({ rawData: data }));
@@ -56,9 +50,9 @@ export const getUserCategoryListAction =
 	() => async (dispatch: any, getState: any) => {
 		const { rawData } = getState().personalTodoReducer;
 
-		const categoryList: ICategorySummary[] = [];
+		const categoryList: ICategory[] = [];
 		rawData.forEach((item: any) => {
-			const indivCategory: ICategorySummary = {
+			const indivCategory: ICategory = {
 				_id: item._id,
 				categoryName: item.categoryName,
 				creator_id: item.creator_id,
