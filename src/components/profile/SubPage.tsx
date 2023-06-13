@@ -23,6 +23,7 @@ import {
 	addSubTaskAction,
 	selectedSubTaskToDeleteAction,
 	confirmDeleteSubTaskAction,
+	toggleSubTaskIsDoneAction,
 } from "@/reduxToolkit/personal/subTask-action/subTaskAction";
 
 const SubPage = () => {
@@ -30,8 +31,15 @@ const SubPage = () => {
 	const [showConfirmationModal, setShowConfirmationModal] =
 		useState<boolean>(false);
 	const router = useRouter();
-	const { selectedMainTask, isSendingData, subTaskToDelete, isDeletingData } =
-		useAppSelector((state: RootState) => state.personalTodoReducer);
+	const {
+		selectedMainTask,
+		isSendingData,
+		subTaskToDelete,
+		// isDeletingData,
+		// isToggleUpdating,
+		isUpdatingData,
+		updateMessage,
+	} = useAppSelector((state: RootState) => state.personalTodoReducer);
 	const backArrowHandler = () => {
 		router.back();
 	};
@@ -49,11 +57,19 @@ const SubPage = () => {
 		dispatch(selectedSubTaskToDeleteAction({} as ISubTask));
 		setShowConfirmationModal(false);
 	};
-	// !working on
+	// checked
 	const confirmDeleteMainTaskHandler = async () => {
 		const data = await dispatch(confirmDeleteSubTaskAction());
 
-		if (data && data.message === "success") {
+		if (data && data.message === "done") {
+			setShowConfirmationModal(false);
+		}
+	};
+	//checked
+	const toggleIsDoneHandler = async (subTaskId: string) => {
+		setShowConfirmationModal(true);
+		const data = await dispatch(toggleSubTaskIsDoneAction(subTaskId));
+		if (data && data.message === "done") {
 			setShowConfirmationModal(false);
 		}
 	};
@@ -76,7 +92,7 @@ const SubPage = () => {
 				<SubList
 					subTaskList={selectedMainTask.subTaskList}
 					onDeleteSubTodo={selectSubTaskToDeleteHandler}
-					isDoneHandler={(id: string) => {}}
+					isDoneHandler={toggleIsDoneHandler}
 					onEditingSubTask={(subTask: ISubTask) => {}}
 					onDeleteAllDone={() => {}}
 				/>
@@ -85,8 +101,11 @@ const SubPage = () => {
 				<ConfirmationModal
 					message={`Are you sure you want to delete ${subTaskToDelete.subTaskName}`}
 					onCloseModal={cancelDeleteSubTaskHandler}
-					isDeletingData={isDeletingData}
+					// isDeletingData={isDeletingData}
 					onConfirm={confirmDeleteMainTaskHandler}
+					// isToggleUpdating={isToggleUpdating}
+					isUpdatingData={isUpdatingData}
+					updateMessage={updateMessage}
 				/>
 			)}
 		</Card>

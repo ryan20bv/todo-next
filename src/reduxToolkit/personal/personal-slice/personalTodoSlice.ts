@@ -11,7 +11,10 @@ interface IPersonalTodoState {
 	mainTaskToEdit: IMainTask;
 	mainTaskToDelete: IMainTask;
 	subTaskToDelete: ISubTask;
-	isDeletingData: boolean;
+	// isDeletingData: boolean;
+	// isToggleUpdating: boolean;
+	isUpdatingData: boolean;
+	updateMessage: string;
 }
 
 const initialPersonalState: IPersonalTodoState = {
@@ -24,7 +27,10 @@ const initialPersonalState: IPersonalTodoState = {
 	mainTaskToEdit: {} as IMainTask,
 	mainTaskToDelete: {} as IMainTask,
 	subTaskToDelete: {} as ISubTask,
-	isDeletingData: false,
+	// isDeletingData: false,
+	// isToggleUpdating: false,
+	isUpdatingData: false,
+	updateMessage: "",
 };
 
 const personalTodoSlice = createSlice({
@@ -34,8 +40,11 @@ const personalTodoSlice = createSlice({
 		updateIsSendingDataRed(state, action) {
 			state.isSendingData = action.payload.isSendingData;
 		},
-		updateIsDeletingDataRed(state, action) {
-			state.isDeletingData = action.payload.isDeletingData;
+		updateMessageRed(state, action) {
+			state.updateMessage = action.payload.updateMessage;
+		},
+		updateIsUpdatingRed(state, action) {
+			state.isUpdatingData = action.payload.isUpdatingData;
 		},
 		getRawDataRed(state, action) {
 			state.rawData = action.payload.rawData;
@@ -62,7 +71,10 @@ const personalTodoSlice = createSlice({
 			state.mainTaskToEdit = {} as IMainTask;
 			state.mainTaskToDelete = {} as IMainTask;
 			state.subTaskToDelete = {} as ISubTask;
-			state.isDeletingData = false;
+			// state.isDeletingData = false;
+			// state.isToggleUpdating = false;
+			state.isUpdatingData = false;
+			state.updateMessage = "";
 		},
 		updateMainTaskListRed(state, action) {
 			state.mainTaskList = action.payload.newMainTaskList;
@@ -81,7 +93,8 @@ const personalTodoSlice = createSlice({
 
 export const {
 	updateIsSendingDataRed,
-	updateIsDeletingDataRed,
+	updateMessageRed,
+	updateIsUpdatingRed,
 	getRawDataRed,
 	setCurrentCategoryRed,
 	getUserCategoryListRed,

@@ -6,13 +6,19 @@ interface propsTypes {
 	message: string;
 	onCloseModal: () => void;
 	onConfirm: () => void;
-	isDeletingData: boolean;
+	// isDeletingData: boolean;
+	// isToggleUpdating: boolean;
+	isUpdatingData: boolean;
+	updateMessage: string;
 }
 const ConfirmationModal: React.FC<propsTypes> = ({
 	message,
 	onCloseModal,
 	onConfirm,
-	isDeletingData,
+	// isDeletingData,
+	// isToggleUpdating,
+	isUpdatingData,
+	updateMessage,
 }) => {
 	const notificationPortal = document.getElementById("notificationPortal");
 	const confirmHandler = () => {
@@ -25,14 +31,14 @@ const ConfirmationModal: React.FC<propsTypes> = ({
 				ReactDOM.createPortal(
 					<main className='absolute top-0   w-full h-full flex justify-center items-center'>
 						<section
-							className='absolute top-0 z-5 w-full h-full  bg-gray-300 bg-opacity-50 flex items-center justify-center'
-							onClick={onCloseModal}
+							className='absolute top-0 z-5 w-full h-full  bg-gray-300 bg-opacity-40 flex items-center justify-center'
+							// onClick={onCloseModal}
 						></section>
 						<div
-							className='absolute top-[30%] border z-10 w-[85%]
-				border-black bg-white p-4 rounded-xl mx-6 flex flex-col justify-center items-center'
+							className='absolute top-[40%] border z-10 w-[85%]
+				border-black bg-white bg-opacity-40 p-4 rounded-xl mx-6 flex flex-col justify-center items-center'
 						>
-							{!isDeletingData && (
+							{!isUpdatingData && (
 								<>
 									<p>{message}</p>
 									<div className='flex justify-around  w-[70%] mt-4'>
@@ -51,7 +57,7 @@ const ConfirmationModal: React.FC<propsTypes> = ({
 									</div>
 								</>
 							)}
-							{isDeletingData && <p>Deleting...</p>}
+							{isUpdatingData && <p>{updateMessage}</p>}
 						</div>
 					</main>,
 					notificationPortal

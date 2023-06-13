@@ -8,7 +8,8 @@ import {
 import {
 	updateIsSendingDataRed,
 	setSubTaskToDeleteRed,
-	updateIsDeletingDataRed,
+	updateMessageRed,
+	updateIsUpdatingRed,
 } from "../personal-slice/personalTodoSlice";
 
 /* const formatDataToISubTask = (dataToFormat: any) => {
@@ -108,7 +109,8 @@ export const confirmDeleteSubTaskAction =
 		const { subTaskToDelete, selectedMainTask, mainTaskList } =
 			getState().personalTodoReducer;
 		const { authData } = getState().authReducer;
-		dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
+		dispatch(updateMessageRed({ updateMessage: "Deleting..." }));
+		dispatch(updateIsUpdatingRed({ isUpdatingData: true }));
 		try {
 			const bodyData = {};
 			const url =
@@ -126,7 +128,7 @@ export const confirmDeleteSubTaskAction =
 
 			const response = await fetch(url, options);
 			if (!response.ok) {
-				dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 				return;
 			}
 			const data = await response.json();
@@ -145,11 +147,61 @@ export const confirmDeleteSubTaskAction =
 				copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
 
 				dispatch(updateMainTaskListAction(copyOfMainTaskList));
-				dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
-				return { message: "success" };
+				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 			}
 		} catch (err) {
 			console.log("confirmDeleteSubTaskAction", err);
-			dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+			dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 		}
+		return { message: "done" };
+	};
+
+export const toggleSubTaskIsDoneAction =
+	(subTaskId: string) => async (dispatch: any, getState: any) => {
+		const { mainTaskList } = getState().personalTodoReducer;
+		const { authData } = getState().authReducer;
+		dispatch(updateMessageRed({ updateMessage: "Updating..." }));
+		dispatch(updateIsUpdatingRed({ isUpdatingData: true }));
+		try {
+			const bodyData = {};
+			const url =
+				process.env.NEXT_PUBLIC_BACK_END_URL +
+				"/api/subtask/toggleIsDone/" +
+				subTaskId;
+			const options = {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + authData.apiToken,
+				},
+				body: JSON.stringify(bodyData),
+			};
+
+			const response = await fetch(url, options);
+			if (!response.ok) {
+				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				throw new Error("Error connection in toggle subTask isDone");
+			}
+			const data = await response.json();
+
+			const { updatedMainTask, message } = data;
+			if (message === "toggle success") {
+				dispatch(setSelectedMainTaskAction(updatedMainTask));
+				const indexOfSelectedMainTask = mainTaskList.findIndex(
+					(item: IMainTask) => item._id === updatedMainTask._id
+				);
+
+				const copyOfMainTaskList: IMainTask[] = [];
+				mainTaskList.forEach((mainTask: IMainTask) =>
+					copyOfMainTaskList.push(mainTask)
+				);
+				copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
+				dispatch(updateMainTaskListAction(copyOfMainTaskList));
+				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+			}
+		} catch (err) {
+			console.log("toggleSubTaskIsDoneAction", err);
+			dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+		}
+		return { message: "done" };
 	};
