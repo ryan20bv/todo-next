@@ -153,7 +153,8 @@ export const confirmDeleteSubTaskAction =
 
 			const { updatedMainTask, message } = data;
 			if (message === "delete success") {
-				dispatch(setSelectedMainTaskAction(updatedMainTask));
+				await dispatch(updateMainTaskAndMainTaskListAction(updatedMainTask));
+				/* dispatch(setSelectedMainTaskAction(updatedMainTask));
 				const indexOfSelectedMainTask = mainTaskList.findIndex(
 					(item: IMainTask) => item._id === updatedMainTask._id
 				);
@@ -164,7 +165,7 @@ export const confirmDeleteSubTaskAction =
 				);
 				copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
 
-				dispatch(updateMainTaskListAction(copyOfMainTaskList));
+				dispatch(updateMainTaskListAction(copyOfMainTaskList)); */
 				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 			}
 		} catch (err) {
@@ -204,7 +205,8 @@ export const toggleSubTaskIsDoneAction =
 
 			const { updatedMainTask, message } = data;
 			if (message === "toggle success") {
-				dispatch(setSelectedMainTaskAction(updatedMainTask));
+				await dispatch(updateMainTaskAndMainTaskListAction(updatedMainTask));
+				/* dispatch(setSelectedMainTaskAction(updatedMainTask));
 				const indexOfSelectedMainTask = mainTaskList.findIndex(
 					(item: IMainTask) => item._id === updatedMainTask._id
 				);
@@ -214,7 +216,7 @@ export const toggleSubTaskIsDoneAction =
 					copyOfMainTaskList.push(mainTask)
 				);
 				copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
-				dispatch(updateMainTaskListAction(copyOfMainTaskList));
+				dispatch(updateMainTaskListAction(copyOfMainTaskList)); */
 				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 			}
 		} catch (err) {
@@ -266,7 +268,8 @@ export const deleteAllSubTaskIsDoneAction =
 
 			const { updatedMainTask, message } = data;
 			if (message === "All Done deleted") {
-				dispatch(setSelectedMainTaskAction(updatedMainTask));
+				await dispatch(updateMainTaskAndMainTaskListAction(updatedMainTask));
+				/* dispatch(setSelectedMainTaskAction(updatedMainTask));
 				const indexOfSelectedMainTask = mainTaskList.findIndex(
 					(item: IMainTask) => item._id === updatedMainTask._id
 				);
@@ -277,7 +280,7 @@ export const deleteAllSubTaskIsDoneAction =
 				);
 				copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
 
-				dispatch(updateMainTaskListAction(copyOfMainTaskList));
+				dispatch(updateMainTaskListAction(copyOfMainTaskList)); */
 				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 			}
 		} catch (err) {
