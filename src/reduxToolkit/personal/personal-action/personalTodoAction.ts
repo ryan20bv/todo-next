@@ -25,7 +25,7 @@ export const getRawDataAction =
 			const response = await fetch(url, options);
 
 			const data = await response.json();
-			console.log(data);
+
 			if (!response.ok) {
 				if (data.message === "Authentication failed!") {
 					signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
@@ -69,7 +69,7 @@ export const setCurrentCategoryAction =
 		const foundCategoryItems = rawData.find(
 			(item: any) => item._id === category._id
 		);
-		console.log("foundCategoryItems", foundCategoryItems);
+
 		const currentMainTaskList: IMainTask[] = [...foundCategoryItems.mainTaskList];
 		/* const currentMainTaskList = foundCategoryItems.mainTaskList.map(
 			(item: any) => {

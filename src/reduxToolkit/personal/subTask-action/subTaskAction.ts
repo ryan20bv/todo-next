@@ -10,7 +10,7 @@ import {
 	setSubTaskToDeleteRed,
 } from "../personal-slice/personalTodoSlice";
 
-const formatDataToISubTask = (dataToFormat: any) => {
+/* const formatDataToISubTask = (dataToFormat: any) => {
 	const formattedData: ISubTask = {
 		mainTaskId: dataToFormat.mainTask_id,
 		subTaskId: dataToFormat._id,
@@ -19,8 +19,8 @@ const formatDataToISubTask = (dataToFormat: any) => {
 	};
 
 	return formattedData;
-};
-const formatDataToIMainTask = (dataToFormat: any) => {
+}; */
+/* const formatDataToIMainTask = (dataToFormat: any) => {
 	const formattedData: IMainTask = {
 		categoryId: dataToFormat.category_id,
 		mainTaskId: dataToFormat._id,
@@ -30,7 +30,7 @@ const formatDataToIMainTask = (dataToFormat: any) => {
 	};
 
 	return formattedData;
-};
+}; */
 
 export const addSubTaskAction =
 	(enteredSubTaskName: string) => async (dispatch: any, getState: any) => {
@@ -46,7 +46,7 @@ export const addSubTaskAction =
 		try {
 			const bodyData = {
 				enteredSubTaskName,
-				maintask_id: selectedMainTask.mainTaskId,
+				maintask_id: selectedMainTask._id,
 			};
 			const url = process.env.NEXT_PUBLIC_BACK_END_URL + "/api/subtask/addSubtask";
 			const options = {
@@ -68,15 +68,15 @@ export const addSubTaskAction =
 
 			const { newSubTask, message } = data;
 			if (message === "subTask Added!") {
-				const formattedDataToSubTask = formatDataToISubTask(newSubTask);
+				// const formattedDataToSubTask = formatDataToISubTask(newSubTask);
 				const copyOfSubTaskList: ISubTask[] = [];
 				selectedMainTask.subTaskList.forEach((subTask: ISubTask) =>
 					copyOfSubTaskList.push(subTask)
 				);
-				copyOfSubTaskList.push(formattedDataToSubTask);
+				copyOfSubTaskList.push(newSubTask);
 				const copyOfSelectedMainTask: IMainTask = { ...selectedMainTask };
 				const indexOfSelectedMainTask = mainTaskList.findIndex(
-					(item: IMainTask) => item.mainTaskId === selectedMainTask.mainTaskId
+					(item: IMainTask) => item._id === selectedMainTask._id
 				);
 
 				copyOfSelectedMainTask.subTaskList = [...copyOfSubTaskList];
@@ -93,6 +93,7 @@ export const addSubTaskAction =
 			}
 		} catch (err) {
 			console.log("addSubTaskAction", err);
+			dispatch(updateIsSendingDataRed({ isSendingData: false }));
 		}
 	};
 // checked

@@ -30,9 +30,8 @@ const SubPage = () => {
 	const [showConfirmationModal, setShowConfirmationModal] =
 		useState<boolean>(false);
 	const router = useRouter();
-	const { selectedMainTask, isSendingData, subTaskToDelete } = useAppSelector(
-		(state: RootState) => state.personalTodoReducer
-	);
+	const { selectedMainTask, isSendingData, subTaskToDelete, isDeletingData } =
+		useAppSelector((state: RootState) => state.personalTodoReducer);
 	const backArrowHandler = () => {
 		router.back();
 	};
@@ -86,7 +85,7 @@ const SubPage = () => {
 				<ConfirmationModal
 					message={`Are you sure you want to delete ${subTaskToDelete.subTaskName}`}
 					onCloseModal={cancelDeleteSubTaskHandler}
-					isSendingData={isSendingData}
+					isDeletingData={isDeletingData}
 					onConfirm={confirmDeleteMainTaskHandler}
 				/>
 			)}

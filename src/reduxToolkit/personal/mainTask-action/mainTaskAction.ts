@@ -49,7 +49,7 @@ export const addMainTaskAction =
 
 			const response = await fetch(url, options);
 			const data = await response.json();
-			console.log(data);
+
 			if (!response.ok) {
 				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 				return;
