@@ -7,6 +7,8 @@ import {
 	setMainTaskToEditRed,
 	setMainTaskToDeleteRed,
 	updateIsDeletingDataRed,
+	updateIsUpdatingRed,
+	updateMessageRed,
 } from "../personal-slice/personalTodoSlice";
 
 // const formatDataToIMainTask = (dataToFormat: any) => {
@@ -55,10 +57,11 @@ export const addMainTaskAction =
 				return;
 			}
 
-			if (data.message === "new Task Added!") {
+			const { updatedMainTaskList, message } = data;
+			if (message === "new Task Added!") {
 				// const newMainTask = formatDataToIMainTask(data.newTask);
-				const addNewMainTaskList: IMainTask[] = [...mainTaskList, data.newTask];
-				dispatch(updateMainTaskListAction(addNewMainTaskList));
+				// const addNewMainTaskList: IMainTask[] = [...mainTaskList, data.newTask];
+				dispatch(updateMainTaskListAction(updatedMainTaskList));
 				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 			}
 		} catch (err) {
@@ -131,7 +134,14 @@ export const confirmEditMainTaskNameAction =
 // checked
 export const setMainTaskToDeleteAction =
 	(mainTask: IMainTask) => async (dispatch: any, getState: any) => {
+		dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
 		dispatch(setMainTaskToDeleteRed({ mainTaskToDelete: mainTask }));
+	};
+// checked
+export const cancelMainTaskToDeleteAction =
+	() => async (dispatch: any, getState: any) => {
+		dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+		dispatch(setMainTaskToDeleteRed({ mainTaskToDelete: {} as IMainTask }));
 	};
 
 // checked
@@ -139,8 +149,9 @@ export const confirmDeleteMainTaskAction =
 	() => async (dispatch: any, getState: any) => {
 		const { mainTaskList, mainTaskToDelete } = getState().personalTodoReducer;
 		const { authData } = getState().authReducer;
-		dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
-
+		// dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
+		dispatch(updateMessageRed({ updateMessage: "Deleting..." }));
+		dispatch(updateIsUpdatingRed({ isUpdatingData: true }));
 		try {
 			const bodyData = {};
 			const url =
@@ -178,4 +189,25 @@ export const confirmDeleteMainTaskAction =
 			console.log("confirmDeleteMainTaskAction", err);
 			dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
 		}
+	};
+
+// checked
+export const deleteAllDoneMainTaskAction =
+	() => async (dispatch: any, getState: any) => {
+		dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+		dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
+	};
+
+// checked
+export const cancelDeleteAllDoneMainTaskAction =
+	() => async (dispatch: any, getState: any) => {
+		dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+	};
+
+// checked
+export const confirmDeleteAllSubTaskIsDoneAction =
+	() => async (dispatch: any, getState: any) => {
+		console.log("confirmDeleteAllSubTaskIsDone");
+		dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+		return { message: "done" };
 	};

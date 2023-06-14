@@ -20,6 +20,10 @@ import {
 	confirmEditMainTaskNameAction,
 	setMainTaskToDeleteAction,
 	confirmDeleteMainTaskAction,
+	deleteAllDoneMainTaskAction,
+	cancelDeleteAllDoneMainTaskAction,
+	confirmDeleteAllSubTaskIsDoneAction,
+	cancelMainTaskToDeleteAction,
 } from "@/reduxToolkit/personal/mainTask-action/mainTaskAction";
 
 // component import
@@ -33,6 +37,7 @@ import MainList from "../task/main/MainList";
 import SendingData from "../ui/SendingData";
 
 import ConfirmationModal from "../ui/ConfirmationModal";
+import DeleteAllDoneModal from "../ui/DeleteAllDoneModal";
 
 // types
 import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
@@ -45,6 +50,8 @@ const MainPage = () => {
 	const [showListOfCategories, setShowListOfCategories] =
 		useState<boolean>(false);
 	const [isEditing, setIsEditing] = useState<boolean>(false);
+	const [showDeleteAllDoneModal, setShowDeleteAllDoneModal] =
+		useState<boolean>(false);
 	const {
 		currentCategory,
 		categoryList,
@@ -98,12 +105,12 @@ const MainPage = () => {
 
 	// checked
 	const selectMainTaskToDeleteHandler = (selectedMainTask: IMainTask) => {
-		dispatch(setMainTaskToDeleteAction(selectedMainTask));
 		setShowConfirmationModal(true);
+		dispatch(setMainTaskToDeleteAction(selectedMainTask));
 	};
 	// checked
 	const cancelDeleteMainTaskHandler = () => {
-		dispatch(setMainTaskToDeleteAction({} as IMainTask));
+		dispatch(cancelMainTaskToDeleteAction());
 		setShowConfirmationModal(false);
 	};
 	// checked
@@ -112,6 +119,24 @@ const MainPage = () => {
 
 		if (data && data.message === "success") {
 			setShowConfirmationModal(false);
+		}
+	};
+
+	// checked
+	const deleteAllDoneMainTaskHandler = async () => {
+		setShowDeleteAllDoneModal(true);
+		dispatch(deleteAllDoneMainTaskAction());
+	};
+	const cancelDeleteAllDoneMainTaskHandler = async () => {
+		setShowDeleteAllDoneModal(false);
+		dispatch(cancelDeleteAllDoneMainTaskAction());
+	};
+
+	const confirmDeleteAllMainTaskIsDoneHandler = async () => {
+		const data = await dispatch(confirmDeleteAllSubTaskIsDoneAction());
+
+		if (data && data.message === "done") {
+			setShowDeleteAllDoneModal(false);
 		}
 	};
 
@@ -159,7 +184,7 @@ const MainPage = () => {
 					onSeeSubTaskPage={goToSubTaskPageHandler}
 					onEditing={selectMainTaskToEditHandler}
 					onDeleteMainTask={selectMainTaskToDeleteHandler}
-					onDeleteAllDone={() => {}}
+					onDeleteAllDone={deleteAllDoneMainTaskHandler}
 				/>
 			</ListContainer>
 			{showConfirmationModal && (
@@ -168,6 +193,17 @@ const MainPage = () => {
 					onCloseModal={cancelDeleteMainTaskHandler}
 					onConfirm={confirmDeleteMainTaskHandler}
 					isDeletingData={isDeletingData}
+					isUpdatingData={isUpdatingData}
+					updateMessage={updateMessage}
+				/>
+			)}
+			{showDeleteAllDoneModal && (
+				<DeleteAllDoneModal
+					message={`Are you sure you want to delete All Done Main Tasks?`}
+					onCloseModal={cancelDeleteAllDoneMainTaskHandler}
+					isDeletingData={isDeletingData}
+					onConfirm={confirmDeleteAllMainTaskIsDoneHandler}
+					// isToggleUpdating={isToggleUpdating}
 					isUpdatingData={isUpdatingData}
 					updateMessage={updateMessage}
 				/>

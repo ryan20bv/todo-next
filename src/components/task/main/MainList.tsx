@@ -36,6 +36,9 @@ const MainList: React.FC<PropsTypes> = ({
 	}
 
 	let todoLength: number = filteredTodoList.length;
+	let haveDoneTask = mainTaskList.some(
+		(mainTask: IMainTask) => mainTask.isAllSubTaskDone === true
+	);
 	return (
 		<>
 			<div className='h-96 bg-white  overflow-y-scroll mb-4 border border-black '>
@@ -61,6 +64,7 @@ const MainList: React.FC<PropsTypes> = ({
 				selectedTab={selectedTab}
 				onSelectTab={updateSelectedTabHandler}
 				onDeleteAllDone={onDeleteAllDone}
+				haveDoneTask={haveDoneTask}
 			/>
 		</>
 	);

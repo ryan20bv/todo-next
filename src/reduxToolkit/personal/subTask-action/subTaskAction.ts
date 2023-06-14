@@ -147,7 +147,7 @@ export const confirmDeleteSubTaskAction =
 
 			const response = await fetch(url, options);
 			if (!response.ok) {
-				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 				return;
 			}
 			const data = await response.json();
@@ -167,11 +167,11 @@ export const confirmDeleteSubTaskAction =
 				copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
 
 				dispatch(updateMainTaskListAction(copyOfMainTaskList)); */
-				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 			}
 		} catch (err) {
 			console.log("confirmDeleteSubTaskAction", err);
-			dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+			// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 		}
 		return { message: "done" };
 	};
@@ -199,7 +199,7 @@ export const toggleSubTaskIsDoneAction =
 
 			const response = await fetch(url, options);
 			if (!response.ok) {
-				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 				throw new Error("Error connection in toggle subTask isDone");
 			}
 			const data = await response.json();
@@ -218,11 +218,11 @@ export const toggleSubTaskIsDoneAction =
 				);
 				copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
 				dispatch(updateMainTaskListAction(copyOfMainTaskList)); */
-				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 			}
 		} catch (err) {
 			console.log("toggleSubTaskIsDoneAction", err);
-			dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+			// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 		}
 		return { message: "done" };
 	};
@@ -287,6 +287,7 @@ export const confirmEdiSubTaskAction =
 // checked
 export const deleteAllDoneSubTaskAction =
 	() => async (dispatch: any, getState: any) => {
+		dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 		dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
 	};
 
@@ -304,12 +305,12 @@ export const confirmDeleteAllSubTaskIsDoneAction =
 		hasDoneSubTask = selectedMainTask.subTaskList.some(
 			(subTask: ISubTask) => subTask.isDone === true
 		);
-		// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+
 		if (selectedMainTask.subTaskList.length <= 0 || !hasDoneSubTask) {
 			console.log("NO subTask done");
 			return { message: "done" };
 		}
-
+		dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 		dispatch(updateMessageRed({ updateMessage: "Deleting All done SubTask..." }));
 		dispatch(updateIsUpdatingRed({ isUpdatingData: true }));
 

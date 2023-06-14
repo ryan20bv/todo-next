@@ -109,7 +109,7 @@ const SubPage = () => {
 		setShowDeleteAllDoneModal(true);
 		dispatch(deleteAllDoneSubTaskAction());
 	};
-	const cancelDeleteAllSubTaskHandler = async () => {
+	const cancelDeleteAllSubTaskIsDoneHandler = async () => {
 		setShowDeleteAllDoneModal(false);
 		dispatch(cancelDeleteAllDoneSubTaskAction());
 	};
@@ -165,7 +165,7 @@ const SubPage = () => {
 			{showDeleteAllDoneModal && (
 				<DeleteAllDoneModal
 					message={`Are you sure you want to delete All Done Sub Tasks?`}
-					onCloseModal={cancelDeleteAllSubTaskHandler}
+					onCloseModal={cancelDeleteAllSubTaskIsDoneHandler}
 					isDeletingData={isDeletingData}
 					onConfirm={confirmDeleteAllSubTaskIsDoneHandler}
 					// isToggleUpdating={isToggleUpdating}
