@@ -150,6 +150,7 @@ export const confirmDeleteMainTaskAction =
 		const { mainTaskList, mainTaskToDelete } = getState().personalTodoReducer;
 		const { authData } = getState().authReducer;
 		// dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
+		dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 		dispatch(updateMessageRed({ updateMessage: "Deleting..." }));
 		dispatch(updateIsUpdatingRed({ isUpdatingData: true }));
 		try {
@@ -169,8 +170,8 @@ export const confirmDeleteMainTaskAction =
 
 			const response = await fetch(url, options);
 			if (!response.ok) {
-				dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
-
+				// dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 				return;
 			}
 			const data = await response.json();
@@ -182,12 +183,14 @@ export const confirmDeleteMainTaskAction =
 				);
 				dispatch(updateMainTaskListAction(updatedMainTaskList));
 			}
-			dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+			// dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+			dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 
 			return { message: "success" };
 		} catch (err) {
 			console.log("confirmDeleteMainTaskAction", err);
-			dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+			// dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+			dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 		}
 	};
 
