@@ -53,6 +53,8 @@ const MainPage = () => {
 		mainTaskToEdit,
 		mainTaskToDelete,
 		isDeletingData,
+		isUpdatingData,
+		updateMessage,
 	} = useAppSelector((state: RootState) => state.personalTodoReducer);
 
 	const toggleShowCategoryList = () => {
@@ -166,6 +168,8 @@ const MainPage = () => {
 					onCloseModal={cancelDeleteMainTaskHandler}
 					onConfirm={confirmDeleteMainTaskHandler}
 					isDeletingData={isDeletingData}
+					isUpdatingData={isUpdatingData}
+					updateMessage={updateMessage}
 				/>
 			)}
 		</Card>

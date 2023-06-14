@@ -11,6 +11,7 @@ import {
 	setSubTaskToDeleteRed,
 	updateMessageRed,
 	updateIsUpdatingRed,
+	setSubTaskToEditRed,
 } from "../personal-slice/personalTodoSlice";
 
 /* const formatDataToISubTask = (dataToFormat: any) => {
@@ -285,6 +286,63 @@ export const deleteAllSubTaskIsDoneAction =
 			}
 		} catch (err) {
 			console.log("deleteAllSubTaskIsDoneAction", err);
+		}
+		return { message: "done" };
+	};
+
+// checked
+export const setSubTaskToEditAction =
+	(selectedSubTask: ISubTask) => async (dispatch: any, getState: any) => {
+		// setSubTaskToEditRed;
+		dispatch(setSubTaskToEditRed({ subTaskToEdit: selectedSubTask }));
+	};
+export const cancelEditSubTaskAction =
+	() => async (dispatch: any, getState: any) => {
+		dispatch(setSubTaskToEditRed({ subTaskToEdit: {} as ISubTask }));
+	};
+
+export const confirmEdiSubTaskAction =
+	(enteredSubTaskName: string) => async (dispatch: any, getState: any) => {
+		if (!enteredSubTaskName || enteredSubTaskName.trim().length === 0) {
+			return;
+		}
+		dispatch(updateIsSendingDataRed({ isSendingData: true }));
+
+		const { subTaskToEdit } = getState().personalTodoReducer;
+		const { authData } = getState().authReducer;
+		try {
+			const bodyData = {
+				enteredNewSubTaskName: enteredSubTaskName,
+			};
+			const url =
+				process.env.NEXT_PUBLIC_BACK_END_URL +
+				"/api/subtask/editSubTaskName/" +
+				subTaskToEdit._id;
+			const options = {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + authData.apiToken,
+				},
+				body: JSON.stringify(bodyData),
+			};
+
+			const response = await fetch(url, options);
+
+			if (!response.ok) {
+				dispatch(updateIsSendingDataRed({ isSendingData: false }));
+				return { message: "done" };
+			}
+			const data = await response.json();
+
+			const { updatedMainTask, message } = data;
+			if (message === "subtask updated") {
+				await dispatch(updateMainTaskAndMainTaskListAction(updatedMainTask));
+				dispatch(updateIsSendingDataRed({ isSendingData: false }));
+			}
+		} catch (err) {
+			console.log("confirmEditMainTaskNameAction", err);
+			dispatch(updateIsSendingDataRed({ isSendingData: false }));
 		}
 		return { message: "done" };
 	};

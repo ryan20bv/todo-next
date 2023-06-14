@@ -12,9 +12,9 @@ interface IPersonalTodoState {
 	mainTaskToDelete: IMainTask;
 	subTaskToDelete: ISubTask;
 	isDeletingData: boolean;
-	// isToggleUpdating: boolean;
 	isUpdatingData: boolean;
 	updateMessage: string;
+	subTaskToEdit: ISubTask;
 }
 
 const initialPersonalState: IPersonalTodoState = {
@@ -28,9 +28,9 @@ const initialPersonalState: IPersonalTodoState = {
 	mainTaskToDelete: {} as IMainTask,
 	subTaskToDelete: {} as ISubTask,
 	isDeletingData: false,
-	// isToggleUpdating: false,
 	isUpdatingData: false,
 	updateMessage: "",
+	subTaskToEdit: {} as ISubTask,
 };
 
 const personalTodoSlice = createSlice({
@@ -75,9 +75,9 @@ const personalTodoSlice = createSlice({
 			state.mainTaskToDelete = {} as IMainTask;
 			state.subTaskToDelete = {} as ISubTask;
 			state.isDeletingData = false;
-			// state.isToggleUpdating = false;
 			state.isUpdatingData = false;
 			state.updateMessage = "";
+			state.subTaskToEdit = {} as ISubTask;
 		},
 		updateMainTaskListRed(state, action) {
 			state.mainTaskList = action.payload.newMainTaskList;
@@ -90,6 +90,9 @@ const personalTodoSlice = createSlice({
 		},
 		setSubTaskToDeleteRed(state, action) {
 			state.subTaskToDelete = action.payload.subTaskToDelete;
+		},
+		setSubTaskToEditRed(state, action) {
+			state.subTaskToEdit = action.payload.subTaskToEdit;
 		},
 	},
 });
@@ -109,6 +112,7 @@ export const {
 	setMainTaskToEditRed,
 	setMainTaskToDeleteRed,
 	setSubTaskToDeleteRed,
+	setSubTaskToEditRed,
 } = personalTodoSlice.actions;
 
 export default personalTodoSlice;

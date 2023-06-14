@@ -14,6 +14,7 @@ import ListContainer from "@/components/ui/ListContainer";
 import SubList from "../task/sub/SubList";
 import SendingData from "../ui/SendingData";
 import ConfirmationModal from "../ui/ConfirmationModal";
+import EditForm from "../ui/EditForm";
 
 // import type & interface
 import { ISubTask } from "@/DUMMY_DATA/MODEL";
@@ -26,21 +27,25 @@ import {
 	confirmDeleteSubTaskAction,
 	toggleSubTaskIsDoneAction,
 	deleteAllSubTaskIsDoneAction,
+	setSubTaskToEditAction,
+	cancelEditSubTaskAction,
+	confirmEdiSubTaskAction,
 } from "@/reduxToolkit/personal/subTask-action/subTaskAction";
 
 const SubPage = () => {
 	const dispatch = useAppDispatch();
 	const [showConfirmationModal, setShowConfirmationModal] =
 		useState<boolean>(false);
+	const [isEditingSubTask, setIsEditingSubTask] = useState<boolean>(false);
 	const router = useRouter();
 	const {
 		selectedMainTask,
 		isSendingData,
 		subTaskToDelete,
 		isDeletingData,
-		// isToggleUpdating,
 		isUpdatingData,
 		updateMessage,
+		subTaskToEdit,
 	} = useAppSelector((state: RootState) => state.personalTodoReducer);
 	const backArrowHandler = () => {
 		router.back();
@@ -75,6 +80,7 @@ const SubPage = () => {
 			setShowConfirmationModal(false);
 		}
 	};
+	// checked
 	const deleteAllSubTaskIsDoneHandler = async () => {
 		setShowConfirmationModal(true);
 		const data = await dispatch(deleteAllSubTaskIsDoneAction());
@@ -82,6 +88,24 @@ const SubPage = () => {
 		if (data && data.message === "done") {
 			setShowConfirmationModal(false);
 		}
+	};
+
+	// checked
+	const selectSubTaskToEditHandler = (selectedSubTask: ISubTask) => {
+		setIsEditingSubTask(true);
+		dispatch(setSubTaskToEditAction(selectedSubTask));
+	};
+	// checked
+	const cancelEditSubTaskHandler = () => {
+		setIsEditingSubTask(false);
+		dispatch(cancelEditSubTaskAction());
+	};
+
+	// !working on
+	const confirmEditSubTaskNameHandler = async (newSubTaskName: string) => {
+		dispatch(confirmEdiSubTaskAction(newSubTaskName));
+
+		setIsEditingSubTask(false);
 	};
 
 	return (
@@ -92,10 +116,17 @@ const SubPage = () => {
 				from='sub_page'
 			/>
 			{isSendingData && <SendingData />}
-			{!isSendingData && (
+			{!isSendingData && !isEditingSubTask && (
 				<AddForm
 					onAddHandler={addSubTaskHandler}
 					placeHolder='add details'
+				/>
+			)}
+			{isEditingSubTask && (
+				<EditForm
+					itemToEdit={subTaskToEdit.subTaskName}
+					confirmEditing={confirmEditSubTaskNameHandler}
+					onCancelEditing={cancelEditSubTaskHandler}
 				/>
 			)}
 			<ListContainer>
@@ -104,7 +135,7 @@ const SubPage = () => {
 					onDeleteSubTodo={selectSubTaskToDeleteHandler}
 					isDoneHandler={toggleIsDoneHandler}
 					onDeleteAllDone={deleteAllSubTaskIsDoneHandler}
-					onEditingSubTask={(subTask: ISubTask) => {}}
+					onEditingSubTask={selectSubTaskToEditHandler}
 				/>
 			</ListContainer>
 			{showConfirmationModal && (
