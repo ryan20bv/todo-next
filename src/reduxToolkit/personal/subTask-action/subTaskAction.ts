@@ -147,7 +147,7 @@ export const confirmDeleteSubTaskAction =
 
 			const response = await fetch(url, options);
 			if (!response.ok) {
-				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 				return;
 			}
 			const data = await response.json();
@@ -167,11 +167,11 @@ export const confirmDeleteSubTaskAction =
 				copyOfMainTaskList[indexOfSelectedMainTask] = updatedMainTask;
 
 				dispatch(updateMainTaskListAction(copyOfMainTaskList)); */
-				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 			}
 		} catch (err) {
 			console.log("confirmDeleteSubTaskAction", err);
-			dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+			// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 		}
 		return { message: "done" };
 	};

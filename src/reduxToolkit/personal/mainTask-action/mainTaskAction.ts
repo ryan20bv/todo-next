@@ -134,6 +134,7 @@ export const confirmEditMainTaskNameAction =
 // checked
 export const setMainTaskToDeleteAction =
 	(mainTask: IMainTask) => async (dispatch: any, getState: any) => {
+		dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 		dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
 		dispatch(setMainTaskToDeleteRed({ mainTaskToDelete: mainTask }));
 	};
@@ -171,7 +172,7 @@ export const confirmDeleteMainTaskAction =
 			const response = await fetch(url, options);
 			if (!response.ok) {
 				// dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
-				dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 				return;
 			}
 			const data = await response.json();
@@ -184,13 +185,13 @@ export const confirmDeleteMainTaskAction =
 				dispatch(updateMainTaskListAction(updatedMainTaskList));
 			}
 			// dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
-			dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+			// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 
 			return { message: "success" };
 		} catch (err) {
 			console.log("confirmDeleteMainTaskAction", err);
 			// dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
-			dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+			// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 		}
 	};
 
