@@ -15,6 +15,7 @@ import SubList from "../task/sub/SubList";
 import SendingData from "../ui/SendingData";
 import ConfirmationModal from "../ui/ConfirmationModal";
 import EditForm from "../ui/EditForm";
+import DeleteAllDoneModal from "../ui/DeleteAllDoneModal";
 
 // import type & interface
 import { ISubTask } from "@/DUMMY_DATA/MODEL";
@@ -26,15 +27,19 @@ import {
 	cancelDeleteSubTaskAction,
 	confirmDeleteSubTaskAction,
 	toggleSubTaskIsDoneAction,
-	deleteAllSubTaskIsDoneAction,
 	setSubTaskToEditAction,
 	cancelEditSubTaskAction,
 	confirmEdiSubTaskAction,
+	deleteAllDoneSubTaskAction,
+	cancelDeleteAllDoneSubTaskAction,
+	confirmDeleteAllSubTaskIsDoneAction,
 } from "@/reduxToolkit/personal/subTask-action/subTaskAction";
 
 const SubPage = () => {
 	const dispatch = useAppDispatch();
 	const [showConfirmationModal, setShowConfirmationModal] =
+		useState<boolean>(false);
+	const [showDeleteAllDoneModal, setShowDeleteAllDoneModal] =
 		useState<boolean>(false);
 	const [isEditingSubTask, setIsEditingSubTask] = useState<boolean>(false);
 	const router = useRouter();
@@ -65,7 +70,7 @@ const SubPage = () => {
 		setShowConfirmationModal(false);
 	};
 	// checked
-	const confirmDeleteMainTaskHandler = async () => {
+	const confirmDeleteSubTaskHandler = async () => {
 		const data = await dispatch(confirmDeleteSubTaskAction());
 
 		if (data && data.message === "done") {
@@ -76,15 +81,6 @@ const SubPage = () => {
 	const toggleIsDoneHandler = async (subTaskId: string) => {
 		setShowConfirmationModal(true);
 		const data = await dispatch(toggleSubTaskIsDoneAction(subTaskId));
-		if (data && data.message === "done") {
-			setShowConfirmationModal(false);
-		}
-	};
-	// checked
-	const deleteAllSubTaskIsDoneHandler = async () => {
-		setShowConfirmationModal(true);
-		const data = await dispatch(deleteAllSubTaskIsDoneAction());
-
 		if (data && data.message === "done") {
 			setShowConfirmationModal(false);
 		}
@@ -101,11 +97,28 @@ const SubPage = () => {
 		dispatch(cancelEditSubTaskAction());
 	};
 
-	// !working on
+	// checked
 	const confirmEditSubTaskNameHandler = async (newSubTaskName: string) => {
 		dispatch(confirmEdiSubTaskAction(newSubTaskName));
 
 		setIsEditingSubTask(false);
+	};
+
+	// checked
+	const deleteAllSubTaskIsDoneHandler = async () => {
+		setShowDeleteAllDoneModal(true);
+		dispatch(deleteAllDoneSubTaskAction());
+	};
+	const cancelDeleteAllSubTaskHandler = async () => {
+		setShowDeleteAllDoneModal(false);
+		dispatch(cancelDeleteAllDoneSubTaskAction());
+	};
+	const confirmDeleteAllSubTaskIsDoneHandler = async () => {
+		const data = await dispatch(confirmDeleteAllSubTaskIsDoneAction());
+
+		if (data && data.message === "done") {
+			setShowDeleteAllDoneModal(false);
+		}
 	};
 
 	return (
@@ -143,7 +156,18 @@ const SubPage = () => {
 					message={`Are you sure you want to delete ${subTaskToDelete.subTaskName}`}
 					onCloseModal={cancelDeleteSubTaskHandler}
 					isDeletingData={isDeletingData}
-					onConfirm={confirmDeleteMainTaskHandler}
+					onConfirm={confirmDeleteSubTaskHandler}
+					// isToggleUpdating={isToggleUpdating}
+					isUpdatingData={isUpdatingData}
+					updateMessage={updateMessage}
+				/>
+			)}
+			{showDeleteAllDoneModal && (
+				<DeleteAllDoneModal
+					message={`Are you sure you want to delete All Done Sub Tasks?`}
+					onCloseModal={cancelDeleteAllSubTaskHandler}
+					isDeletingData={isDeletingData}
+					onConfirm={confirmDeleteAllSubTaskIsDoneHandler}
 					// isToggleUpdating={isToggleUpdating}
 					isUpdatingData={isUpdatingData}
 					updateMessage={updateMessage}

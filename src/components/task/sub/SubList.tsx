@@ -34,6 +34,10 @@ const SubList: React.FC<PropsType> = ({
 		);
 	}
 	let length: number = filteredList?.length || 0;
+	let haveDoneTask = subTaskList.some(
+		(subTask: ISubTask) => subTask.isDone === true
+	);
+
 	return (
 		<div className=''>
 			<div className='h-96  bg-white   mb-4 border border-black p-2 overflow-y-scroll'>
@@ -61,6 +65,7 @@ const SubList: React.FC<PropsType> = ({
 				onSelectTab={updateSelectedTabHandler}
 				selectedTab={selectedTab}
 				onDeleteAllDone={onDeleteAllDone}
+				haveDoneTask={haveDoneTask}
 			/>
 		</div>
 	);
