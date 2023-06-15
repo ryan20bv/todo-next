@@ -19,14 +19,14 @@ const MainNav = () => {
 	const goToLoginHandler = () => {
 		router.push("/login");
 	};
-	const logOutHandler = () => {
-		/* signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
+	// const logOutHandler = () => {
+	// 	/* signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
 
-		dispatch(logoutAuthAction());
-		dispatch(resetPersonalTodoStateAction()); */
-		// signOut();
-		router.push("/t/loggingout");
-	};
+	// 	dispatch(logoutAuthAction());
+	// 	dispatch(resetPersonalTodoStateAction()); */
+	// 	// signOut();
+	// 	router.push("/t/loggingout");
+	// };
 
 	const checkProfileHandler = () => {
 		router.push("/t/profile");
@@ -39,11 +39,11 @@ const MainNav = () => {
 				<>
 					<p>Hi {authData.userName}</p>
 					<button onClick={checkProfileHandler}>
-						<UserCircleIcon className='text-blue-600 h-6 mx-1' />
+						<UserCircleIcon className='text-blue-600 h-6 mx-2' />
 					</button>
-					<button onClick={logOutHandler}>
+					{/* <button onClick={logOutHandler}>
 						<ArrowRightOnRectangleIcon className='text-red-600 h-6 mx-1' />
-					</button>
+					</button> */}
 				</>
 			)}
 		</nav>
