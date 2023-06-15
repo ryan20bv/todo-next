@@ -36,7 +36,7 @@ const Index = () => {
 				const data: any = session.user?.name;
 				const newData: IAuthData = {
 					userId: data.userData?.id,
-					userName: data.userData?.fName + data.userData?.lName,
+					userName: data.userData?.fName + " " + data.userData?.lName,
 					userEmail: data.userData?.email,
 					apiToken: data.token,
 					expires: session.expires,
