@@ -177,11 +177,12 @@ export const confirmDeleteMainTaskAction =
 			}
 			const data = await response.json();
 
-			const { message } = data;
+			const { updatedMainTaskList, message } = data;
+
 			if (message === "delete success") {
-				const updatedMainTaskList = mainTaskList.filter(
-					(mainTask: IMainTask) => mainTask._id !== mainTaskToDelete._id
-				);
+				// const updatedMainTaskList = mainTaskList.filter(
+				// 	(mainTask: IMainTask) => mainTask._id !== mainTaskToDelete._id
+				// );
 				dispatch(updateMainTaskListAction(updatedMainTaskList));
 			}
 			// dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
@@ -212,6 +213,42 @@ export const cancelDeleteAllDoneMainTaskAction =
 export const confirmDeleteAllSubTaskIsDoneAction =
 	() => async (dispatch: any, getState: any) => {
 		console.log("confirmDeleteAllSubTaskIsDone");
-		dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+		const { currentCategory } = getState().personalTodoReducer;
+		const { authData } = getState().authReducer;
+
+		dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+		dispatch(updateMessageRed({ updateMessage: "Deleting..." }));
+		dispatch(updateIsUpdatingRed({ isUpdatingData: true }));
+
+		try {
+			const bodyData = {};
+			const url =
+				process.env.NEXT_PUBLIC_BACK_END_URL +
+				"/api/mainTask/deleteAllDone/" +
+				currentCategory._id;
+			const options = {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + authData.apiToken,
+				},
+				body: JSON.stringify(bodyData),
+			};
+
+			const response = await fetch(url, options);
+
+			if (!response.ok) {
+				dispatch(updateIsSendingDataRed({ isSendingData: false }));
+				return;
+			}
+			const data = await response.json();
+			const { updatedMainTask, message } = data;
+			if (message === "mainTask updated") {
+				dispatch(updateMainTaskListAction(updatedMainTask));
+			}
+		} catch (err) {
+			console.log("confirmDeleteMainTaskAction", err);
+		}
+
 		return { message: "done" };
 	};
