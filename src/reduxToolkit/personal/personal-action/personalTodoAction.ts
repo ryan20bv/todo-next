@@ -33,9 +33,9 @@ export const getRawDataAction =
 				return;
 			}
 			const initialCategory: ICategory = {
-				categoryId: data[0]._id,
+				_id: data[0]._id,
 				categoryName: data[0].categoryName,
-				creatorId: userId,
+				creator_id: data[0].category_id,
 			};
 
 			await dispatch(getRawDataRed({ rawData: data }));
@@ -53,9 +53,9 @@ export const getUserCategoryListAction =
 		const categoryList: ICategory[] = [];
 		rawData.forEach((item: any) => {
 			const indivCategory: ICategory = {
-				categoryId: item._id,
+				_id: item._id,
 				categoryName: item.categoryName,
-				creatorId: item.creator_id,
+				creator_id: item.creator_id,
 			};
 			categoryList.push(indivCategory);
 		});
@@ -67,10 +67,11 @@ export const setCurrentCategoryAction =
 		const { rawData } = getState().personalTodoReducer;
 
 		const foundCategoryItems = rawData.find(
-			(item: any) => item._id === category.categoryId
+			(item: any) => item._id === category._id
 		);
 
-		const currentMainTaskList = foundCategoryItems.mainTaskList.map(
+		const currentMainTaskList: IMainTask[] = [...foundCategoryItems.mainTaskList];
+		/* const currentMainTaskList = foundCategoryItems.mainTaskList.map(
 			(item: any) => {
 				const formattedSubTaskList: ISubTask[] = item.subTaskList.map(
 					(subItem: any) => {
@@ -91,14 +92,14 @@ export const setCurrentCategoryAction =
 					subTaskList: formattedSubTaskList,
 				};
 			}
-		);
+		); */
 
 		await dispatch(setCurrentCategoryRed({ currentCategory: category }));
 		dispatch(setMainTaskListAction(currentMainTaskList));
 	};
 // checked
 export const setMainTaskListAction =
-	(mainTaskList: IMainTask) => async (dispatch: any, getState: any) => {
+	(mainTaskList: IMainTask[]) => async (dispatch: any, getState: any) => {
 		dispatch(setMainTaskListRed({ mainTaskList: mainTaskList }));
 	};
 // checked

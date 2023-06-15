@@ -50,8 +50,9 @@ export const updateStateAfterRefreshFirstLoadAction =
 export const addNewTodoAction =
 	(newTask: string) => async (dispatch: any, getState: any) => {
 		const newTodo: IMainTask = {
-			categoryId: "Todo next js",
-			mainTaskId: uuidv4(),
+			_id: uuidv4(),
+			creator_id: "public",
+			category_id: "Todo next js",
 			mainTaskName: newTask,
 			isAllSubTaskDone: false,
 			subTaskList: [],
@@ -76,9 +77,9 @@ export const updateLocaleStorageAction =
 // checked
 export const deleteMainTodoAction =
 	(mainTask: IMainTask) => async (dispatch: any, getState: any) => {
-		const { mainTodoList, selectedTab } = getState().todoReducer;
+		const { mainTodoList } = getState().todoReducer;
 		const updatedTodoList = mainTodoList.filter(
-			(todo: IMainTask) => todo.mainTaskId !== mainTask.mainTaskId
+			(todo: IMainTask) => todo._id !== mainTask._id
 		);
 		await dispatch(deleteTodoRed({ updatedTodoList }));
 		dispatch(updateLocaleStorageAction());
@@ -105,7 +106,7 @@ export const confirmEditAction =
 	(newTaskName: string) => async (dispatch: any, getState: any) => {
 		const { mainTodoList, mainTodoToEdit } = getState().todoReducer;
 		let indexToEdit = mainTodoList.findIndex(
-			(todo: IMainTask) => todo.mainTaskId === mainTodoToEdit.mainTaskId
+			(todo: IMainTask) => todo._id === mainTodoToEdit._id
 		);
 
 		let copyOfTodoList = [...mainTodoList];

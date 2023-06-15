@@ -48,7 +48,7 @@ const MainItem: React.FC<propsType> = ({
 	}
 	return (
 		<li
-			key={mainTask.mainTaskId}
+			key={mainTask._id}
 			className='flex px-1 w-full justify-between items-center '
 		>
 			<section className='flex items-center'>

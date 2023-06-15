@@ -20,6 +20,10 @@ import {
 	confirmEditMainTaskNameAction,
 	setMainTaskToDeleteAction,
 	confirmDeleteMainTaskAction,
+	deleteAllDoneMainTaskAction,
+	cancelDeleteAllDoneMainTaskAction,
+	confirmDeleteAllSubTaskIsDoneAction,
+	cancelMainTaskToDeleteAction,
 } from "@/reduxToolkit/personal/mainTask-action/mainTaskAction";
 
 // component import
@@ -33,6 +37,7 @@ import MainList from "../task/main/MainList";
 import SendingData from "../ui/SendingData";
 
 import ConfirmationModal from "../ui/ConfirmationModal";
+import DeleteAllDoneModal from "../ui/DeleteAllDoneModal";
 
 // types
 import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
@@ -40,18 +45,23 @@ import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
 const MainPage = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const [showModal, setShowModal] = useState<boolean>(false);
+	const [showConfirmationModal, setShowConfirmationModal] =
+		useState<boolean>(false);
 	const [showListOfCategories, setShowListOfCategories] =
 		useState<boolean>(false);
 	const [isEditing, setIsEditing] = useState<boolean>(false);
+	const [showDeleteAllDoneModal, setShowDeleteAllDoneModal] =
+		useState<boolean>(false);
 	const {
 		currentCategory,
 		categoryList,
 		mainTaskList,
-
 		isSendingData,
 		mainTaskToEdit,
 		mainTaskToDelete,
+		isDeletingData,
+		isUpdatingData,
+		updateMessage,
 	} = useAppSelector((state: RootState) => state.personalTodoReducer);
 
 	const toggleShowCategoryList = () => {
@@ -95,20 +105,38 @@ const MainPage = () => {
 
 	// checked
 	const selectMainTaskToDeleteHandler = (selectedMainTask: IMainTask) => {
+		setShowConfirmationModal(true);
 		dispatch(setMainTaskToDeleteAction(selectedMainTask));
-		setShowModal(true);
 	};
 	// checked
 	const cancelDeleteMainTaskHandler = () => {
-		dispatch(setMainTaskToDeleteAction({} as IMainTask));
-		setShowModal(false);
+		dispatch(cancelMainTaskToDeleteAction());
+		setShowConfirmationModal(false);
 	};
-	// !working
+	// checked
 	const confirmDeleteMainTaskHandler = async () => {
 		const data = await dispatch(confirmDeleteMainTaskAction());
 
 		if (data && data.message === "success") {
-			setShowModal(false);
+			setShowConfirmationModal(false);
+		}
+	};
+
+	// checked
+	const deleteAllDoneMainTaskHandler = async () => {
+		setShowDeleteAllDoneModal(true);
+		dispatch(deleteAllDoneMainTaskAction());
+	};
+	const cancelDeleteAllDoneMainTaskHandler = async () => {
+		setShowDeleteAllDoneModal(false);
+		dispatch(cancelDeleteAllDoneMainTaskAction());
+	};
+
+	const confirmDeleteAllMainTaskIsDoneHandler = async () => {
+		const data = await dispatch(confirmDeleteAllSubTaskIsDoneAction());
+
+		if (data && data.message === "done") {
+			setShowDeleteAllDoneModal(false);
 		}
 	};
 
@@ -123,9 +151,9 @@ const MainPage = () => {
 			{showListOfCategories && (
 				<section className='w-[93%] text-center bg-white  border-b-2 border-black absolute  top-20'>
 					<ul>
-						{categoryList.map((category) => (
+						{categoryList.map((category: ICategory) => (
 							<li
-								key={category.categoryId}
+								key={category._id}
 								onClick={() => selectNewCategory(category)}
 								className='py-1'
 							>
@@ -156,15 +184,28 @@ const MainPage = () => {
 					onSeeSubTaskPage={goToSubTaskPageHandler}
 					onEditing={selectMainTaskToEditHandler}
 					onDeleteMainTask={selectMainTaskToDeleteHandler}
-					onDeleteAllDone={() => {}}
+					onDeleteAllDone={deleteAllDoneMainTaskHandler}
 				/>
 			</ListContainer>
-			{showModal && (
+			{showConfirmationModal && (
 				<ConfirmationModal
 					message={`Are you sure you want to delete ${mainTaskToDelete.mainTaskName}`}
 					onCloseModal={cancelDeleteMainTaskHandler}
 					onConfirm={confirmDeleteMainTaskHandler}
-					isSendingData={isSendingData}
+					isDeletingData={isDeletingData}
+					isUpdatingData={isUpdatingData}
+					updateMessage={updateMessage}
+				/>
+			)}
+			{showDeleteAllDoneModal && (
+				<DeleteAllDoneModal
+					message={`Are you sure you want to delete All Done Main Tasks?`}
+					onCloseModal={cancelDeleteAllDoneMainTaskHandler}
+					isDeletingData={isDeletingData}
+					onConfirm={confirmDeleteAllMainTaskIsDoneHandler}
+					// isToggleUpdating={isToggleUpdating}
+					isUpdatingData={isUpdatingData}
+					updateMessage={updateMessage}
 				/>
 			)}
 		</Card>

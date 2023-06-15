@@ -5,6 +5,7 @@ interface propsTypes {
 	onSelectTab: (tabName: string) => void;
 	selectedTab: string;
 	onDeleteAllDone: () => void;
+	haveDoneTask: boolean;
 }
 
 const Summary: React.FC<propsTypes> = ({
@@ -12,11 +13,11 @@ const Summary: React.FC<propsTypes> = ({
 	onSelectTab,
 	selectedTab,
 	onDeleteAllDone,
+	haveDoneTask,
 }) => {
 	const deleteAllDoneHandler = () => {
 		onDeleteAllDone();
 	};
-
 	const clickTabHandler = (e: React.MouseEvent<HTMLLIElement>) => {
 		const tabName = e.currentTarget.id;
 		onSelectTab(tabName);
@@ -58,9 +59,10 @@ const Summary: React.FC<propsTypes> = ({
 			</ul>
 
 			<button
-				className='border border-black p-2 bg-white cursor-pointer'
+				className='border border-black p-2 bg-red-400 text-white cursor-pointer disabled:bg-white disabled:text-black'
 				onClick={deleteAllDoneHandler}
 				data-testid={`delete_all_done_button`}
+				disabled={!haveDoneTask}
 			>
 				Delete All Done
 			</button>

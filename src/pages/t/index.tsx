@@ -11,6 +11,7 @@ import {
 	authDataAction,
 	logoutAuthAction,
 } from "@/reduxToolkit/auth/auth-action/authAction";
+import { IAuthData } from "@/DUMMY_DATA/MODEL";
 
 import LoadingPage from "@/components/ui/LoadingPage";
 
@@ -33,9 +34,9 @@ const Index = () => {
 				// window.location.href = "/";
 			} else {
 				const data: any = session.user?.name;
-				const newData = {
+				const newData: IAuthData = {
 					userId: data.userData?.id,
-					userName: data.userData?.fName + data.userData?.lName,
+					userName: data.userData?.fName + " " + data.userData?.lName,
 					userEmail: data.userData?.email,
 					apiToken: data.token,
 					expires: session.expires,

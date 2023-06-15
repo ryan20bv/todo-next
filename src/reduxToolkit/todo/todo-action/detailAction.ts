@@ -6,14 +6,14 @@ import { v4 as uuidv4 } from "uuid";
 
 // checked
 export const addNewSubTodoAction =
-	(newSubTodoName: string, mainTodoId: string) =>
-	async (dispatch: any, getState: any) => {
+	(newSubTodoName: string) => async (dispatch: any, getState: any) => {
 		let { selectedTodo } = getState().todoReducer;
 		const newSubTodo: ISubTask = {
-			subTaskId: uuidv4(),
+			_id: uuidv4(),
+			creator_id: "public",
+			mainTask_id: selectedTodo._id,
 			subTaskName: newSubTodoName,
 			isDone: false,
-			mainTaskId: mainTodoId,
 		};
 
 		const copyOfTodoDetails: IMainTask = { ...selectedTodo };
@@ -30,7 +30,7 @@ export const deleteSubTodoAction =
 		let { selectedTodo } = getState().todoReducer;
 		let copyOfTodoDetails: IMainTask = { ...selectedTodo };
 		let updatedTodoDetails = selectedTodo.subTaskList.filter(
-			(subTask: ISubTask) => subTask.subTaskId !== subTaskToDelete.subTaskId
+			(subTask: ISubTask) => subTask._id !== subTaskToDelete._id
 		);
 
 		copyOfTodoDetails.subTaskList = [...updatedTodoDetails];
@@ -43,7 +43,7 @@ export const updateLisOfTodoAction =
 		let { mainTodoList } = getState().todoReducer;
 		let copyOfMainTodoList = [...mainTodoList];
 		const todoDetailsIndex = copyOfMainTodoList.findIndex(
-			(todo: IMainTask) => todo.mainTaskId === updatedTodo.mainTaskId
+			(todo: IMainTask) => todo._id === updatedTodo._id
 		);
 		let mainTodoIsDone: boolean = updatedTodo.subTaskList.every(
 			(detail: ISubTask) => detail.isDone === true
@@ -77,7 +77,7 @@ export const confirmSubTodoEditingAction =
 		);
 
 		let subTaskIndex = copyOfSubTodoList.findIndex(
-			(subTodo: ISubTask) => subTodo.subTaskId === subTaskToEdit.subTaskId
+			(subTodo: ISubTask) => subTodo._id === subTaskToEdit._id
 		);
 
 		copyOfSubTodoList[subTaskIndex].subTaskName = newSubTodoName;
@@ -98,7 +98,7 @@ export const toggleSubTodoIsDoneAction =
 			})
 		);
 		let subTaskIndex = copyOfSubTodoList.findIndex(
-			(subTodo: ISubTask) => subTodo.subTaskId === subTodo_id
+			(subTodo: ISubTask) => subTodo._id === subTodo_id
 		);
 
 		copyOfSubTodoList[subTaskIndex].isDone =

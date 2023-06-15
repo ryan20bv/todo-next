@@ -11,7 +11,7 @@ interface propsTypes {
 	isUpdatingData: boolean;
 	updateMessage: string;
 }
-const ConfirmationModal: React.FC<propsTypes> = ({
+const DeleteAllDoneModal: React.FC<propsTypes> = ({
 	message,
 	onCloseModal,
 	onConfirm,
@@ -71,4 +71,4 @@ const ConfirmationModal: React.FC<propsTypes> = ({
 	);
 };
 
-export default ConfirmationModal;
+export default DeleteAllDoneModal;

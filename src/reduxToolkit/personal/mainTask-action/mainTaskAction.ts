@@ -6,19 +6,22 @@ import {
 	updateIsSendingDataRed,
 	setMainTaskToEditRed,
 	setMainTaskToDeleteRed,
+	updateIsDeletingDataRed,
+	updateIsUpdatingRed,
+	updateMessageRed,
 } from "../personal-slice/personalTodoSlice";
 
-const formatDataToIMainTask = (dataToFormat: any) => {
-	const formattedData: IMainTask = {
-		categoryId: dataToFormat.category_id,
-		mainTaskId: dataToFormat._id,
-		mainTaskName: dataToFormat.mainTaskName,
-		isAllSubTaskDone: dataToFormat.isAllSubTaskDone,
-		subTaskList: [...dataToFormat.subTaskList],
-	};
+// const formatDataToIMainTask = (dataToFormat: any) => {
+// 	const formattedData: IMainTask = {
+// 		categoryId: dataToFormat.category_id,
+// 		mainTaskId: dataToFormat._id,
+// 		mainTaskName: dataToFormat.mainTaskName,
+// 		isAllSubTaskDone: dataToFormat.isAllSubTaskDone,
+// 		subTaskList: [...dataToFormat.subTaskList],
+// 	};
 
-	return formattedData;
-};
+// 	return formattedData;
+// };
 // checked
 export const addMainTaskAction =
 	(enteredMainTaskName: string) => async (dispatch: any, getState: any) => {
@@ -33,7 +36,7 @@ export const addMainTaskAction =
 		try {
 			const bodyData = {
 				enteredMainTaskName,
-				category_id: currentCategory.categoryId,
+				category_id: currentCategory._id,
 			};
 			const url =
 				process.env.NEXT_PUBLIC_BACK_END_URL + "/api/mainTask/createMainTask";
@@ -53,15 +56,17 @@ export const addMainTaskAction =
 				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 				return;
 			}
-			console.log(data);
-			if (data.message === "new Task Added!") {
-				const newMainTask = formatDataToIMainTask(data.newTask);
-				const addNewMainTaskList: IMainTask[] = [...mainTaskList, newMainTask];
-				dispatch(updateMainTaskListAction(addNewMainTaskList));
+
+			const { updatedMainTaskList, message } = data;
+			if (message === "new Task Added!") {
+				// const newMainTask = formatDataToIMainTask(data.newTask);
+				// const addNewMainTaskList: IMainTask[] = [...mainTaskList, data.newTask];
+				dispatch(updateMainTaskListAction(updatedMainTaskList));
 				dispatch(updateIsSendingDataRed({ isSendingData: false }));
 			}
 		} catch (err) {
 			console.log("addMainTaskAction", err);
+			dispatch(updateIsSendingDataRed({ isSendingData: false }));
 		}
 	};
 // checked
@@ -90,7 +95,7 @@ export const confirmEditMainTaskNameAction =
 			const url =
 				process.env.NEXT_PUBLIC_BACK_END_URL +
 				"/api/mainTask/editMainTask/" +
-				mainTaskToEdit.mainTaskId;
+				mainTaskToEdit._id;
 			const options = {
 				method: "PATCH",
 				headers: {
@@ -111,13 +116,13 @@ export const confirmEditMainTaskNameAction =
 			const { updatedMainTask, message } = data;
 			if (message === "update success") {
 				const indexOfMainTask = mainTaskList.findIndex((item: IMainTask) => {
-					return item.mainTaskId === updatedMainTask._id;
+					return item._id === updatedMainTask._id;
 				});
 
 				const copyOfMainTaskList = [...mainTaskList];
-				const formattedUpdatedMainTask: IMainTask =
-					formatDataToIMainTask(updatedMainTask);
-				copyOfMainTaskList[indexOfMainTask] = formattedUpdatedMainTask;
+				// const formattedUpdatedMainTask: IMainTask =
+				// 	formatDataToIMainTask(updatedMainTask);
+				copyOfMainTaskList[indexOfMainTask] = updatedMainTask;
 				dispatch(updateMainTaskListAction(copyOfMainTaskList));
 			}
 			dispatch(updateIsSendingDataRed({ isSendingData: false }));
@@ -129,21 +134,32 @@ export const confirmEditMainTaskNameAction =
 // checked
 export const setMainTaskToDeleteAction =
 	(mainTask: IMainTask) => async (dispatch: any, getState: any) => {
+		dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+		dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
 		dispatch(setMainTaskToDeleteRed({ mainTaskToDelete: mainTask }));
 	};
+// checked
+export const cancelMainTaskToDeleteAction =
+	() => async (dispatch: any, getState: any) => {
+		dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+		dispatch(setMainTaskToDeleteRed({ mainTaskToDelete: {} as IMainTask }));
+	};
 
-// !working on
+// checked
 export const confirmDeleteMainTaskAction =
 	() => async (dispatch: any, getState: any) => {
 		const { mainTaskList, mainTaskToDelete } = getState().personalTodoReducer;
 		const { authData } = getState().authReducer;
-		dispatch(updateIsSendingDataRed({ isSendingData: true }));
+		// dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
+		dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+		dispatch(updateMessageRed({ updateMessage: "Deleting..." }));
+		dispatch(updateIsUpdatingRed({ isUpdatingData: true }));
 		try {
 			const bodyData = {};
 			const url =
 				process.env.NEXT_PUBLIC_BACK_END_URL +
 				"/api/mainTask/deleteMainTask/" +
-				mainTaskToDelete.mainTaskId;
+				mainTaskToDelete._id;
 			const options = {
 				method: "DELETE",
 				headers: {
@@ -155,23 +171,84 @@ export const confirmDeleteMainTaskAction =
 
 			const response = await fetch(url, options);
 			if (!response.ok) {
-				dispatch(updateIsSendingDataRed({ isSendingData: false }));
+				// dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 				return;
 			}
 			const data = await response.json();
 
-			const { message } = data;
+			const { updatedMainTaskList, message } = data;
+
 			if (message === "delete success") {
-				const updatedMainTaskList = mainTaskList.filter(
-					(mainTask: IMainTask) =>
-						mainTask.mainTaskId !== mainTaskToDelete.mainTaskId
-				);
+				// const updatedMainTaskList = mainTaskList.filter(
+				// 	(mainTask: IMainTask) => mainTask._id !== mainTaskToDelete._id
+				// );
 				dispatch(updateMainTaskListAction(updatedMainTaskList));
 			}
-			dispatch(updateIsSendingDataRed({ isSendingData: false }));
+			// dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+			// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+
 			return { message: "success" };
 		} catch (err) {
 			console.log("confirmDeleteMainTaskAction", err);
-			dispatch(updateIsSendingDataRed({ isSendingData: false }));
+			// dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+			// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
 		}
+	};
+
+// checked
+export const deleteAllDoneMainTaskAction =
+	() => async (dispatch: any, getState: any) => {
+		dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+		dispatch(updateIsDeletingDataRed({ isDeletingData: true }));
+	};
+
+// checked
+export const cancelDeleteAllDoneMainTaskAction =
+	() => async (dispatch: any, getState: any) => {
+		dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+	};
+
+// checked
+export const confirmDeleteAllSubTaskIsDoneAction =
+	() => async (dispatch: any, getState: any) => {
+		console.log("confirmDeleteAllSubTaskIsDone");
+		const { currentCategory } = getState().personalTodoReducer;
+		const { authData } = getState().authReducer;
+
+		dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+		dispatch(updateMessageRed({ updateMessage: "Deleting..." }));
+		dispatch(updateIsUpdatingRed({ isUpdatingData: true }));
+
+		try {
+			const bodyData = {};
+			const url =
+				process.env.NEXT_PUBLIC_BACK_END_URL +
+				"/api/mainTask/deleteAllDone/" +
+				currentCategory._id;
+			const options = {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + authData.apiToken,
+				},
+				body: JSON.stringify(bodyData),
+			};
+
+			const response = await fetch(url, options);
+
+			if (!response.ok) {
+				dispatch(updateIsSendingDataRed({ isSendingData: false }));
+				return;
+			}
+			const data = await response.json();
+			const { updatedMainTask, message } = data;
+			if (message === "mainTask updated") {
+				dispatch(updateMainTaskListAction(updatedMainTask));
+			}
+		} catch (err) {
+			console.log("confirmDeleteMainTaskAction", err);
+		}
+
+		return { message: "done" };
 	};
