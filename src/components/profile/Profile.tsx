@@ -92,7 +92,7 @@ const Profile = () => {
 			<div className='w-full'>
 				<section className='bg-white w-full h-[5rem] relative flex items-center justify-center mb-10'>
 					<div className='w-16 h-16 border border-black rounded-full  bg-blue-500 absolute top-[60%] '>
-						<div className='text-7xl text-white absolute left-2.5 bottom-0'>
+						<div className='text-[3.5rem] text-white absolute left-3.5 top-[-10px]'>
 							{authData.userName[0]}
 						</div>
 					</div>
