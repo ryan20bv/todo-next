@@ -1,68 +1,92 @@
-import { ITask } from "./MODEL";
+import { IMainTask } from "./MODEL";
 
-export const DUMMY_TODOS: ITask[] = [
+export const DUMMY_TODOS: IMainTask[] = [
 	{
 		_id: "t1",
-		name: "Study",
-		isDone: false,
-		details: [
+		creator_id: "public",
+		category_id: "Todo next js",
+		mainTaskName: "Study",
+		isAllSubTaskDone: false,
+		subTaskList: [
 			{
 				_id: "s1",
-				item: "OOP Javascript",
+				creator_id: "public",
+				mainTask_id: "t1",
+				subTaskName: "OOP Javascript",
 				isDone: false,
 			},
 			{
 				_id: "s2",
-				item: "Science Books",
+				creator_id: "public",
+				mainTask_id: "t1",
+				subTaskName: "Science Books",
 				isDone: false,
 			},
 			{
 				_id: "s3",
-				item: "English Language",
+				creator_id: "public",
+				mainTask_id: "t1",
+				subTaskName: "English Language",
 				isDone: true,
 			},
 		],
 	},
 	{
 		_id: "t2",
-		name: "Exercise",
-		isDone: false,
-		details: [
+		creator_id: "public",
+		category_id: "Todo next js",
+		mainTaskName: "Exercise",
+		isAllSubTaskDone: false,
+		subTaskList: [
 			{
 				_id: "e1",
-				item: "Walk the dog",
+				creator_id: "public",
+				mainTask_id: "t2",
+				subTaskName: "Walk the dog",
 				isDone: true,
 			},
 			{
 				_id: "e2",
-				item: "Jogging",
+				creator_id: "public",
+				mainTask_id: "t2",
+				subTaskName: "Jogging",
 				isDone: false,
 			},
 			{
 				_id: "e3",
-				item: "Swim",
+				creator_id: "public",
+				mainTask_id: "t2",
+				subTaskName: "Swim",
 				isDone: false,
 			},
 		],
 	},
 	{
 		_id: "t3",
-		name: "House Hold Chore",
-		isDone: false,
-		details: [
+		creator_id: "public",
+		category_id: "Todo next js",
+		mainTaskName: "House Hold Chore",
+		isAllSubTaskDone: false,
+		subTaskList: [
 			{
 				_id: "h1",
-				item: "Sweep the Room",
+				creator_id: "public",
+				mainTask_id: "t3",
+				subTaskName: "Sweep the Room",
 				isDone: false,
 			},
 			{
 				_id: "h2",
-				item: "Wash the dishes",
+				creator_id: "public",
+				mainTask_id: "t3",
+				subTaskName: "Wash the dishes",
 				isDone: true,
 			},
 			{
 				_id: "h3",
-				item: "Lawn the grass",
+				creator_id: "public",
+				mainTask_id: "t3",
+				subTaskName: "Lawn the grass",
 				isDone: true,
 			},
 		],

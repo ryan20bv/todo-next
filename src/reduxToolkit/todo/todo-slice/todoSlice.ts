@@ -1,77 +1,77 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
 interface ITodoState {
-	todoList: ITask[];
+	mainTodoList: IMainTask[];
 	firstLoad: boolean;
-	// filteredTodoList: ITask[];
-	selectedTab: string;
-	isEditing: boolean;
-	todoToEdit: ITask;
-	isInDetails: boolean;
-	todoDetails: ITask;
+	mainTodoToEdit: IMainTask;
+	selectedTodo: IMainTask;
 }
 
 const initialTodoState: ITodoState = {
-	todoList: [],
+	mainTodoList: [],
 	firstLoad: true,
-	// filteredTodoList: [],
-	selectedTab: "all",
-	isEditing: false,
-	todoToEdit: {} as ITask,
-	isInDetails: false,
-	todoDetails: {} as ITask,
+
+	selectedTodo: {} as IMainTask,
+	mainTodoToEdit: {} as IMainTask,
 };
 
 const todoSlice = createSlice({
 	name: "Todo Slice",
 	initialState: initialTodoState,
 	reducers: {
+		// checked
 		getAllTodoRed(state, action) {
-			state.todoList = action.payload.allTodos;
+			state.mainTodoList = action.payload.allTodos;
 		},
+		// checked
 		updateTodoListRed(state, action) {
-			state.todoList = action.payload.updatedTodoList;
+			state.mainTodoList = action.payload.updatedTodoList;
 		},
+		// checked
 		updateFirstLoadRed(state, action) {
 			state.firstLoad = action.payload.firstLoad;
 		},
+		// checked
 		addNewTodoRed(state, action) {
-			state.todoList = action.payload.updatedTodos;
+			state.mainTodoList = action.payload.updatedTodos;
 		},
-		// updateFilteredTodoListRed(state, action) {
-		// 	state.selectedTab = action.payload.selectedTab;
-		// 	state.filteredTodoList = action.payload.updatedFilteredTodoList;
-		// },
-		updateTodoDoneStatusRed(state, action) {
-			state.todoList = action.payload.updatedTodoList;
+		// checked
+		updateEditingStatusRed(state, action) {
+			state.mainTodoToEdit = action.payload.todoToEdit;
 		},
+		// checked
+		setSelectedTodoRed(state, action) {
+			state.selectedTodo = action.payload.selectedTodo;
+		},
+
+		// checked
 		deleteTodoRed(state, action) {
-			state.todoList = action.payload.updatedTodoList;
+			state.mainTodoList = action.payload.updatedTodoList;
+		},
+
+		// checked
+		updateTodoListAfterEditRed(state, action) {
+			state.mainTodoToEdit = {} as IMainTask;
+			state.mainTodoList = action.payload.todoList;
+		},
+		// checked
+		resetIsEditingRed(state, action) {
+			state.mainTodoToEdit = {} as IMainTask;
 		},
 		deleteAllDoneRed(state, action) {
-			state.todoList = action.payload.updatedTodoList;
+			state.mainTodoList = action.payload.updatedTodoList;
 		},
-		updateEditingStatusRed(state, action) {
-			state.isEditing = action.payload.isEditingStatus;
-			state.todoToEdit = action.payload.todoToEdit;
-		},
-		updateTodoListAfterEditRed(state, action) {
-			state.isEditing = false;
-			state.todoToEdit = {} as ITask;
-			state.todoList = action.payload.todoList;
-		},
-		resetIsEditingRed(state, action) {
-			state.isEditing = false;
-			state.todoToEdit = {} as ITask;
+		updateTodoDoneStatusRed(state, action) {
+			state.mainTodoList = action.payload.updatedTodoList;
 		},
 	},
 });
 export const {
 	getAllTodoRed,
 	updateFirstLoadRed,
+	setSelectedTodoRed,
 	addNewTodoRed,
-	// updateFilteredTodoListRed,
 	updateTodoDoneStatusRed,
 	deleteTodoRed,
 	deleteAllDoneRed,

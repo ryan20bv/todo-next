@@ -1,23 +1,16 @@
 import React, { useRef } from "react";
-import { ITask, ITodoDetails } from "@/DUMMY_DATA/MODEL";
 import { CheckIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 interface propsTypes {
-	todoToEdit?: ITask;
+	itemToEdit: string;
 	confirmEditing: (input: string) => void;
-	isEditing?: boolean;
-	detailToEdit?: ITodoDetails;
-	isDetailEditing?: boolean;
-	onCancel: () => void;
+	onCancelEditing: () => void;
 }
 
 const EditForm: React.FC<propsTypes> = ({
-	todoToEdit,
+	itemToEdit,
 	confirmEditing,
-	isEditing,
-	isDetailEditing,
-	detailToEdit,
-	onCancel,
+	onCancelEditing,
 }) => {
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -34,7 +27,7 @@ const EditForm: React.FC<propsTypes> = ({
 	};
 
 	const cancelEditHandler = () => {
-		onCancel();
+		onCancelEditing();
 	};
 	return (
 		<section className=' mt-4  w-full px-3 flex '>
@@ -47,9 +40,7 @@ const EditForm: React.FC<propsTypes> = ({
 					type='text'
 					placeholder='edit todo'
 					required
-					defaultValue={
-						isEditing ? todoToEdit?.name : isDetailEditing ? detailToEdit?.item : ""
-					}
+					defaultValue={itemToEdit}
 					ref={inputRef}
 					className='py-2 px-2 focus:outline-none w-[85%] border border-black '
 					id={`edit_input`}

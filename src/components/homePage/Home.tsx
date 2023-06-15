@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -11,21 +11,28 @@ import CardHeader from "../ui/CardHeader";
 import AddForm from "../ui/AddForm";
 import EditForm from "../ui/EditForm";
 import ListContainer from "../ui/ListContainer";
-import TodoList from "./TodoList";
+import MainList from "../task/main/MainList";
+
 import {
 	addNewTodoAction,
 	confirmEditAction,
-	cancelEditTodoAction,
+	cancelEditMainTaskAction,
+	editSelectedTodoAction,
+	deleteMainTodoAction,
+	setSelectedTodoAction,
+	deleteAllDoneMainTaskAction,
 } from "@/reduxToolkit/todo/todo-action/todoAction";
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { IMainTask } from "@/DUMMY_DATA/MODEL";
 
 interface propsType {
-	allTasks: ITask[];
+	allTasks: IMainTask[];
 }
 
 const Home: React.FC<propsType> = ({ allTasks }) => {
+	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const { todoList, firstLoad, isEditing, todoToEdit } = useAppSelector(
+	const [isEditing, setIsEditing] = useState<boolean>(false);
+	const { mainTodoList, firstLoad, mainTodoToEdit } = useAppSelector(
 		(state: RootState) => state.todoReducer
 	);
 
@@ -34,17 +41,40 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			dispatch(getAllTodoAction());
 		}
 	}, [dispatch, firstLoad]);
-
-	const title = <h1>TODO nextJS</h1>;
-
+	// checked
 	const addTodoHandler = (task: string) => {
 		dispatch(addNewTodoAction(task));
 	};
-	const editTodoHandler = (task: string) => {
-		dispatch(confirmEditAction(task));
+	// checked
+	const isEditingHandler = (mainTask: IMainTask) => {
+		setIsEditing(true);
+		dispatch(editSelectedTodoAction(mainTask));
 	};
-	const cancelEditingHandler = () => {
-		dispatch(cancelEditTodoAction());
+	// checked
+	const confirmEditingHandler = (task: string) => {
+		dispatch(confirmEditAction(task));
+		setIsEditing(false);
+	};
+	// checked
+	const cancelMainTaskEditingHandler = () => {
+		dispatch(cancelEditMainTaskAction());
+		setIsEditing(false);
+	};
+	// checked
+	const deleteMainTaskHandler = (mainTask: IMainTask) => {
+		dispatch(deleteMainTodoAction(mainTask));
+	};
+	// checked
+	const goToSubTaskPageHandler = (selectedTask: IMainTask) => {
+		dispatch(setSelectedTodoAction(selectedTask));
+		let str = selectedTask.mainTaskName;
+		str = str.replace(/\s+/g, "-").toLowerCase();
+		router.push(`${router.asPath}/${str}`);
+		// router.push(`/n/${selectedTask.mainTaskName}`);
+	};
+	// working on
+	const deleteAllDoneMainTaskHandler = () => {
+		dispatch(deleteAllDoneMainTaskAction());
 	};
 
 	const burgerMenuHandler = () => {
@@ -54,9 +84,9 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 	return (
 		<Card>
 			<CardHeader
-				title={title}
-				onIconHandler={burgerMenuHandler}
-				isInDetails={false}
+				title='TODO nextJS'
+				iconFunction={burgerMenuHandler}
+				from='home'
 			/>
 			{!isEditing && (
 				<AddForm
@@ -66,15 +96,30 @@ const Home: React.FC<propsType> = ({ allTasks }) => {
 			)}
 			{isEditing && (
 				<EditForm
-					todoToEdit={todoToEdit}
-					confirmEditing={editTodoHandler}
-					isEditing={isEditing}
-					onCancel={cancelEditingHandler}
+					itemToEdit={mainTodoToEdit.mainTaskName}
+					confirmEditing={confirmEditingHandler}
+					onCancelEditing={cancelMainTaskEditingHandler}
 				/>
 			)}
 			<ListContainer>
-				{firstLoad && <TodoList allTasks={allTasks} />}
-				{!firstLoad && <TodoList allTasks={todoList} />}
+				{firstLoad && (
+					<MainList
+						mainTaskList={allTasks}
+						onEditing={isEditingHandler}
+						onDeleteMainTask={deleteMainTaskHandler}
+						onSeeSubTaskPage={goToSubTaskPageHandler}
+						onDeleteAllDone={deleteAllDoneMainTaskHandler}
+					/>
+				)}
+				{!firstLoad && (
+					<MainList
+						mainTaskList={mainTodoList}
+						onEditing={isEditingHandler}
+						onDeleteMainTask={deleteMainTaskHandler}
+						onSeeSubTaskPage={goToSubTaskPageHandler}
+						onDeleteAllDone={deleteAllDoneMainTaskHandler}
+					/>
+				)}
 			</ListContainer>
 		</Card>
 	);

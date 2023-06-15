@@ -1,19 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
 import AddForm from "../ui/AddForm";
 import ListContainer from "../ui/ListContainer";
-import DetailsLists from "./DetailsLists";
+
 import EditForm from "../ui/EditForm";
+import SubList from "./sub/SubList";
 
 import {
-	setTodoDetailAction,
-	addNewDetailsAction,
-	cancelDetailEditingAction,
-	confirmDetailEditingAction,
+	addNewSubTodoAction,
+	deleteSubTodoAction,
+	selectSubTodoToEditAction,
+	cancelSubTodoEditingAction,
+	confirmSubTodoEditingAction,
+	toggleSubTodoIsDoneAction,
+	deleteAllDoneDetailAction,
 } from "@/reduxToolkit/todo/todo-action/detailAction";
-import { ITask } from "@/DUMMY_DATA/MODEL";
+import { ISubTask } from "@/DUMMY_DATA/MODEL";
 
 import {
 	useAppDispatch,
@@ -23,83 +27,77 @@ import {
 
 const TaskDetail = () => {
 	const dispatch = useAppDispatch();
-
 	const router = useRouter();
-	const { todoList } = useAppSelector((state: RootState) => state.todoReducer);
-	const { todoDetails, isLoading, detailToEdit, isDetailEditing } =
-		useAppSelector((state: RootState) => state.detailReducer);
-	const { taskid } = router.query;
-
-	useEffect(() => {
-		if (!todoDetails._id && taskid) {
-			if (typeof taskid === "string") {
-				dispatch(setTodoDetailAction(taskid));
-			}
-		}
-	}, [taskid, dispatch]);
-
-	let index: string | number = "";
-	let title = <div></div>;
-	if (todoDetails._id) {
-		index = todoList.findIndex((todo: ITask) => todo._id === todoDetails._id);
-		title = (
-			<h1>
-				<span>{index + 1 + ". "}</span> {todoDetails.name}
-			</h1>
-		);
-	}
-
-	let todoLength: number = 0;
-	if (!isLoading) {
-		todoLength = todoDetails?.details.length;
-	}
-
-	const addDetailsHandler = (enteredDetail: string) => {
-		let id = "";
-		if (typeof taskid === "string") {
-			id = taskid;
-		}
-		dispatch(addNewDetailsAction(enteredDetail, id));
-	};
+	const [isEditingSubTodo, setIsEditingSubTodo] = useState<boolean>(false);
+	const { selectedTodo } = useAppSelector(
+		(state: RootState) => state.todoReducer
+	);
+	const { subTaskToEdit } = useAppSelector(
+		(state: RootState) => state.detailReducer
+	);
 	const backArrowHandler = () => {
-		// if (isInDetails) {
-		// 	await dispatch(resetIsInDetailsAction());
-		// }
-		router.replace("/");
-		// router.reload();
+		router.back();
 	};
-	const editDetailHandler = (detail: string) => {
-		dispatch(confirmDetailEditingAction(detail));
+	// checked
+	const addSubTodoHandler = (newSubTodoName: string) => {
+		dispatch(addNewSubTodoAction(newSubTodoName));
 	};
-	const cancelDetailEditingHandler = () => {
-		dispatch(cancelDetailEditingAction());
+	// checked
+	const deleteSubTodoHandler = (subTask: ISubTask) => {
+		dispatch(deleteSubTodoAction(subTask));
 	};
 
+	// checked
+	const onEditingSubTaskHandler = (subTask: ISubTask) => {
+		setIsEditingSubTodo(true);
+		dispatch(selectSubTodoToEditAction(subTask));
+	};
+	//checked
+	const cancelEditSubTaskHandler = () => {
+		setIsEditingSubTodo(false);
+		dispatch(cancelSubTodoEditingAction());
+	};
+	// checked
+	const confirmEditSubTaskHandler = (newSubTodoName: string) => {
+		dispatch(confirmSubTodoEditingAction(newSubTodoName));
+		setIsEditingSubTodo(false);
+	};
+	// checked
+	const isDoneHandler = (subTaskId: string) => {
+		cancelEditSubTaskHandler();
+		dispatch(toggleSubTodoIsDoneAction(subTaskId));
+	};
+
+	const deleteAllDoneSubTaskHandler = () => {
+		dispatch(deleteAllDoneDetailAction());
+	};
 	return (
 		<Card>
 			<CardHeader
-				title={title}
-				onIconHandler={backArrowHandler}
-				isInDetails={true}
+				title={selectedTodo.mainTaskName}
+				iconFunction={backArrowHandler}
+				from='generalSubtask'
 			/>
-			{!isDetailEditing && (
+			{!isEditingSubTodo && (
 				<AddForm
-					onAddHandler={addDetailsHandler}
-					placeHolder='add details'
+					onAddHandler={addSubTodoHandler}
+					placeHolder='add sub todo'
 				/>
 			)}
-			{isDetailEditing && (
+			{isEditingSubTodo && (
 				<EditForm
-					detailToEdit={detailToEdit}
-					confirmEditing={editDetailHandler}
-					isDetailEditing={isDetailEditing}
-					onCancel={cancelDetailEditingHandler}
+					itemToEdit={subTaskToEdit.subTaskName}
+					confirmEditing={confirmEditSubTaskHandler}
+					onCancelEditing={cancelEditSubTaskHandler}
 				/>
 			)}
 			<ListContainer>
-				<DetailsLists
-					details={todoDetails?.details}
-					isLoading={isLoading}
+				<SubList
+					subTaskList={selectedTodo.subTaskList}
+					isDoneHandler={isDoneHandler}
+					onDeleteSubTodo={deleteSubTodoHandler}
+					onEditingSubTask={onEditingSubTaskHandler}
+					onDeleteAllDone={deleteAllDoneSubTaskHandler}
 				/>
 			</ListContainer>
 		</Card>
