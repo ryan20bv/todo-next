@@ -19,6 +19,13 @@ import {
 	toggleShowModalAction,
 } from "@/reduxToolkit/auth/auth-action/authAction";
 
+// import hero icon
+import {
+	ArrowRightOnRectangleIcon,
+	UserCircleIcon,
+	KeyIcon,
+} from "@heroicons/react/24/outline";
+
 // import components
 import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
@@ -59,7 +66,18 @@ const Profile = () => {
 	const backArrowHandler = () => {
 		router.back();
 	};
+	const logOutHandler = () => {
+		/* signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
 
+		dispatch(logoutAuthAction());
+		dispatch(resetPersonalTodoStateAction()); */
+		// signOut();
+		router.push("/t/loggingout");
+	};
+
+	const changePasswordHandler = () => {
+		router.push("/t/profile/change-password");
+	};
 	if (isLoading) {
 		return <LoadingPage status='Loading...' />;
 	}
@@ -82,6 +100,14 @@ const Profile = () => {
 				<div className='flex flex-col items-center w-full '>
 					<h1>{authData.userName}</h1>
 					<p>{authData.userEmail}</p>
+					<div className='m-4'>
+						<button onClick={changePasswordHandler}>
+							<KeyIcon className='text-blue-600 h-6 mx-4 ' />
+						</button>
+						<button onClick={logOutHandler}>
+							<ArrowRightOnRectangleIcon className='text-red-600 h-6 mx-4' />
+						</button>
+					</div>
 				</div>
 			</div>
 		</Card>
