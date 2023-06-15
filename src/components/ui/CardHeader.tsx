@@ -35,7 +35,7 @@ const CardHeader: React.FC<propsTypes> = ({
 	// 		data-testid={`icon_${from}`}
 	// 	/>
 	// );
-	if (from === "generalSubtask" || from === "sub_page") {
+	if (from === "generalSubtask" || from === "sub_page" || from === "profile") {
 		icon = <ChevronDoubleLeftIcon className='text-red-600 h-6' />;
 	} else if (from === "login") {
 		icon = <HomeIcon className='text-red-600 h-6' />;
