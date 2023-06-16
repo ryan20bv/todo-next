@@ -32,12 +32,11 @@ import CardHeader from "@/components/ui/CardHeader";
 import AddForm from "@/components/ui/AddForm";
 import EditForm from "@/components/ui/EditForm";
 import ListContainer from "@/components/ui/ListContainer";
-
 import MainList from "../task/main/MainList";
 import SendingData from "../ui/SendingData";
-
 import ConfirmationModal from "../ui/ConfirmationModal";
 import DeleteAllDoneModal from "../ui/DeleteAllDoneModal";
+import CategoryList from "./CategoryList";
 
 // types
 import { ICategory, IMainTask } from "@/DUMMY_DATA/MODEL";
@@ -68,11 +67,6 @@ const MainPage = () => {
 		setShowListOfCategories((prevState) => !prevState);
 	};
 
-	const selectNewCategory = (category: ICategory) => {
-		console.log(category);
-		dispatch(setCurrentCategoryAction(category));
-		toggleShowCategoryList();
-	};
 	// checked
 	const goToSubTaskPageHandler = (mainTask: IMainTask) => {
 		dispatch(setSelectedMainTaskAction(mainTask));
@@ -149,19 +143,10 @@ const MainPage = () => {
 				showListOfCategories={showListOfCategories}
 			/>
 			{showListOfCategories && (
-				<section className='w-[93%] text-center bg-white  border-b-2 border-black absolute  top-20'>
-					<ul>
-						{categoryList.map((category: ICategory) => (
-							<li
-								key={category._id}
-								onClick={() => selectNewCategory(category)}
-								className='py-1'
-							>
-								{category.categoryName}
-							</li>
-						))}
-					</ul>
-				</section>
+				<CategoryList
+					categoryList={categoryList}
+					onToggle={toggleShowCategoryList}
+				/>
 			)}
 
 			{isSendingData && <SendingData />}
