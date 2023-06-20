@@ -11,6 +11,9 @@ import {
 // import from personalTodoAction
 import { setCurrentCategoryAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 
+// import from categoryAction
+import { addNewCategoryAction } from "@/reduxToolkit/personal/category/categoryAction";
+
 // import component
 import AddForm from "../ui/AddForm";
 
@@ -33,7 +36,7 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 	};
 
 	const addNewCategoryHandler = (newCategoryName: string) => {
-		console.log(newCategoryName);
+		dispatch(addNewCategoryAction(newCategoryName));
 	};
 
 	return (
