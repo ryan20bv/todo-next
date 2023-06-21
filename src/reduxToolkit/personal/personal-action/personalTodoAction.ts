@@ -12,6 +12,7 @@ import { signOut } from "next-auth/react";
 // checked
 export const getRawDataAction =
 	(userId: string, apiToken: string) => async (dispatch: any, getState: any) => {
+		const { currentCategory } = getState().personalTodoReducer;
 		try {
 			const url =
 				process.env.NEXT_PUBLIC_BACK_END_URL + "/api/category/user/" + userId;
@@ -32,11 +33,14 @@ export const getRawDataAction =
 				}
 				return;
 			}
-			const initialCategory: ICategory = {
-				_id: data[0]._id,
-				categoryName: data[0].categoryName,
-				creator_id: data[0].category_id,
-			};
+			let initialCategory: ICategory = currentCategory;
+			if (!currentCategory || currentCategory._id.length === 0) {
+				initialCategory = {
+					_id: data[0]._id,
+					categoryName: data[0].categoryName,
+					creator_id: data[0].category_id,
+				};
+			}
 
 			await dispatch(getRawDataRed({ rawData: data }));
 			dispatch(setCurrentCategoryAction(initialCategory));

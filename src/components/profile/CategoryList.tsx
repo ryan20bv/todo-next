@@ -16,6 +16,7 @@ import { addNewCategoryAction } from "@/reduxToolkit/personal/category/categoryA
 
 // import component
 import AddForm from "../ui/AddForm";
+import SendingData from "../ui/SendingData";
 
 interface PropsType {
 	categoryList: ICategory[];
@@ -24,6 +25,9 @@ interface PropsType {
 
 const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 	const dispatch = useAppDispatch();
+	const { isSendingData } = useAppSelector(
+		(state: RootState) => state.personalTodoReducer
+	);
 	const [isAddingCategory, setIsAddingCategory] = useState<boolean>(false);
 	const selectNewCategory = (category: ICategory) => {
 		console.log(category);
@@ -32,11 +36,14 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 	};
 
 	const toggleAddingCategoryHandler = () => {
-		setIsAddingCategory((prevState) => !prevState);
+		setIsAddingCategory(true);
 	};
 
-	const addNewCategoryHandler = (newCategoryName: string) => {
-		dispatch(addNewCategoryAction(newCategoryName));
+	const addNewCategoryHandler = async (newCategoryName: string) => {
+		const result = await dispatch(addNewCategoryAction(newCategoryName));
+		if (result && result.status === "done") {
+			setIsAddingCategory(false);
+		}
 	};
 
 	return (
@@ -50,7 +57,9 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 						ADD New Category +
 					</h1>
 				)}
-				{isAddingCategory && (
+				{isSendingData && <SendingData />}
+
+				{isAddingCategory && !isSendingData && (
 					<AddForm
 						onAddHandler={addNewCategoryHandler}
 						placeHolder='Add new category'
