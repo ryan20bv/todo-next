@@ -34,7 +34,7 @@ export const getRawDataAction =
 				return;
 			}
 			let initialCategory: ICategory = currentCategory;
-			if (!currentCategory || currentCategory._id.length === 0) {
+			if (!currentCategory || Object.keys(currentCategory).length === 0) {
 				initialCategory = {
 					_id: data[0]._id,
 					categoryName: data[0].categoryName,

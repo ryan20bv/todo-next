@@ -17,6 +17,7 @@ import { addNewCategoryAction } from "@/reduxToolkit/personal/category/categoryA
 // import component
 import AddForm from "../ui/AddForm";
 import SendingData from "../ui/SendingData";
+import CategoryItem from "./CategoryItem";
 
 interface PropsType {
 	categoryList: ICategory[];
@@ -30,7 +31,6 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 	);
 	const [isAddingCategory, setIsAddingCategory] = useState<boolean>(false);
 	const selectNewCategory = (category: ICategory) => {
-		console.log(category);
 		dispatch(setCurrentCategoryAction(category));
 		onToggle();
 	};
@@ -47,7 +47,7 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 	};
 
 	return (
-		<section className='w-[97%] text-center bg-white  border-b-2 border-black absolute  top-20 p-2'>
+		<section className='w-[97%] text-center bg-white  border-b-2 border-black absolute  top-20 p-2 h-[60%]  '>
 			<div className='mb-4'>
 				{!isAddingCategory && (
 					<h1
@@ -66,15 +66,13 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 					/>
 				)}
 			</div>
-			<ul>
+			<ul className='border border-black overflow-y-scroll h-[85%]'>
 				{categoryList.map((category: ICategory) => (
-					<li
+					<CategoryItem
 						key={category._id}
-						onClick={() => selectNewCategory(category)}
-						className='py-1 border-0 border-gray-400 border-b-2'
-					>
-						{category.categoryName}
-					</li>
+						category={category}
+						selectNewCategory={selectNewCategory}
+					/>
 				))}
 			</ul>
 		</section>
