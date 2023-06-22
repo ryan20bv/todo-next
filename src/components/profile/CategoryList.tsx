@@ -46,6 +46,10 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 		}
 	};
 
+	const closeAddNewCategoryHandler = () => {
+		setIsAddingCategory(false);
+	};
+
 	return (
 		<section className='w-[97%] text-center bg-white  border-b-2 border-black absolute  top-20 p-2 h-[60%]  '>
 			<div className='mb-4'>
@@ -67,11 +71,13 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 				)}
 			</div>
 			<ul className='border border-black overflow-y-scroll h-[85%]'>
-				{categoryList.map((category: ICategory) => (
+				{categoryList.map((category: ICategory, index) => (
 					<CategoryItem
 						key={category._id}
 						category={category}
 						selectNewCategory={selectNewCategory}
+						index={index}
+						closeAddNewCategoryHandler={closeAddNewCategoryHandler}
 					/>
 				))}
 			</ul>

@@ -7,29 +7,42 @@ import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 interface PropsType {
 	category: ICategory;
 	selectNewCategory: (selectedCategory: ICategory) => void;
+	index: number;
+	closeAddNewCategoryHandler: () => void;
 }
 
-const CategoryItem: React.FC<PropsType> = ({ category, selectNewCategory }) => {
+const CategoryItem: React.FC<PropsType> = ({
+	category,
+	selectNewCategory,
+	index,
+	closeAddNewCategoryHandler,
+}) => {
 	const [isOtherOptionOpen, setIsOtherOptionOpen] = useState<boolean>(false);
 
 	const openMoreOptionHandler = () => {
 		console.log("more option handler", category.categoryName);
 		setIsOtherOptionOpen(true);
+		closeAddNewCategoryHandler();
 	};
 	const closeMoreOptionHandler = () => {
 		setIsOtherOptionOpen(false);
+		closeAddNewCategoryHandler();
 	};
 
-	let addedClass: string = "absolute right-2";
+	let addedClass: string = index % 2 !== 0 ? "bg-gray-200" : "";
+
 	return (
 		<li
 			key={category._id}
-			className='py-1  border-gray-400 border-b-2 flex items-center justify-center relative'
+			className={`px-3 py-1 flex items-center justify-end relative ${addedClass}`}
 		>
-			<div onClick={() => selectNewCategory(category)}>
+			<div
+				onClick={() => selectNewCategory(category)}
+				className='mx-4 w-9/12 underline'
+			>
 				{category.categoryName}
 			</div>
-			<div className='absolute right-2  h-full  flex items-center'>
+			<div className='  h-full  flex  '>
 				{!isOtherOptionOpen && (
 					<button
 						className=' flex items-center justify-center px-1 py-2 '
@@ -46,7 +59,7 @@ const CategoryItem: React.FC<PropsType> = ({ category, selectNewCategory }) => {
 							<PencilSquareIcon className='text-blue-600 h-5' />
 						</button>
 						<button>
-							<TrashIcon className='text-red-600 h-5 m-2' />
+							<TrashIcon className='text-red-600 h-5 mx-2' />
 						</button>
 						<button
 							className='text-red-600'
