@@ -33,11 +33,13 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 	const { isSendingData } = useAppSelector(
 		(state: RootState) => state.personalTodoReducer
 	);
-	const [isAddingCategory, setIsAddingCategory] = useState<boolean>(false);
 	const selectNewCategory = (category: ICategory) => {
 		dispatch(setCurrentCategoryAction(category));
 		onToggle();
 	};
+	const [idOfToggleToOpenMoreAction, setIdOfToggleToOpenMoreAction] =
+		useState<string>("");
+	const [isAddingCategory, setIsAddingCategory] = useState<boolean>(false);
 
 	const toggleAddingCategoryHandler = () => {
 		setIsAddingCategory(true);
@@ -53,6 +55,12 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 	const closeAddNewCategoryHandler = () => {
 		setIsAddingCategory(false);
 	};
+
+	// !working On
+	const toggleMoreActionHandler = (id: string) => {
+		setIdOfToggleToOpenMoreAction(id);
+	};
+
 	const deleteCategoryHandler = (selectedCategory: ICategory) => {
 		dispatch(setDeleteCategoryAction(selectedCategory));
 	};
@@ -88,6 +96,8 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 						selectNewCategory={selectNewCategory}
 						index={index}
 						closeAddNewCategoryHandler={closeAddNewCategoryHandler}
+						onToggleMoreAction={toggleMoreActionHandler}
+						idOfToggleToOpenMoreAction={idOfToggleToOpenMoreAction}
 						onSetToDelete={deleteCategoryHandler}
 						onCancelDelete={cancelDeleteCategoryHandler}
 					/>

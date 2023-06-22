@@ -9,6 +9,8 @@ interface PropsType {
 	selectNewCategory: (selectedCategory: ICategory) => void;
 	index: number;
 	closeAddNewCategoryHandler: () => void;
+	onToggleMoreAction: (id: string) => void;
+	idOfToggleToOpenMoreAction: string;
 	onSetToDelete: (selectedCategory: ICategory) => void;
 	onCancelDelete: () => void;
 }
@@ -18,19 +20,22 @@ const CategoryItem: React.FC<PropsType> = ({
 	selectNewCategory,
 	index,
 	closeAddNewCategoryHandler,
+	onToggleMoreAction,
+	idOfToggleToOpenMoreAction,
 	onSetToDelete,
 	onCancelDelete,
 }) => {
-	const [isOtherOptionOpen, setIsOtherOptionOpen] = useState<boolean>(false);
+	// const [isOtherOptionOpen, setIsOtherOptionOpen] = useState<boolean>(false);
 
-	const openMoreOptionHandler = () => {
-		setIsOtherOptionOpen(false);
-		setIsOtherOptionOpen(true);
+	const openMoreOptionHandler = (id: string) => {
+		onToggleMoreAction(id);
+		// setIsOtherOptionOpen(true);
 		closeAddNewCategoryHandler();
 	};
 	const closeMoreOptionHandler = () => {
+		onToggleMoreAction("");
 		onCancelDelete();
-		setIsOtherOptionOpen(false);
+		// setIsOtherOptionOpen(false);
 		closeAddNewCategoryHandler();
 	};
 
@@ -39,6 +44,8 @@ const CategoryItem: React.FC<PropsType> = ({
 	};
 
 	let addedClass: string = index % 2 !== 0 ? "bg-gray-200" : "";
+	let isOtherOptionOpen: boolean =
+		idOfToggleToOpenMoreAction === category._id ? true : false;
 
 	return (
 		<li
@@ -55,7 +62,7 @@ const CategoryItem: React.FC<PropsType> = ({
 				{!isOtherOptionOpen && (
 					<button
 						className=' flex items-center justify-center px-1 py-2 '
-						onClick={openMoreOptionHandler}
+						onClick={() => openMoreOptionHandler(category._id)}
 					>
 						<div className='border border-black w-[5px] h-[5px] bg-gray-300 rounded-full '></div>
 						<div className='border border-black  w-[5px] h-[5px] bg-gray-300 rounded-full mx-[2px]'></div>
