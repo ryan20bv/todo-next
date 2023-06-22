@@ -12,7 +12,11 @@ import {
 import { setCurrentCategoryAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 
 // import from categoryAction
-import { addNewCategoryAction } from "@/reduxToolkit/personal/category/categoryAction";
+import {
+	addNewCategoryAction,
+	setDeleteCategoryAction,
+	cancelDeleteCategoryAction,
+} from "@/reduxToolkit/personal/category/categoryAction";
 
 // import component
 import AddForm from "../ui/AddForm";
@@ -49,6 +53,12 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 	const closeAddNewCategoryHandler = () => {
 		setIsAddingCategory(false);
 	};
+	const deleteCategoryHandler = (selectedCategory: ICategory) => {
+		dispatch(setDeleteCategoryAction(selectedCategory));
+	};
+	const cancelDeleteCategoryHandler = () => {
+		dispatch(cancelDeleteCategoryAction());
+	};
 
 	return (
 		<section className='w-[97%] text-center bg-white  border-b-2 border-black absolute  top-20 p-2 h-[60%]  '>
@@ -78,6 +88,8 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 						selectNewCategory={selectNewCategory}
 						index={index}
 						closeAddNewCategoryHandler={closeAddNewCategoryHandler}
+						onSetToDelete={deleteCategoryHandler}
+						onCancelDelete={cancelDeleteCategoryHandler}
 					/>
 				))}
 			</ul>

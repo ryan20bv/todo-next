@@ -5,9 +5,10 @@ import todoSlice from "../todo/todo-slice/todoSlice";
 import detailTodoSlice from "../todo/todo-slice/detailSlice";
 import authSlice from "../auth/auth-slice/authSlice";
 import personalTodoSlice from "../personal/personal-slice/personalTodoSlice";
+import categoryTodoSlice from "../personal/category/categorySlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
-import thunk from "redux-thunk";
+// import thunk from "redux-thunk";
 // import storageSession from "reduxjs-toolkit-persist/lib/storage/session";
 
 const reducers = combineReducers({
@@ -15,6 +16,7 @@ const reducers = combineReducers({
 	detailReducer: detailTodoSlice.reducer,
 	authReducer: authSlice.reducer,
 	personalTodoReducer: personalTodoSlice.reducer,
+	categoryTodoReducer: categoryTodoSlice.reducer,
 });
 
 // const indexStore = configureStore({

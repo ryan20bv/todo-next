@@ -9,6 +9,8 @@ interface PropsType {
 	selectNewCategory: (selectedCategory: ICategory) => void;
 	index: number;
 	closeAddNewCategoryHandler: () => void;
+	onSetToDelete: (selectedCategory: ICategory) => void;
+	onCancelDelete: () => void;
 }
 
 const CategoryItem: React.FC<PropsType> = ({
@@ -16,17 +18,24 @@ const CategoryItem: React.FC<PropsType> = ({
 	selectNewCategory,
 	index,
 	closeAddNewCategoryHandler,
+	onSetToDelete,
+	onCancelDelete,
 }) => {
 	const [isOtherOptionOpen, setIsOtherOptionOpen] = useState<boolean>(false);
 
 	const openMoreOptionHandler = () => {
-		console.log("more option handler", category.categoryName);
+		setIsOtherOptionOpen(false);
 		setIsOtherOptionOpen(true);
 		closeAddNewCategoryHandler();
 	};
 	const closeMoreOptionHandler = () => {
+		onCancelDelete();
 		setIsOtherOptionOpen(false);
 		closeAddNewCategoryHandler();
+	};
+
+	const setDeleteCategoryHandler = (selectedCategory: ICategory) => {
+		onSetToDelete(selectedCategory);
 	};
 
 	let addedClass: string = index % 2 !== 0 ? "bg-gray-200" : "";
@@ -58,7 +67,7 @@ const CategoryItem: React.FC<PropsType> = ({
 						<button>
 							<PencilSquareIcon className='text-blue-600 h-5' />
 						</button>
-						<button>
+						<button onClick={() => setDeleteCategoryHandler(category)}>
 							<TrashIcon className='text-red-600 h-5 mx-2' />
 						</button>
 						<button

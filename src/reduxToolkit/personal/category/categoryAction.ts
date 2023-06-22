@@ -5,6 +5,7 @@ import {
 } from "../personal-slice/personalTodoSlice";
 
 import { getRawDataAction } from "../personal-action/personalTodoAction";
+import { setCategoryToDeleteRed } from "./categorySlice";
 
 export const addNewCategoryAction =
 	(enteredCategoryName: string) => async (dispatch: any, getState: any) => {
@@ -59,4 +60,14 @@ export const updateCategoryListAction =
 	(updatedCategoryList: ICategory[]) => async (dispatch: any, getState: any) => {
 		dispatch(getUserCategoryListRed({ categoryList: updatedCategoryList }));
 		dispatch(updateIsSendingDataRed({ isSendingData: false }));
+	};
+
+export const setDeleteCategoryAction =
+	(category: ICategory) => async (dispatch: any, getState: any) => {
+		dispatch(setCategoryToDeleteRed({ categoryToDelete: category }));
+	};
+
+export const cancelDeleteCategoryAction =
+	() => async (dispatch: any, getState: any) => {
+		dispatch(setCategoryToDeleteRed({ categoryToDelete: {} as ICategory }));
 	};
