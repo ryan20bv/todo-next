@@ -56,7 +56,6 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 		setIsAddingCategory(false);
 	};
 
-	// !working On
 	const toggleMoreActionHandler = (id: string) => {
 		setIdOfToggleToOpenMoreAction(id);
 	};

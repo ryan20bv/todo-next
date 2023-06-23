@@ -29,13 +29,13 @@ const CategoryItem: React.FC<PropsType> = ({
 
 	const openMoreOptionHandler = (id: string) => {
 		onToggleMoreAction(id);
-		// setIsOtherOptionOpen(true);
+
 		closeAddNewCategoryHandler();
 	};
 	const closeMoreOptionHandler = () => {
 		onToggleMoreAction("");
 		onCancelDelete();
-		// setIsOtherOptionOpen(false);
+
 		closeAddNewCategoryHandler();
 	};
 
