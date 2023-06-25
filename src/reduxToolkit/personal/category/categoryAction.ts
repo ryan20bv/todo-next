@@ -1,11 +1,17 @@
 import { ICategory } from "@/DUMMY_DATA/MODEL";
+// import personalTodoSlice
 import {
 	getUserCategoryListRed,
 	updateIsSendingDataRed,
 } from "../personal-slice/personalTodoSlice";
-
+// import personalTodoAction
 import { getRawDataAction } from "../personal-action/personalTodoAction";
-import { setCategoryToDeleteRed } from "./categorySlice";
+// import categorySlice
+import {
+	setCategoryToDeleteRed,
+	setIsDeletingCategoryRed,
+	resetCategorySliceRed,
+} from "./categorySlice";
 
 export const addNewCategoryAction =
 	(enteredCategoryName: string) => async (dispatch: any, getState: any) => {
@@ -62,12 +68,24 @@ export const updateCategoryListAction =
 		dispatch(updateIsSendingDataRed({ isSendingData: false }));
 	};
 
+export const resetCategoryAction =
+	() => async (dispatch: any, getState: any) => {
+		dispatch(resetCategorySliceRed({}));
+	};
 export const setDeleteCategoryAction =
 	(category: ICategory) => async (dispatch: any, getState: any) => {
 		dispatch(setCategoryToDeleteRed({ categoryToDelete: category }));
+		dispatch(setIsDeletingCategoryRed({ isDeletingCategory: true }));
 	};
 
 export const cancelDeleteCategoryAction =
 	() => async (dispatch: any, getState: any) => {
 		dispatch(setCategoryToDeleteRed({ categoryToDelete: {} as ICategory }));
+		dispatch(setIsDeletingCategoryRed({ isDeletingCategory: false }));
+	};
+
+export const confirmDeleteCategoryAction =
+	() => async (dispatch: any, getState: any) => {
+		console.log("confirmDeleteCategoryAction");
+		return "done";
 	};

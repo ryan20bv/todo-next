@@ -7,6 +7,8 @@ import {
 	setSelectedMainTaskRed,
 	updateMainTaskListRed,
 } from "../personal-slice/personalTodoSlice";
+// import Category Action
+import { resetCategoryAction } from "../category/categoryAction";
 import { ICategory, IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 import { signOut } from "next-auth/react";
 // checked
@@ -114,6 +116,7 @@ export const setSelectedMainTaskAction =
 
 export const resetPersonalTodoStateAction =
 	() => async (dispatch: any, getState: any) => {
+		await dispatch(resetCategoryAction());
 		dispatch(resetPersonalTodoStateRed({}));
 	};
 

@@ -16,12 +16,14 @@ import {
 	addNewCategoryAction,
 	setDeleteCategoryAction,
 	cancelDeleteCategoryAction,
+	confirmDeleteCategoryAction,
 } from "@/reduxToolkit/personal/category/categoryAction";
 
 // import component
 import AddForm from "../ui/AddForm";
 import SendingData from "../ui/SendingData";
 import CategoryItem from "./CategoryItem";
+import ConfirmationModal from "../ui/ConfirmationModal";
 
 interface PropsType {
 	categoryList: ICategory[];
@@ -32,6 +34,9 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 	const dispatch = useAppDispatch();
 	const { isSendingData } = useAppSelector(
 		(state: RootState) => state.personalTodoReducer
+	);
+	const { isDeletingCategory, categoryToDelete } = useAppSelector(
+		(state: RootState) => state.categoryTodoReducer
 	);
 	const selectNewCategory = (category: ICategory) => {
 		dispatch(setCurrentCategoryAction(category));
@@ -63,8 +68,16 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 	const deleteCategoryHandler = (selectedCategory: ICategory) => {
 		dispatch(setDeleteCategoryAction(selectedCategory));
 	};
-	const cancelDeleteCategoryHandler = () => {
+
+	const cancelDeleteOnConfirmationModal = () => {
 		dispatch(cancelDeleteCategoryAction());
+	};
+	const confirmDeleteCategoryHandler = async () => {
+		const result = await dispatch(confirmDeleteCategoryAction());
+		if (result === "done") {
+			dispatch(cancelDeleteCategoryAction());
+			toggleMoreActionHandler("");
+		}
 	};
 
 	return (
@@ -98,10 +111,19 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 						onToggleMoreAction={toggleMoreActionHandler}
 						idOfToggleToOpenMoreAction={idOfToggleToOpenMoreAction}
 						onSetToDelete={deleteCategoryHandler}
-						onCancelDelete={cancelDeleteCategoryHandler}
 					/>
 				))}
 			</ul>
+			{isDeletingCategory && (
+				<ConfirmationModal
+					message={`Are you sure you want to delete ${categoryToDelete.categoryName}`}
+					onCloseModal={cancelDeleteOnConfirmationModal}
+					onConfirm={confirmDeleteCategoryHandler}
+					isDeletingData={isDeletingCategory}
+					isUpdatingData={false}
+					updateMessage=''
+				/>
+			)}
 		</section>
 	);
 };

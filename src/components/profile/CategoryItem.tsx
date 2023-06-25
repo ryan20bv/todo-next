@@ -12,7 +12,6 @@ interface PropsType {
 	onToggleMoreAction: (id: string) => void;
 	idOfToggleToOpenMoreAction: string;
 	onSetToDelete: (selectedCategory: ICategory) => void;
-	onCancelDelete: () => void;
 }
 
 const CategoryItem: React.FC<PropsType> = ({
@@ -23,10 +22,7 @@ const CategoryItem: React.FC<PropsType> = ({
 	onToggleMoreAction,
 	idOfToggleToOpenMoreAction,
 	onSetToDelete,
-	onCancelDelete,
 }) => {
-	// const [isOtherOptionOpen, setIsOtherOptionOpen] = useState<boolean>(false);
-
 	const openMoreOptionHandler = (id: string) => {
 		onToggleMoreAction(id);
 
@@ -34,7 +30,6 @@ const CategoryItem: React.FC<PropsType> = ({
 	};
 	const closeMoreOptionHandler = () => {
 		onToggleMoreAction("");
-		onCancelDelete();
 
 		closeAddNewCategoryHandler();
 	};
