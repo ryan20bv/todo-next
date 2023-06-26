@@ -28,7 +28,7 @@ export const getRawDataAction =
 			const response = await fetch(url, options);
 
 			const data = await response.json();
-
+			console.log(data);
 			if (!response.ok) {
 				if (data.message === "Authentication failed!") {
 					signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
@@ -36,15 +36,22 @@ export const getRawDataAction =
 				return;
 			}
 			let initialCategory: ICategory = currentCategory;
-			if (!currentCategory || Object.keys(currentCategory).length === 0) {
+			if (
+				!currentCategory ||
+				(Object.keys(currentCategory).length === 0 && data.length > 0)
+			) {
 				initialCategory = {
 					_id: data[0]._id,
 					categoryName: data[0].categoryName,
 					creator_id: data[0].category_id,
 				};
 			}
+			if (data.length === 0) {
+				initialCategory = {} as ICategory;
+			}
 
 			await dispatch(getRawDataRed({ rawData: data }));
+
 			dispatch(setCurrentCategoryAction(initialCategory));
 			dispatch(getUserCategoryListAction());
 		} catch (err) {
@@ -75,7 +82,12 @@ export const setCurrentCategoryAction =
 		const foundCategoryItems = rawData.find(
 			(item: any) => item._id === category._id
 		);
-
+		// console.log(foundCategoryItems);
+		if (!foundCategoryItems) {
+			await dispatch(setCurrentCategoryRed({ currentCategory: {} as ICategory }));
+			dispatch(setMainTaskListAction([]));
+			return;
+		}
 		const currentMainTaskList: IMainTask[] = [...foundCategoryItems.mainTaskList];
 		/* const currentMainTaskList = foundCategoryItems.mainTaskList.map(
 			(item: any) => {

@@ -28,7 +28,6 @@ const authHandler = async (req, res) => {
 			process.env.NEXT_PUBLIC_BACK_END_URL + "/api/users/signup",
 			newUser
 		);
-		console.log(response);
 
 		res.status(201).json({ newUser: response.data });
 	} catch (err) {

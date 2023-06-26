@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 // import type/interface from model
 import { ICategory } from "@/DUMMY_DATA/MODEL";
 // import from indexStore
@@ -24,6 +25,7 @@ import AddForm from "../ui/AddForm";
 import SendingData from "../ui/SendingData";
 import CategoryItem from "./CategoryItem";
 import ConfirmationModal from "../ui/ConfirmationModal";
+import EmptyCategoryPage from "./EmptyCategoryPage";
 
 interface PropsType {
 	categoryList: ICategory[];
@@ -31,16 +33,33 @@ interface PropsType {
 }
 
 const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
+	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const { isSendingData } = useAppSelector(
 		(state: RootState) => state.personalTodoReducer
 	);
-	const { isDeletingCategory, categoryToDelete } = useAppSelector(
-		(state: RootState) => state.categoryTodoReducer
-	);
+	const {
+		isDeletingCategory,
+		categoryToDelete,
+		isUpdatingCategory,
+		categoryMessage,
+	} = useAppSelector((state: RootState) => state.categoryTodoReducer);
+
+	// useEffect(() => {
+	// 	if (categoryList.length === 0) {
+	// 		router.replace("/t/emptyCategory");
+	// 	}
+	// }, [categoryList, router]);
+
 	const selectNewCategory = (category: ICategory) => {
 		dispatch(setCurrentCategoryAction(category));
 		onToggle();
+		console.log(category);
+		if (Object.keys(category).length !== 0) {
+			let str = category.categoryName;
+			str = str.replace(/\s+/g, "-").toLowerCase();
+			router.push(`/t/${str}`);
+		}
 	};
 	const [idOfToggleToOpenMoreAction, setIdOfToggleToOpenMoreAction] =
 		useState<string>("");
@@ -77,8 +96,17 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 		if (result === "done") {
 			dispatch(cancelDeleteCategoryAction());
 			toggleMoreActionHandler("");
+			console.log("here");
+			// console.log(categoryList);
+			// if (categoryList.length === 0) {
+			// 	router.replace("/t/emptyCategory");
+			// }
 		}
 	};
+	// console.log(categoryList);
+	// if (categoryList.length === 0) {
+	// 	return <EmptyCategoryPage />;
+	// }
 
 	return (
 		<section className='w-[97%] text-center bg-white  border-b-2 border-black absolute  top-20 p-2 h-[60%]  '>
@@ -100,28 +128,33 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 					/>
 				)}
 			</div>
+
 			<ul className='border border-black overflow-y-scroll h-[85%]'>
-				{categoryList.map((category: ICategory, index) => (
-					<CategoryItem
-						key={category._id}
-						category={category}
-						selectNewCategory={selectNewCategory}
-						index={index}
-						closeAddNewCategoryHandler={closeAddNewCategoryHandler}
-						onToggleMoreAction={toggleMoreActionHandler}
-						idOfToggleToOpenMoreAction={idOfToggleToOpenMoreAction}
-						onSetToDelete={deleteCategoryHandler}
-					/>
-				))}
+				{!categoryList ||
+					(categoryList.length === 0 && <div>Category List is Empty!</div>)}
+				{categoryList.length > 0 &&
+					categoryList.map((category: ICategory, index) => (
+						<CategoryItem
+							key={category._id}
+							category={category}
+							selectNewCategory={selectNewCategory}
+							index={index}
+							closeAddNewCategoryHandler={closeAddNewCategoryHandler}
+							onToggleMoreAction={toggleMoreActionHandler}
+							idOfToggleToOpenMoreAction={idOfToggleToOpenMoreAction}
+							onSetToDelete={deleteCategoryHandler}
+						/>
+					))}
 			</ul>
+
 			{isDeletingCategory && (
 				<ConfirmationModal
 					message={`Are you sure you want to delete ${categoryToDelete.categoryName}`}
 					onCloseModal={cancelDeleteOnConfirmationModal}
 					onConfirm={confirmDeleteCategoryHandler}
 					isDeletingData={isDeletingCategory}
-					isUpdatingData={false}
-					updateMessage=''
+					isUpdatingData={isUpdatingCategory}
+					updateMessage={categoryMessage}
 				/>
 			)}
 		</section>

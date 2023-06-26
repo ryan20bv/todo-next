@@ -3,6 +3,7 @@ import { ICategory } from "@/DUMMY_DATA/MODEL";
 import {
 	getUserCategoryListRed,
 	updateIsSendingDataRed,
+	updateCategoryListAfterDeleteRed,
 } from "../personal-slice/personalTodoSlice";
 // import personalTodoAction
 import { getRawDataAction } from "../personal-action/personalTodoAction";
@@ -11,6 +12,8 @@ import {
 	setCategoryToDeleteRed,
 	setIsDeletingCategoryRed,
 	resetCategorySliceRed,
+	setIsUpdatingCategoryRed,
+	setCategoryMessageRed,
 } from "./categorySlice";
 
 export const addNewCategoryAction =
@@ -42,7 +45,7 @@ export const addNewCategoryAction =
 				return;
 			}
 			const data = await response.json();
-			console.log(data);
+			// console.log(data);
 			const { newCategory, message } = data;
 			if (message === "new category created") {
 				const addedCategory: ICategory = {
@@ -86,6 +89,52 @@ export const cancelDeleteCategoryAction =
 
 export const confirmDeleteCategoryAction =
 	() => async (dispatch: any, getState: any) => {
-		console.log("confirmDeleteCategoryAction");
-		return "done";
+		// console.log("confirmDeleteCategoryAction");
+		dispatch(setIsUpdatingCategoryRed({ isUpdatingCategory: true }));
+		dispatch(setCategoryMessageRed({ categoryMessage: "Deleting...." }));
+		const { categoryToDelete } = getState().categoryTodoReducer;
+		const { authData } = getState().authReducer;
+		try {
+			const bodyData = {};
+			const url =
+				process.env.NEXT_PUBLIC_BACK_END_URL +
+				"/api/category/delete/" +
+				categoryToDelete._id;
+			const options = {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + authData.apiToken,
+				},
+				body: JSON.stringify(bodyData),
+			};
+
+			const response = await fetch(url, options);
+			if (!response.ok) {
+				// dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				return;
+			}
+			const data = await response.json();
+
+			const { message } = data;
+			if (message === "deleted") {
+				const { categoryList } = getState().personalTodoReducer;
+				const copyOfCategoryList: ICategory[] = [...categoryList];
+				console.log(copyOfCategoryList);
+				const updatedCategoryList = copyOfCategoryList.filter(
+					(category) => category._id !== categoryToDelete._id
+				);
+				console.log(updatedCategoryList);
+
+				await dispatch(getRawDataAction(authData.userId, authData.apiToken));
+				await dispatch(updateCategoryListAfterDeleteRed({ updatedCategoryList }));
+				dispatch(setIsUpdatingCategoryRed({ isUpdatingCategory: false }));
+				dispatch(setCategoryMessageRed({ categoryMessage: "" }));
+
+				return "done";
+			}
+		} catch (err) {
+			console.log("confirmDeleteCategoryAction", err);
+		}
 	};
