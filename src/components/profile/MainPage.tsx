@@ -137,17 +137,12 @@ const MainPage = () => {
 	return (
 		<Card>
 			<CardHeader
-				title={currentCategory.categoryName}
+				title={`Category: ${currentCategory.categoryName}`}
 				from='category'
 				iconFunction={toggleShowCategoryList}
 				showListOfCategories={showListOfCategories}
 			/>
-			{showListOfCategories && (
-				<CategoryList
-					categoryList={categoryList}
-					onToggle={toggleShowCategoryList}
-				/>
-			)}
+			{showListOfCategories && <CategoryList onToggle={toggleShowCategoryList} />}
 
 			{isSendingData && <SendingData />}
 			{!isSendingData && !isEditing && (

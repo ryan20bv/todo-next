@@ -1,112 +1,55 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 // import type/interface from model
 import { ICategory } from "@/DUMMY_DATA/MODEL";
 // import from indexStore
-import {
-	useAppDispatch,
-	useAppSelector,
-	RootState,
-} from "@/reduxToolkit/indexStore/indexStore";
-
-// import from personalTodoAction
-import { setCurrentCategoryAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
-
-// import from categoryAction
-import {
-	addNewCategoryAction,
-	setDeleteCategoryAction,
-	cancelDeleteCategoryAction,
-	confirmDeleteCategoryAction,
-} from "@/reduxToolkit/personal/category/categoryAction";
 
 // import component
 import AddForm from "../ui/AddForm";
 import SendingData from "../ui/SendingData";
 import CategoryItem from "./CategoryItem";
 import ConfirmationModal from "../ui/ConfirmationModal";
-import EmptyCategoryPage from "./EmptyCategoryPage";
+
+// import category custom hooks
+import useCategoryHook from "@/customHooks/use-categoryHook";
 
 interface PropsType {
-	categoryList: ICategory[];
 	onToggle: () => void;
 }
 
-const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
+const CategoryList: React.FC<PropsType> = ({ onToggle }) => {
 	const router = useRouter();
-	const dispatch = useAppDispatch();
-	const { isSendingData } = useAppSelector(
-		(state: RootState) => state.personalTodoReducer
-	);
+
 	const {
+		categoryList,
+		toggleAddingCategoryHandler,
+		isAddingCategory,
+		isSendingData,
+		addNewCategoryHandler,
+		selectNewCategory,
+		closeAddNewCategoryHandler,
+		toggleMoreActionHandler,
+		idOfToggleToOpenMoreAction,
+		deleteCategoryHandler,
 		isDeletingCategory,
 		categoryToDelete,
+		cancelDeleteOnConfirmationModal,
+		confirmDeleteCategoryHandler,
 		isUpdatingCategory,
 		categoryMessage,
-	} = useAppSelector((state: RootState) => state.categoryTodoReducer);
+		currentCategory,
+	} = useCategoryHook();
 
-	// useEffect(() => {
-	// 	if (categoryList.length === 0) {
-	// 		router.replace("/t/emptyCategory");
-	// 	}
-	// }, [categoryList, router]);
+	useEffect(() => {
+		if (categoryList.length === 0) {
+			router.replace("/t/category");
+		}
+	}, [categoryList, router]);
 
-	const selectNewCategory = (category: ICategory) => {
-		dispatch(setCurrentCategoryAction(category));
+	const selectCategoryHandler = (category: ICategory) => {
+		selectNewCategory(category);
 		onToggle();
-		console.log(category);
-		if (Object.keys(category).length !== 0) {
-			let str = category.categoryName;
-			str = str.replace(/\s+/g, "-").toLowerCase();
-			router.push(`/t/${str}`);
-		}
 	};
-	const [idOfToggleToOpenMoreAction, setIdOfToggleToOpenMoreAction] =
-		useState<string>("");
-	const [isAddingCategory, setIsAddingCategory] = useState<boolean>(false);
-
-	const toggleAddingCategoryHandler = () => {
-		setIsAddingCategory(true);
-	};
-
-	const addNewCategoryHandler = async (newCategoryName: string) => {
-		const result = await dispatch(addNewCategoryAction(newCategoryName));
-		if (result && result.status === "done") {
-			setIsAddingCategory(false);
-		}
-	};
-
-	const closeAddNewCategoryHandler = () => {
-		setIsAddingCategory(false);
-	};
-
-	const toggleMoreActionHandler = (id: string) => {
-		setIdOfToggleToOpenMoreAction(id);
-	};
-
-	const deleteCategoryHandler = (selectedCategory: ICategory) => {
-		dispatch(setDeleteCategoryAction(selectedCategory));
-	};
-
-	const cancelDeleteOnConfirmationModal = () => {
-		dispatch(cancelDeleteCategoryAction());
-	};
-	const confirmDeleteCategoryHandler = async () => {
-		const result = await dispatch(confirmDeleteCategoryAction());
-		if (result === "done") {
-			dispatch(cancelDeleteCategoryAction());
-			toggleMoreActionHandler("");
-			console.log("here");
-			// console.log(categoryList);
-			// if (categoryList.length === 0) {
-			// 	router.replace("/t/emptyCategory");
-			// }
-		}
-	};
-	// console.log(categoryList);
-	// if (categoryList.length === 0) {
-	// 	return <EmptyCategoryPage />;
-	// }
 
 	return (
 		<section className='w-[97%] text-center bg-white  border-b-2 border-black absolute  top-20 p-2 h-[60%]  '>
@@ -137,12 +80,13 @@ const CategoryList: React.FC<PropsType> = ({ categoryList, onToggle }) => {
 						<CategoryItem
 							key={category._id}
 							category={category}
-							selectNewCategory={selectNewCategory}
+							selectNewCategory={() => selectCategoryHandler(category)}
 							index={index}
 							closeAddNewCategoryHandler={closeAddNewCategoryHandler}
 							onToggleMoreAction={toggleMoreActionHandler}
 							idOfToggleToOpenMoreAction={idOfToggleToOpenMoreAction}
 							onSetToDelete={deleteCategoryHandler}
+							currentCategory={currentCategory}
 						/>
 					))}
 			</ul>

@@ -1,14 +1,9 @@
-import React, { useEffect, useCallback } from "react";
+import React from "react";
+// import component
+import CategoryPage from "@/components/profile/CategoryPage";
 
-import {
-	useAppDispatch,
-	useAppSelector,
-	RootState,
-} from "@/reduxToolkit/indexStore/indexStore";
-// imports from redux reducers
-import { getRawDataAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 const Category = () => {
-	return <div>category Page</div>;
+	return <CategoryPage />;
 };
 
 export default Category;

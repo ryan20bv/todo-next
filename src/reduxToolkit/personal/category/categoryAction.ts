@@ -2,7 +2,7 @@ import { ICategory } from "@/DUMMY_DATA/MODEL";
 // import personalTodoSlice
 import {
 	getUserCategoryListRed,
-	updateIsSendingDataRed,
+	// updateIsSendingDataRed,
 	updateCategoryListAfterDeleteRed,
 } from "../personal-slice/personalTodoSlice";
 // import personalTodoAction
@@ -11,6 +11,7 @@ import { getRawDataAction } from "../personal-action/personalTodoAction";
 import {
 	setCategoryToDeleteRed,
 	setIsDeletingCategoryRed,
+	updateCategoryIsSendingDataRed,
 	resetCategorySliceRed,
 	setIsUpdatingCategoryRed,
 	setCategoryMessageRed,
@@ -24,7 +25,7 @@ export const addNewCategoryAction =
 			console.log("no entered new category name");
 			return;
 		}
-		dispatch(updateIsSendingDataRed({ isSendingData: true }));
+		dispatch(updateCategoryIsSendingDataRed({ isSendingData: true }));
 		try {
 			const bodyData = {
 				enteredCategoryName,
@@ -41,7 +42,7 @@ export const addNewCategoryAction =
 
 			const response = await fetch(url, options);
 			if (!response.ok) {
-				dispatch(updateIsSendingDataRed({ isSendingData: false }));
+				dispatch(updateCategoryIsSendingDataRed({ isSendingData: false }));
 				return;
 			}
 			const data = await response.json();
@@ -61,14 +62,14 @@ export const addNewCategoryAction =
 			}
 		} catch (err) {
 			console.log("addNewCategoryAction", err);
-			dispatch(updateIsSendingDataRed({ isSendingData: false }));
+			dispatch(updateCategoryIsSendingDataRed({ isSendingData: false }));
 		}
 	};
 
 export const updateCategoryListAction =
 	(updatedCategoryList: ICategory[]) => async (dispatch: any, getState: any) => {
 		dispatch(getUserCategoryListRed({ categoryList: updatedCategoryList }));
-		dispatch(updateIsSendingDataRed({ isSendingData: false }));
+		dispatch(updateCategoryIsSendingDataRed({ isSendingData: false }));
 	};
 
 export const resetCategoryAction =
@@ -121,11 +122,10 @@ export const confirmDeleteCategoryAction =
 			if (message === "deleted") {
 				const { categoryList } = getState().personalTodoReducer;
 				const copyOfCategoryList: ICategory[] = [...categoryList];
-				console.log(copyOfCategoryList);
+
 				const updatedCategoryList = copyOfCategoryList.filter(
 					(category) => category._id !== categoryToDelete._id
 				);
-				console.log(updatedCategoryList);
 
 				await dispatch(getRawDataAction(authData.userId, authData.apiToken));
 				await dispatch(updateCategoryListAfterDeleteRed({ updatedCategoryList }));

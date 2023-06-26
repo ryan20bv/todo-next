@@ -6,6 +6,7 @@ interface ICategoryState {
 	isDeletingCategory: boolean;
 	isUpdatingCategory: boolean;
 	categoryMessage: string;
+	isCategorySendingData: boolean;
 }
 
 const initialCategoryState: ICategoryState = {
@@ -13,6 +14,7 @@ const initialCategoryState: ICategoryState = {
 	isDeletingCategory: false,
 	isUpdatingCategory: false,
 	categoryMessage: "",
+	isCategorySendingData: false,
 };
 
 const categoryTodoSlice = createSlice({
@@ -22,6 +24,9 @@ const categoryTodoSlice = createSlice({
 		resetCategorySliceRed(state, action) {
 			state.categoryToDelete = {} as ICategory;
 			state.isDeletingCategory = false;
+		},
+		updateCategoryIsSendingDataRed(state, action) {
+			state.isCategorySendingData = action.payload.isSendingData;
 		},
 		setCategoryToDeleteRed(state, action) {
 			state.categoryToDelete = action.payload.categoryToDelete;
@@ -40,6 +45,7 @@ const categoryTodoSlice = createSlice({
 
 export const {
 	resetCategorySliceRed,
+	updateCategoryIsSendingDataRed,
 	setCategoryToDeleteRed,
 	setIsDeletingCategoryRed,
 	setIsUpdatingCategoryRed,

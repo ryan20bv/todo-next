@@ -51,16 +51,18 @@ const MainItem: React.FC<propsType> = ({
 			key={mainTask._id}
 			className='flex px-1 w-full justify-between items-center '
 		>
-			<section className='flex items-center'>
+			<section className='flex items-center w-4/5'>
 				<h3
-					className={`${setDone} pl-2 pr-1 cursor-pointer `}
+					className={`${setDone} pl-2 pr-1 cursor-pointer  w-full`}
 					onClick={() => seeSubTaskHandler(mainTask)}
 					data-testid={`task_${mainTask.mainTaskName}`}
 				>
-					<span>{index + 1 + "."}</span>
-					{summaryName}
-					<span className='text-red-600 ml-2 '>{taskDataToShow}</span>
+					{/* <span className='w-4/5 border border-red-300'>
+						{index + 1 + "."} {summaryName}
+					</span> */}
+					{index + 1 + "."} {summaryName}
 				</h3>
+				<span className='text-red-600 ml-2 '>{taskDataToShow}</span>
 			</section>
 			<section>
 				{!mainTask.isAllSubTaskDone && (

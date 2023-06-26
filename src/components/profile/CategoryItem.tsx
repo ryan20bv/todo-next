@@ -6,6 +6,7 @@ import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 
 interface PropsType {
 	category: ICategory;
+	currentCategory: ICategory;
 	selectNewCategory: (selectedCategory: ICategory) => void;
 	index: number;
 	closeAddNewCategoryHandler: () => void;
@@ -16,6 +17,7 @@ interface PropsType {
 
 const CategoryItem: React.FC<PropsType> = ({
 	category,
+	currentCategory,
 	selectNewCategory,
 	index,
 	closeAddNewCategoryHandler,
@@ -41,7 +43,8 @@ const CategoryItem: React.FC<PropsType> = ({
 	let addedClass: string = index % 2 !== 0 ? "bg-gray-200" : "";
 	let isOtherOptionOpen: boolean =
 		idOfToggleToOpenMoreAction === category._id ? true : false;
-
+	let titleAddedClass: string =
+		category._id === currentCategory._id ? "text-red-400" : "";
 	return (
 		<li
 			key={category._id}
@@ -49,14 +52,14 @@ const CategoryItem: React.FC<PropsType> = ({
 		>
 			<div
 				onClick={() => selectNewCategory(category)}
-				className='mx-4 w-9/12 underline'
+				className={`mx-4 w-9/12 underline ${titleAddedClass}`}
 			>
 				{category.categoryName}
 			</div>
 			<div className='  h-full  flex  '>
 				{!isOtherOptionOpen && (
 					<button
-						className=' flex items-center justify-center px-1 py-2 '
+						className='flex items-center justify-center px-1 py-2 '
 						onClick={() => openMoreOptionHandler(category._id)}
 					>
 						<div className='border border-black w-[5px] h-[5px] bg-gray-300 rounded-full '></div>

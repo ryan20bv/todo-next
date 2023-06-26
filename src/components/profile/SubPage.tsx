@@ -51,6 +51,7 @@ const SubPage = () => {
 		isUpdatingData,
 		updateMessage,
 		subTaskToEdit,
+		currentCategory,
 	} = useAppSelector((state: RootState) => state.personalTodoReducer);
 	const backArrowHandler = () => {
 		router.back();
@@ -124,7 +125,7 @@ const SubPage = () => {
 	return (
 		<Card>
 			<CardHeader
-				title={selectedMainTask.mainTaskName}
+				title={`Main Task: ${selectedMainTask.mainTaskName}`}
 				iconFunction={backArrowHandler}
 				from='sub_page'
 			/>
