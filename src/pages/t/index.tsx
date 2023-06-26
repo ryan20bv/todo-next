@@ -14,7 +14,6 @@ import {
 import { IAuthData } from "@/DUMMY_DATA/MODEL";
 
 import LoadingPage from "@/components/ui/LoadingPage";
-import EmptyCategoryPage from "@/components/profile/EmptyCategoryPage";
 
 const Index = () => {
 	const router = useRouter();
