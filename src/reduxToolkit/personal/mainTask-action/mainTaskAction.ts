@@ -27,7 +27,7 @@ export const addMainTaskAction =
 	(enteredMainTaskName: string) => async (dispatch: any, getState: any) => {
 		dispatch(updateIsSendingDataRed({ isSendingData: true }));
 
-		const { mainTaskList, currentCategory } = getState().personalTodoReducer;
+		const { currentCategory } = getState().personalTodoReducer;
 		const { authData } = getState().authReducer;
 		if (!enteredMainTaskName || enteredMainTaskName.trim().length === 0) {
 			console.log("no entered new Name");
@@ -88,6 +88,10 @@ export const confirmEditMainTaskNameAction =
 		dispatch(updateIsSendingDataRed({ isSendingData: true }));
 		const { mainTaskList, mainTaskToEdit } = getState().personalTodoReducer;
 		const { authData } = getState().authReducer;
+		if (enteredNewMainTaskName === mainTaskToEdit.mainTaskName) {
+			dispatch(updateIsSendingDataRed({ isSendingData: false }));
+			return;
+		}
 		try {
 			const bodyData = {
 				enteredNewMainTaskName,

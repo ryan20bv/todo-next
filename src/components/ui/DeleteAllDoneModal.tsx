@@ -59,7 +59,7 @@ const DeleteAllDoneModal: React.FC<propsTypes> = ({
 						{isUpdatingData && (
 							<div
 								className='absolute top-[40%] border z-10 w-[85%]
-				border-black bg-white bg-opacity-40 p-4 rounded-xl mx-6 flex flex-col justify-center items-center'
+				border-black bg-white  p-4 rounded-xl mx-6 flex flex-col justify-center items-center'
 							>
 								<p>{updateMessage}</p>
 							</div>

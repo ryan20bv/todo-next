@@ -51,7 +51,7 @@ const CardHeader: React.FC<propsTypes> = ({
 		);
 	}
 	return (
-		<section className='bg-[#AF7EEB] w-full py-2 px-3 text-white text-center relative min-h-[40px]'>
+		<section className='bg-[#AF7EEB] w-full py-2 px-3  text-white text-center relative min-h-[40px]'>
 			<button
 				className='absolute left-4 text-red-600 h-6'
 				onClick={clickIconHandler}

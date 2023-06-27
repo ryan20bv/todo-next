@@ -7,11 +7,14 @@ import {
 	setSelectedMainTaskRed,
 	updateMainTaskListRed,
 } from "../personal-slice/personalTodoSlice";
+// import Category Action
+import { resetCategoryAction } from "../category/categoryAction";
 import { ICategory, IMainTask, ISubTask } from "@/DUMMY_DATA/MODEL";
 import { signOut } from "next-auth/react";
 // checked
 export const getRawDataAction =
 	(userId: string, apiToken: string) => async (dispatch: any, getState: any) => {
+		const { currentCategory } = getState().personalTodoReducer;
 		try {
 			const url =
 				process.env.NEXT_PUBLIC_BACK_END_URL + "/api/category/user/" + userId;
@@ -32,14 +35,24 @@ export const getRawDataAction =
 				}
 				return;
 			}
-			const initialCategory: ICategory = {
-				_id: data[0]._id,
-				categoryName: data[0].categoryName,
-				creator_id: data[0].category_id,
-			};
+			// let initialCategory: ICategory = currentCategory;
+			// if (
+			// 	!currentCategory ||
+			// 	(Object.keys(currentCategory).length === 0 && data.length > 0)
+			// ) {
+			// 	initialCategory = {
+			// 		_id: data[0]._id,
+			// 		categoryName: data[0].categoryName,
+			// 		creator_id: data[0].category_id,
+			// 	};
+			// }
+			// if (data.length === 0) {
+			// 	initialCategory = {} as ICategory;
+			// }
 
 			await dispatch(getRawDataRed({ rawData: data }));
-			dispatch(setCurrentCategoryAction(initialCategory));
+
+			// dispatch(setCurrentCategoryAction(initialCategory));
 			dispatch(getUserCategoryListAction());
 		} catch (err) {
 			console.log("getRawDataAction", err);
@@ -69,7 +82,12 @@ export const setCurrentCategoryAction =
 		const foundCategoryItems = rawData.find(
 			(item: any) => item._id === category._id
 		);
-
+		// console.log(foundCategoryItems);
+		if (!foundCategoryItems) {
+			await dispatch(setCurrentCategoryRed({ currentCategory: {} as ICategory }));
+			dispatch(setMainTaskListAction([]));
+			return;
+		}
 		const currentMainTaskList: IMainTask[] = [...foundCategoryItems.mainTaskList];
 		/* const currentMainTaskList = foundCategoryItems.mainTaskList.map(
 			(item: any) => {
@@ -110,6 +128,7 @@ export const setSelectedMainTaskAction =
 
 export const resetPersonalTodoStateAction =
 	() => async (dispatch: any, getState: any) => {
+		await dispatch(resetCategoryAction());
 		dispatch(resetPersonalTodoStateRed({}));
 	};
 

@@ -31,7 +31,7 @@ const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
 	};
 
 	return (
-		<section className=' mt-4  w-full px-3 flex '>
+		<section className=' w-full px-3 flex my-2'>
 			<form
 				action=''
 				onSubmit={submitTodoHandler}
@@ -42,7 +42,7 @@ const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
 					placeholder={placeHolder}
 					required
 					ref={inputRef}
-					className='py-2 px-2 focus:outline-none w-[85%] border border-black '
+					className='py-1 px-2 focus:outline-none w-[85%] border border-black '
 					id={`add_input`}
 					// data-testid={`filter_active`}
 				/>
@@ -56,7 +56,7 @@ const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
 			</form>
 			<button onClick={cancelAddHandler}>
 				<XCircleIcon
-					className='text-red-600 h-8 mx-2'
+					className='text-red-600 h-8 mx-1'
 					data-testid={`add_cancel_button`}
 				/>
 			</button>
