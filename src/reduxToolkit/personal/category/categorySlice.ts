@@ -7,6 +7,8 @@ interface ICategoryState {
 	isUpdatingCategory: boolean;
 	categoryMessage: string;
 	isCategorySendingData: boolean;
+	isEditingCategory: boolean;
+	categoryToEdit: ICategory;
 }
 
 const initialCategoryState: ICategoryState = {
@@ -15,6 +17,8 @@ const initialCategoryState: ICategoryState = {
 	isUpdatingCategory: false,
 	categoryMessage: "",
 	isCategorySendingData: false,
+	isEditingCategory: false,
+	categoryToEdit: {} as ICategory,
 };
 
 const categoryTodoSlice = createSlice({
@@ -40,6 +44,12 @@ const categoryTodoSlice = createSlice({
 		setCategoryMessageRed(state, action) {
 			state.categoryMessage = action.payload.categoryMessage;
 		},
+		updateEditingStatusRed(state, action) {
+			state.isEditingCategory = action.payload.isEditingStatus;
+		},
+		setCategoryToEditRed(state, action) {
+			state.categoryToEdit = action.payload.categoryToEdit;
+		},
 	},
 });
 
@@ -50,6 +60,8 @@ export const {
 	setIsDeletingCategoryRed,
 	setIsUpdatingCategoryRed,
 	setCategoryMessageRed,
+	updateEditingStatusRed,
+	setCategoryToEditRed,
 } = categoryTodoSlice.actions;
 export const categoryInitialState = initialCategoryState;
 export default categoryTodoSlice;

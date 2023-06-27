@@ -15,6 +15,8 @@ import {
 	resetCategorySliceRed,
 	setIsUpdatingCategoryRed,
 	setCategoryMessageRed,
+	updateEditingStatusRed,
+	setCategoryToEditRed,
 } from "./categorySlice";
 
 export const addNewCategoryAction =
@@ -137,4 +139,75 @@ export const confirmDeleteCategoryAction =
 		} catch (err) {
 			console.log("confirmDeleteCategoryAction", err);
 		}
+	};
+
+export const setIsEditingCategoryAction =
+	(categoryToEdit: ICategory) => async (dispatch: any, getState: any) => {
+		await dispatch(setCategoryToEditRed({ categoryToEdit }));
+		dispatch(updateEditingStatusRed({ isEditingStatus: true }));
+	};
+export const cancelEditCategoryAction =
+	() => async (dispatch: any, getState: any) => {
+		await dispatch(setCategoryToEditRed({ categoryToEdit: {} as ICategory }));
+		dispatch(updateEditingStatusRed({ isEditingStatus: false }));
+	};
+
+export const confirmEditCategoryAction =
+	(enteredCategoryName: string) => async (dispatch: any, getState: any) => {
+		const { categoryToEdit } = getState().categoryTodoReducer;
+		const { authData } = getState().authReducer;
+		dispatch(setIsUpdatingCategoryRed({ isUpdatingCategory: false }));
+		dispatch(setIsUpdatingCategoryRed({ isUpdatingCategory: true }));
+		if (enteredCategoryName === categoryToEdit.categoryName) {
+			dispatch(setIsUpdatingCategoryRed({ isUpdatingCategory: false }));
+			return "done";
+		}
+
+		try {
+			const bodyData = { enteredCategoryName };
+			const url =
+				process.env.NEXT_PUBLIC_BACK_END_URL +
+				"/api/category/edit/" +
+				categoryToEdit._id;
+			const options = {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: "Bearer " + authData.apiToken,
+				},
+				body: JSON.stringify(bodyData),
+			};
+
+			const response = await fetch(url, options);
+			if (!response.ok) {
+				// dispatch(updateIsDeletingDataRed({ isDeletingData: false }));
+				// dispatch(updateIsUpdatingRed({ isUpdatingData: false }));
+				dispatch(setIsUpdatingCategoryRed({ isUpdatingCategory: false }));
+				return;
+			}
+			const data = await response.json();
+
+			const { updatedCategory, message } = data;
+			if (message === "edited") {
+				const { categoryList } = getState().personalTodoReducer;
+				let copyOfCategoryList = [...categoryList];
+				let findIndexOfEditedCategory = copyOfCategoryList.findIndex(
+					(category: ICategory) => category._id === updatedCategory._id
+				);
+
+				// console.log(findIndexOfEditedCategory);
+				copyOfCategoryList[findIndexOfEditedCategory] = updatedCategory;
+				let updatedCategoryList = [...copyOfCategoryList];
+
+				await dispatch(updateCategoryListAction(updatedCategoryList));
+				await dispatch(getRawDataAction(authData.userId, authData.apiToken));
+				dispatch(setIsUpdatingCategoryRed({ isUpdatingCategory: false }));
+
+				// return "done";
+			}
+		} catch (err) {
+			console.log("confirmEditCategoryAction", err);
+			dispatch(setIsUpdatingCategoryRed({ isUpdatingCategory: false }));
+		}
+		return "done";
 	};

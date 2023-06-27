@@ -56,7 +56,7 @@ const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
 			</form>
 			<button onClick={cancelAddHandler}>
 				<XCircleIcon
-					className='text-red-600 h-8 mx-2'
+					className='text-red-600 h-8 mx-1'
 					data-testid={`add_cancel_button`}
 				/>
 			</button>

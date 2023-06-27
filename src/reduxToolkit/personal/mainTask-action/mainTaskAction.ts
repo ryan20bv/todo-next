@@ -88,6 +88,10 @@ export const confirmEditMainTaskNameAction =
 		dispatch(updateIsSendingDataRed({ isSendingData: true }));
 		const { mainTaskList, mainTaskToEdit } = getState().personalTodoReducer;
 		const { authData } = getState().authReducer;
+		if (enteredNewMainTaskName === mainTaskToEdit.mainTaskName) {
+			dispatch(updateIsSendingDataRed({ isSendingData: false }));
+			return;
+		}
 		try {
 			const bodyData = {
 				enteredNewMainTaskName,

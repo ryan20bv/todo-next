@@ -13,9 +13,15 @@ import {
 	setDeleteCategoryAction,
 	cancelDeleteCategoryAction,
 	confirmDeleteCategoryAction,
+	setIsEditingCategoryAction,
+	cancelEditCategoryAction,
+	confirmEditCategoryAction,
 } from "@/reduxToolkit/personal/category/categoryAction";
 // import from personalTodoAction
-import { setCurrentCategoryAction } from "@/reduxToolkit/personal/personal-action/personalTodoAction";
+import {
+	setCurrentCategoryAction,
+	getRawDataAction,
+} from "@/reduxToolkit/personal/personal-action/personalTodoAction";
 
 const useCategoryHook = () => {
 	const router = useRouter();
@@ -29,13 +35,21 @@ const useCategoryHook = () => {
 		categoryToDelete,
 		isUpdatingCategory,
 		categoryMessage,
+		isEditingCategory,
+		categoryToEdit,
 	} = useAppSelector((state: RootState) => state.categoryTodoReducer);
 	const { currentCategory } = useAppSelector(
 		(state: RootState) => state.personalTodoReducer
 	);
+	const { authData } = useAppSelector((state: RootState) => state.authReducer);
 	const [isAddingCategory, setIsAddingCategory] = useState<boolean>(false);
 	const [idOfToggleToOpenMoreAction, setIdOfToggleToOpenMoreAction] =
 		useState<string>("");
+
+	useEffect(() => {
+		dispatch(getRawDataAction(authData.userId, authData.apiToken));
+	}, [dispatch, authData]);
+
 	const toggleAddingCategoryHandler = () => {
 		setIsAddingCategory(true);
 	};
@@ -59,9 +73,11 @@ const useCategoryHook = () => {
 	};
 	const toggleMoreActionHandler = (id: string) => {
 		setIdOfToggleToOpenMoreAction(id);
+		cancelEditCategoryHandler();
 	};
 	const deleteCategoryHandler = (selectedCategory: ICategory) => {
 		dispatch(setDeleteCategoryAction(selectedCategory));
+		cancelEditCategoryHandler();
 	};
 	const cancelDeleteOnConfirmationModal = () => {
 		dispatch(cancelDeleteCategoryAction());
@@ -71,6 +87,18 @@ const useCategoryHook = () => {
 		if (result === "done") {
 			dispatch(cancelDeleteCategoryAction());
 			toggleMoreActionHandler("");
+		}
+	};
+	const editCategoryHandler = (categoryToEdit: ICategory) => {
+		dispatch(setIsEditingCategoryAction(categoryToEdit));
+	};
+	const cancelEditCategoryHandler = () => {
+		dispatch(cancelEditCategoryAction());
+	};
+	const confirmEditCategoryHandler = async (enteredCategoryName: string) => {
+		const result = await dispatch(confirmEditCategoryAction(enteredCategoryName));
+		if (result === "done") {
+			cancelEditCategoryHandler();
 		}
 	};
 	return {
@@ -91,6 +119,11 @@ const useCategoryHook = () => {
 		isUpdatingCategory: isUpdatingCategory,
 		categoryMessage: categoryMessage,
 		currentCategory: currentCategory,
+		editCategoryHandler: editCategoryHandler,
+		isEditingCategory: isEditingCategory,
+		categoryToEdit: categoryToEdit,
+		cancelEditCategoryHandler: cancelEditCategoryHandler,
+		confirmEditCategoryHandler: confirmEditCategoryHandler,
 	};
 };
 export default useCategoryHook;

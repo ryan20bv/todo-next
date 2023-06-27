@@ -13,6 +13,7 @@ interface PropsType {
 	onToggleMoreAction: (id: string) => void;
 	idOfToggleToOpenMoreAction: string;
 	onSetToDelete: (selectedCategory: ICategory) => void;
+	onSetToEdit: (selectedCategory: ICategory) => void;
 }
 
 const CategoryItem: React.FC<PropsType> = ({
@@ -24,6 +25,7 @@ const CategoryItem: React.FC<PropsType> = ({
 	onToggleMoreAction,
 	idOfToggleToOpenMoreAction,
 	onSetToDelete,
+	onSetToEdit,
 }) => {
 	const openMoreOptionHandler = (id: string) => {
 		onToggleMoreAction(id);
@@ -32,12 +34,14 @@ const CategoryItem: React.FC<PropsType> = ({
 	};
 	const closeMoreOptionHandler = () => {
 		onToggleMoreAction("");
-
 		closeAddNewCategoryHandler();
 	};
 
 	const setDeleteCategoryHandler = (selectedCategory: ICategory) => {
 		onSetToDelete(selectedCategory);
+	};
+	const setCategoryToEditHandler = (selectedCategory: ICategory) => {
+		onSetToEdit(selectedCategory);
 	};
 
 	let addedClass: string = index % 2 !== 0 ? "bg-gray-200" : "";
@@ -70,7 +74,10 @@ const CategoryItem: React.FC<PropsType> = ({
 				{isOtherOptionOpen && (
 					<div className='flex items-center justify-center'>
 						<button>
-							<PencilSquareIcon className='text-blue-600 h-5' />
+							<PencilSquareIcon
+								className='text-blue-600 h-5'
+								onClick={() => setCategoryToEditHandler(category)}
+							/>
 						</button>
 						<button onClick={() => setDeleteCategoryHandler(category)}>
 							<TrashIcon className='text-red-600 h-5 mx-2' />
