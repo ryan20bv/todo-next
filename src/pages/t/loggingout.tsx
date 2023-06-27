@@ -10,9 +10,8 @@ const LoggingOut = () => {
 	const dispatch = useAppDispatch();
 	useEffect(() => {
 		signOut({ callbackUrl: process.env.NEXT_PUBLIC_FRONT_END_URL });
-
-		dispatch(logoutAuthAction());
 		dispatch(resetPersonalTodoStateAction());
+		dispatch(logoutAuthAction());
 	}, [dispatch]);
 
 	return <LoadingPage status='Logging Out...' />;

@@ -30,7 +30,8 @@ const EditForm: React.FC<propsTypes> = ({
 		onCancelEditing();
 	};
 	return (
-		<section className=' mt-4  w-full px-3 flex '>
+		<section className=' w-full px-1 flex my-2 items-center'>
+			<h3 className='text-green-600 mr-1'>Edit</h3>
 			<form
 				action=''
 				onSubmit={submitTodoEditHandler}
@@ -42,7 +43,7 @@ const EditForm: React.FC<propsTypes> = ({
 					required
 					defaultValue={itemToEdit}
 					ref={inputRef}
-					className='py-2 px-2 focus:outline-none w-[85%] border border-black '
+					className='py-1 px-2 focus:outline-none w-[85%] border border-black '
 					id={`edit_input`}
 				/>
 
@@ -55,7 +56,7 @@ const EditForm: React.FC<propsTypes> = ({
 			</form>
 			<button onClick={cancelEditHandler}>
 				<XCircleIcon
-					className='text-red-600 h-8 mx-2'
+					className='text-red-600 h-7 mx-1'
 					data-testid={`edit_cancel_button`}
 				/>
 			</button>

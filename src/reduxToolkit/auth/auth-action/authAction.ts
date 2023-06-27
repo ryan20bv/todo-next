@@ -26,6 +26,7 @@ export const logInAction =
 				throw new Error("Invalid Email or password!");
 			}
 			dispatch(updateIsAuthState({ isAuthenticated: true }));
+			dispatch(toggleSendingData({ isSendingData: false }));
 		} catch (err: any) {
 			dispatch(updateAuthError({ authError: err.message }));
 			dispatch(toggleSendingData({ isSendingData: false }));

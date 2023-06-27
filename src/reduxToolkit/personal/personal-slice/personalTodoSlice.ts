@@ -94,6 +94,9 @@ const personalTodoSlice = createSlice({
 		setSubTaskToEditRed(state, action) {
 			state.subTaskToEdit = action.payload.subTaskToEdit;
 		},
+		updateCategoryListAfterDeleteRed(state, action) {
+			state.categoryList = action.payload.updatedCategoryList;
+		},
 	},
 });
 
@@ -113,6 +116,7 @@ export const {
 	setMainTaskToDeleteRed,
 	setSubTaskToDeleteRed,
 	setSubTaskToEditRed,
+	updateCategoryListAfterDeleteRed,
 } = personalTodoSlice.actions;
 
 export default personalTodoSlice;
