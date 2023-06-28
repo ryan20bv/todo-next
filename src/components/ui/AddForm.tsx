@@ -15,7 +15,7 @@ const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
 		stringChangeHandler,
 		submitStringHandler,
 		submitDoneInputHandler,
-	} = useSanitizeInputHook();
+	} = useSanitizeInputHook("");
 
 	const changeHandler = (e: React.FormEvent<HTMLInputElement>) => {
 		stringChangeHandler(e.currentTarget.value);

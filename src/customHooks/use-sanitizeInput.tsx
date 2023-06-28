@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 
-const useSanitizeInputHook = () => {
-	const [inputStringValue, setInputStringValue] = useState<string>("");
+const useSanitizeInputHook = (itemToEdit: string) => {
+	const [inputStringValue, setInputStringValue] = useState<string>(
+		itemToEdit ? itemToEdit : ""
+	);
 
 	const stringChangeHandler = (enteredValue: string) => {
 		const regex = /^[_=-]+|[^a-zA-Z0-9-_ ]+$/g;
