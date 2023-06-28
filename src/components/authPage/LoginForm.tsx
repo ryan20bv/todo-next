@@ -48,7 +48,6 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 		const character = ".";
 		const count = (enteredValue.match(new RegExp(character, "g")) || []).length;
 		if (count > 1) {
-			return;
 		}
 		const regex = /^[-_=]+|[^.a-zA-Z0-9]+$/;
 
