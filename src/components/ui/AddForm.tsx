@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { PlusCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import useSanitizeInputHook from "@/customHooks/use-sanitizeInput";
 
 interface propsTypes {
 	onAddHandler: (newTaskName: string) => void;
@@ -7,50 +8,39 @@ interface propsTypes {
 }
 
 const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
-	const [inputValue, setInputValue] = useState<string>("");
 	const [hasError, setHasError] = useState<boolean>(false);
 
+	const {
+		inputStringValue,
+		stringChangeHandler,
+		submitStringHandler,
+		submitDoneInputHandler,
+	} = useSanitizeInputHook();
+
 	const changeHandler = (e: React.FormEvent<HTMLInputElement>) => {
-		const regex = /[^a-zA-Z0-9-_ ]/g;
-		const trimmedValue = e.currentTarget.value.trimStart().replace(regex, "");
-		const capitalizeFirstCharacter = (str: string): string => {
-			if (str.length === 0) {
-				return str; // Return empty string if input is empty
-			}
-			const firstChar = str.charAt(0).toUpperCase(); // Get the first character and capitalize it
-			const restOfString = str.slice(1); // Get the remaining characters of the string
-
-			return firstChar + restOfString; // Return the capitalized string
-		};
-
-		const capitalizedString = capitalizeFirstCharacter(trimmedValue);
-
-		setInputValue(capitalizedString);
+		stringChangeHandler(e.currentTarget.value);
 	};
 
 	const submitTodoHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const removeUnderscoreAndHyphen = (str: string): string => {
-			const regex = /[_-](?!\w)/g;
-			const cleanedStr = str.replace(regex, "");
-			return cleanedStr;
-		};
-		const cleanedString = removeUnderscoreAndHyphen(inputValue);
-		setInputValue(cleanedString);
+
+		const cleanedString = submitStringHandler();
 
 		if (!cleanedString || cleanedString?.trim().length === 0) {
 			setHasError(true);
 			return;
 		}
 
-		onAddHandler(cleanedString.trim());
+		onAddHandler(cleanedString);
 		setHasError(false);
-		setInputValue("");
+
+		submitDoneInputHandler();
 	};
 
 	const cancelAddHandler = () => {
 		setHasError(false);
-		setInputValue("");
+
+		submitDoneInputHandler();
 	};
 
 	return (
@@ -64,12 +54,10 @@ const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
 					<input
 						type='text'
 						placeholder={placeHolder}
-						// required
-						// ref={inputRef}
 						className='py-1 px-2 focus:outline-none w-[85%] border border-black '
 						id={`add_input`}
 						onChange={changeHandler}
-						value={inputValue}
+						value={inputStringValue}
 						// data-testid={`filter_active`}
 					/>
 
