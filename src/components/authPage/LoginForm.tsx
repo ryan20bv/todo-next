@@ -24,34 +24,90 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 	);
 	const Router = useRouter();
 
-	const emailInputRef = useRef<HTMLInputElement>(null);
-	const passwordInputRef = useRef<HTMLInputElement>(null);
+	// const emailInputRef = useRef<HTMLInputElement>(null);
+	// const passwordInputRef = useRef<HTMLInputElement>(null);
 
 	const [showPassword, setShowPassword] = useState<boolean>(false);
+	const [enteredEmail, setEnteredEmail] = useState<string>("");
+	const [emailError, setEmailError] = useState<boolean>(false);
+	const [enteredPassword, setEnteredPassword] = useState<string>("");
+
+	const changeInputEmailHandler = (e: React.FormEvent<HTMLInputElement>) => {
+		setEmailError(false);
+		const enteredValue = e.currentTarget.value.trim();
+
+		const regex = /^[-_=]+|[^a-zA-Z0-9@.]+$/;
+
+		const trimmedValue = enteredValue.trimStart().replace(regex, "");
+		setEnteredEmail(trimmedValue.trim());
+	};
+
+	const changeInputPasswordHandler = (e: React.FormEvent<HTMLInputElement>) => {
+		setEmailError(false);
+		const enteredValue = e.currentTarget.value.trim();
+		const character = ".";
+		const count = (enteredValue.match(new RegExp(character, "g")) || []).length;
+		if (count > 1) {
+			return;
+		}
+		const regex = /^[-_=]+|[^.a-zA-Z0-9]+$/;
+
+		const trimmedValue = enteredValue.trimStart().replace(regex, "");
+
+		setEnteredPassword(trimmedValue.trim());
+	};
+
+	const validPasswordRegex = /^.{6,}\.$/;
+
+	const validateEnteredEmailHandler = (enteredInput: string) => {
+		const isValidString = (input: string): boolean => {
+			const validEmailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+			return validEmailRegex.test(input);
+		};
+		const isEmailValid = isValidString(enteredInput);
+
+		if (!isEmailValid) {
+			setEmailError(true);
+		}
+		return isEmailValid;
+	};
+
 	const submitLoginFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		const enteredEmail = emailInputRef.current?.value;
-		const enteredPassword = passwordInputRef.current?.value;
+		const isEmailValid = validateEnteredEmailHandler(enteredEmail);
+		console.log(isEmailValid);
+		// const isValidString = (input: string): boolean => {
+		// 	const validEmailRegex =
+		// 		/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+		// 	return validEmailRegex.test(input);
+		// };
+		// const isEmailValid = isValidString(enteredEmail);
+		// console.log(isEmailValid);
+		// if (!isEmailValid) {
+		// 	setEmailError(true);
+		// }
 
-		if (
-			!enteredEmail ||
-			enteredEmail.trim() === "" ||
-			!enteredEmail.includes("@")
-		) {
-			dispatch(authErrorAction("Invalid email!"));
-			return;
-		}
-		if (
-			!enteredPassword ||
-			enteredPassword.trim() === "" ||
-			enteredPassword.length < 6
-		) {
-			dispatch(authErrorAction("Invalid password. Min of 6 characters required!"));
-			return;
-		}
+		// const enteredEmail = emailInputRef.current?.value;
+		// const enteredPassword = passwordInputRef.current?.value;
+		// if (
+		// 	!enteredEmail ||
+		// 	enteredEmail.trim().length === 0 ||
+		// 	!enteredEmail.includes("@")
+		// ) {
+		// 	dispatch(authErrorAction("Invalid email!"));
+		// 	return;
+		// }
+		// if (
+		// 	!enteredPassword ||
+		// 	enteredPassword.trim() === "" ||
+		// 	enteredPassword.length < 6
+		// ) {
+		// 	dispatch(authErrorAction("Invalid password. Min of 6 characters required!"));
+		// 	return;
+		// }
 
-		dispatch(logInAction(enteredEmail, enteredPassword));
+		// dispatch(logInAction(enteredEmail, enteredPassword));
 	};
 
 	const toggleShowPasswordHandler = () => {
@@ -68,14 +124,17 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 					<div className=' text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7'>
 						<div className='relative mb-6'>
 							<input
-								type='email'
+								type='text'
 								name='email'
 								id='email'
-								required
+								// required
 								autoComplete='off'
-								ref={emailInputRef}
+								// ref={emailInputRef}
 								className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 								placeholder='Email address'
+								value={enteredEmail}
+								onBlur={() => validateEnteredEmailHandler(enteredEmail)}
+								onChange={changeInputEmailHandler}
 							/>
 
 							<label
@@ -84,6 +143,9 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 							>
 								Email Address
 							</label>
+							{emailError && (
+								<p className='text-red-500 text-xs '>*Enter a valid Email address</p>
+							)}
 						</div>
 						<div className='relative mb-6 flex items-center'>
 							<div>
@@ -94,9 +156,12 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 									required
 									autoComplete='off'
 									min={6}
-									ref={passwordInputRef}
+									// ref={passwordInputRef}
 									className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 									placeholder='Password'
+									value={enteredPassword}
+									onBlur={() => validateEnteredEmailHandler(enteredEmail)}
+									onChange={changeInputPasswordHandler}
 								/>
 
 								<label
@@ -114,9 +179,9 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 								{!showPassword && <EyeSlashIcon className='h-5' />}
 							</div>
 						</div>
-						{authError && authError.trim().length > 0 && (
+						{/* {authError && authError.trim().length > 0 && (
 							<p className='text-red-500 text-xs text-center'>{authError}</p>
-						)}
+						)} */}
 						<div className='flex justify-end '>
 							{isSendingData && (
 								<button
