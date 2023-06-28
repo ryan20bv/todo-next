@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { PlusCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 interface propsTypes {
@@ -7,11 +7,10 @@ interface propsTypes {
 }
 
 const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
-	const inputRef = useRef<HTMLInputElement>(null);
 	const [inputValue, setInputValue] = useState<string>("");
+	const [hasError, setHasError] = useState<boolean>(false);
 
 	const changeHandler = (e: React.FormEvent<HTMLInputElement>) => {
-		console.log(e.currentTarget.value.trim());
 		const regex = /[^a-zA-Z0-9-_ ]/g;
 		const trimmedValue = e.currentTarget.value.trimStart().replace(regex, "");
 		const capitalizeFirstCharacter = (str: string): string => {
@@ -31,66 +30,66 @@ const AddForm: React.FC<propsTypes> = ({ onAddHandler, placeHolder }) => {
 
 	const submitTodoHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		// const enteredInput = inputRef.current?.value;
-		// if (!enteredInput || enteredInput?.trim() === "") {
-		// 	console.log("no value");
-		// 	return;
-		// }
+		const removeUnderscoreAndHyphen = (str: string): string => {
+			const regex = /[_-](?!\w)/g;
+			const cleanedStr = str.replace(regex, "");
+			return cleanedStr;
+		};
+		const cleanedString = removeUnderscoreAndHyphen(inputValue);
+		setInputValue(cleanedString);
 
-		if (!inputValue || inputValue?.trim().length === 0) {
-			console.log("no value");
+		if (!cleanedString || cleanedString?.trim().length === 0) {
+			setHasError(true);
 			return;
 		}
 
-		console.log(inputValue.trim());
-		console.log(inputValue.trim().length);
-
-		// onAddHandler(enteredInput);
-		// inputRef.current.value = "";
+		onAddHandler(cleanedString.trim());
+		setHasError(false);
+		setInputValue("");
 	};
 
 	const cancelAddHandler = () => {
-		// const enteredInput = inputRef.current?.value;
-		// if (!enteredInput || enteredInput?.trim() === "") {
-		// 	console.log("no value");
-		// 	return;
-		// }
-		// inputRef.current.value = "";
+		setHasError(false);
 		setInputValue("");
 	};
 
 	return (
-		<section className=' w-full px-3 flex my-2'>
-			<form
-				action=''
-				onSubmit={submitTodoHandler}
-				className=' w-full flex justify-between '
-			>
-				<input
-					type='text'
-					placeholder={placeHolder}
-					required
-					// ref={inputRef}
-					className='py-1 px-2 focus:outline-none w-[85%] border border-black '
-					id={`add_input`}
-					onChange={changeHandler}
-					value={inputValue}
-					// data-testid={`filter_active`}
-				/>
+		<section className=' w-full px-3  mt-2 '>
+			<div className='flex'>
+				<form
+					action=''
+					onSubmit={submitTodoHandler}
+					className=' w-full flex justify-between '
+				>
+					<input
+						type='text'
+						placeholder={placeHolder}
+						// required
+						// ref={inputRef}
+						className='py-1 px-2 focus:outline-none w-[85%] border border-black '
+						id={`add_input`}
+						onChange={changeHandler}
+						value={inputValue}
+						// data-testid={`filter_active`}
+					/>
 
-				<button>
-					<PlusCircleIcon
-						className='text-green-600 h-8 '
-						data-testid={`add_confirm_button`}
+					<button>
+						<PlusCircleIcon
+							className='text-green-600 h-8 '
+							data-testid={`add_confirm_button`}
+						/>
+					</button>
+				</form>
+				<button onClick={cancelAddHandler}>
+					<XCircleIcon
+						className='text-red-600 h-8 mx-1'
+						data-testid={`add_cancel_button`}
 					/>
 				</button>
-			</form>
-			<button onClick={cancelAddHandler}>
-				<XCircleIcon
-					className='text-red-600 h-8 mx-1'
-					data-testid={`add_cancel_button`}
-				/>
-			</button>
+			</div>
+			{hasError && (
+				<p className='text-red-500 text-xs pl-4'>*Please enter a value</p>
+			)}
 		</section>
 	);
 };
