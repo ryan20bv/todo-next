@@ -20,13 +20,24 @@ const useSanitizeInputHook = (itemToEdit: string) => {
 
 		const capitalizedString = capitalizeFirstCharacter(trimmedValue);
 		setInputStringValue(capitalizedString);
+		return capitalizedString;
 	};
+	const removeUnderscoreAndHyphen = (str: string): string => {
+		const regex = /^[_-]+|[_-]+$/g;
+		const cleanedStr = str.replace(regex, "");
+
+		return cleanedStr;
+	};
+	const validateInput = (input: string): boolean => {
+		console.log(input);
+		// const regex = /[`!@#$%^&*()-_=/,:'\./;?":{}|<>]/;
+		const regex = /[!@#$%^&*(),.?":+{}|_<>/`-]/;
+		const isInValid = regex.test(input);
+		console.log(isInValid);
+		return isInValid;
+	};
+
 	const submitStringHandler = () => {
-		const removeUnderscoreAndHyphen = (str: string): string => {
-			const regex = /^[_-]+|[_-]+$/g;
-			const cleanedStr = str.replace(regex, "");
-			return cleanedStr;
-		};
 		const cleanedString = removeUnderscoreAndHyphen(inputStringValue).trim();
 		setInputStringValue(cleanedString);
 		return cleanedString;
@@ -40,6 +51,8 @@ const useSanitizeInputHook = (itemToEdit: string) => {
 		stringChangeHandler: stringChangeHandler,
 		submitStringHandler: submitStringHandler,
 		submitDoneInputHandler: submitDoneInputHandler,
+		removeUnderscoreAndHyphen: removeUnderscoreAndHyphen,
+		validateInput: validateInput,
 	};
 };
 

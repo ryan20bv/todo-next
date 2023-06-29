@@ -1,7 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import useSanitizeInputHook from "@/customHooks/use-sanitizeInput";
+import useSanitizeLoginHook from "@/customHooks/use-sanitizeLogin";
 
 interface propsTypes {
 	onToggle: () => void;
@@ -9,14 +11,31 @@ interface propsTypes {
 
 const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 	const Router = useRouter();
+	const { stringChangeHandler, removeUnderscoreAndHyphen, validateInput } =
+		useSanitizeInputHook("");
+	const {
+		enteredEmail,
+		emailError,
+		setEmailError,
+		changeInputEmailHandler,
+		validateEnteredEmailHandler,
+		enteredPassword,
+		passwordError,
+		setPasswordError,
+		changeInputPasswordHandler,
+		validateEnteredPasswordHandler,
+	} = useSanitizeLoginHook();
+
 	const [isDataValid, setIsDataValid] = useState<boolean>(true);
-	const fNameInputRef = useRef<HTMLInputElement>(null);
-	const lNameInputRef = useRef<HTMLInputElement>(null);
-	const emailInputRef = useRef<HTMLInputElement>(null);
-	const passwordInputRef = useRef<HTMLInputElement>(null);
+
+	const [errorMessage, setErrorMessage] = useState<string>("");
+
 	const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-	const [errorMessage, setErrorMessage] = useState<string>("");
+	const [inputFirstName, setInputFirstName] = useState<string>("");
+	const [firstNameError, setFirstNameError] = useState<boolean>(false);
+	const [inputLastName, setInputLastName] = useState<string>("");
+	const [lastNameError, setLastNameError] = useState<boolean>(false);
 
 	const loginHandler = async (emailInput: string, passwordInput: string) => {
 		let result;
@@ -36,47 +55,91 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 			setIsSigningUp(false);
 		}
 	};
+	// first name validation
+	const inputFirstNameHandler = (e: React.FormEvent<HTMLInputElement>) => {
+		const result = stringChangeHandler(e.currentTarget.value);
+		setInputFirstName(result);
+	};
+	const blurInputFirstNameHandler = () => {
+		const cleanedStr = removeUnderscoreAndHyphen(inputFirstName);
+		const isInValid = validateInput(cleanedStr);
+		setFirstNameError(isInValid);
+		setInputFirstName(cleanedStr);
+	};
+
+	// last name validation
+	const inputLastNameHandler = (e: React.FormEvent<HTMLInputElement>) => {
+		const result = stringChangeHandler(e.currentTarget.value);
+		setInputLastName(result);
+	};
+	const blurInputLastNameHandler = () => {
+		const cleanedStr = removeUnderscoreAndHyphen(inputLastName);
+		const isInValid = validateInput(cleanedStr);
+		setLastNameError(isInValid);
+		setInputLastName(cleanedStr);
+	};
+	// email validation
 
 	const submitSignUpFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setIsDataValid(true);
-		setIsSigningUp(true);
 		setErrorMessage("");
 
-		const enteredFName = fNameInputRef.current?.value;
-		const enteredLName = lNameInputRef.current?.value;
-		const enteredEmail = emailInputRef.current?.value;
-		const enteredPassword = passwordInputRef.current?.value;
+		const isEmailValid = validateEnteredEmailHandler(enteredEmail);
 
+		if (!isEmailValid && enteredEmail.length > 0) {
+			setEmailError(true);
+		}
+		const isPasswordValid = validateEnteredPasswordHandler(enteredPassword);
+
+		if (!isPasswordValid && enteredPassword.length > 0) {
+			setPasswordError(true);
+		}
+		if (!inputFirstName || inputFirstName.trim().length === 0) {
+			setFirstNameError(true);
+		}
+		if (!inputLastName || inputLastName.trim().length === 0) {
+			setLastNameError(true);
+		}
 		if (
 			!enteredEmail ||
 			enteredEmail.trim() === "" ||
 			!enteredEmail.includes("@") ||
-			!enteredFName ||
-			enteredFName.trim() === "" ||
-			!enteredLName ||
-			enteredLName.trim() === ""
+			!enteredPassword ||
+			enteredPassword.trim() === "" ||
+			!inputFirstName ||
+			inputFirstName.trim().length === 0 ||
+			!inputLastName ||
+			inputLastName.trim().length === 0
 		) {
 			setErrorMessage("Fill up the form properly!");
 			setIsDataValid(false);
 			setIsSigningUp(false);
 			return;
 		}
-		if (
-			!enteredPassword ||
-			enteredPassword.trim() === "" ||
-			enteredPassword.length < 6
-		) {
-			setErrorMessage("Password must be at least min 6 characters");
-			setIsDataValid(false);
-			setIsSigningUp(false);
+
+		console.log("emailError", emailError);
+		console.log("passwordError", passwordError);
+		console.log("firstNameError", firstNameError);
+		console.log("lastNameError", lastNameError);
+		console.log("isDataValid", isDataValid);
+
+		const isAllDataIsValid: boolean =
+			!emailError &&
+			!passwordError &&
+			!firstNameError &&
+			!lastNameError &&
+			isDataValid;
+		console.log(isAllDataIsValid);
+		if (!isAllDataIsValid) {
 			return;
 		}
+		setIsSigningUp(true);
 
 		const submitToApi = async () => {
 			const inputData = {
-				firstName: enteredFName,
-				lastName: enteredLName,
+				firstName: inputFirstName,
+				lastName: inputLastName,
 				email: enteredEmail,
 				password: enteredPassword,
 			};
@@ -124,9 +187,12 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 								id='fName'
 								// required
 								autoComplete='off'
-								ref={fNameInputRef}
+								// ref={fNameInputRef}
 								className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 								placeholder='First Name'
+								value={inputFirstName}
+								onChange={inputFirstNameHandler}
+								onBlur={blurInputFirstNameHandler}
 							/>
 							<label
 								htmlFor='fName'
@@ -134,6 +200,9 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 							>
 								First Name
 							</label>
+							{firstNameError && (
+								<p className='text-red-500 text-xs '>*Enter a valid First Name</p>
+							)}
 						</div>
 						<div className='relative mb-6'>
 							<input
@@ -142,9 +211,12 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 								id='lName'
 								// required
 								autoComplete='off'
-								ref={lNameInputRef}
+								// ref={lNameInputRef}
 								className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 								placeholder='Last Name'
+								value={inputLastName}
+								onChange={inputLastNameHandler}
+								onBlur={blurInputLastNameHandler}
 							/>
 							<label
 								htmlFor='lName'
@@ -152,17 +224,24 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 							>
 								Last Name
 							</label>
+
+							{lastNameError && (
+								<p className='text-red-500 text-xs '>*Enter a valid Last Name</p>
+							)}
 						</div>
 						<div className='relative mb-6'>
 							<input
-								type='email'
+								type='text'
 								name='email'
 								id='email'
-								required
+								// required
 								autoComplete='off'
-								ref={emailInputRef}
+								// ref={emailInputRef}
 								className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 								placeholder='Email address'
+								value={enteredEmail}
+								onBlur={() => validateEnteredEmailHandler(enteredEmail)}
+								onChange={changeInputEmailHandler}
 							/>
 							<label
 								htmlFor='email'
@@ -170,6 +249,9 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 							>
 								Email Address
 							</label>
+							{emailError && (
+								<p className='text-red-500 text-xs '>*Enter a valid Email address</p>
+							)}
 						</div>
 						<div className='relative mb-6 flex items-center'>
 							<div>
@@ -177,12 +259,14 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 									type={showPassword ? "text" : "password"}
 									name='password'
 									id='password'
-									required
+									// required
 									autoComplete='off'
 									min={6}
-									ref={passwordInputRef}
+									// ref={passwordInputRef}
 									className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 									placeholder='Password'
+									value={enteredPassword}
+									onChange={changeInputPasswordHandler}
 								/>
 								<label
 									htmlFor='password'
@@ -190,6 +274,9 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 								>
 									Password
 								</label>
+								{passwordError && (
+									<p className='text-red-500 text-xs '>*Min 6 characters</p>
+								)}
 							</div>
 							<div
 								className=' h-10 flex items-end pb-2'
