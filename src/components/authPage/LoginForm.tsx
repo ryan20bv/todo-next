@@ -12,6 +12,7 @@ import {
 	logInAction,
 	authErrorAction,
 } from "@/reduxToolkit/auth/auth-action/authAction";
+import useSanitizeLoginHook from "@/customHooks/use-sanitizeLogin";
 
 interface propsTypes {
 	onToggle: () => void;
@@ -23,64 +24,20 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 		(state: RootState) => state.authReducer
 	);
 	const Router = useRouter();
-
-	// const emailInputRef = useRef<HTMLInputElement>(null);
-	// const passwordInputRef = useRef<HTMLInputElement>(null);
+	const {
+		enteredEmail,
+		emailError,
+		setEmailError,
+		changeInputEmailHandler,
+		validateEnteredEmailHandler,
+		enteredPassword,
+		passwordError,
+		setPasswordError,
+		changeInputPasswordHandler,
+		validateEnteredPasswordHandler,
+	} = useSanitizeLoginHook();
 
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-	const [enteredEmail, setEnteredEmail] = useState<string>("");
-	const [emailError, setEmailError] = useState<boolean>(false);
-	const [enteredPassword, setEnteredPassword] = useState<string>("");
-	const [passwordError, setPasswordError] = useState<boolean>(false);
-
-	const changeInputEmailHandler = (e: React.FormEvent<HTMLInputElement>) => {
-		setEmailError(false);
-		const enteredValue = e.currentTarget.value.trim();
-
-		const regex = /^[-_=]+|[^a-zA-Z0-9@.]+$/;
-
-		const trimmedValue = enteredValue.trimStart().replace(regex, "");
-		setEnteredEmail(trimmedValue.trim());
-	};
-
-	const changeInputPasswordHandler = (e: React.FormEvent<HTMLInputElement>) => {
-		setPasswordError(false);
-		let enteredValue = e.currentTarget.value.trim();
-		let valueLength = enteredValue.length;
-
-		if (valueLength > 1 && enteredValue[valueLength - 1] === ".") {
-			enteredValue = enteredValue.slice(0, enteredValue.length - 1);
-		}
-
-		const regex = /^[-_=]|[^.a-zA-Z0-9]+$/;
-
-		const trimmedValue = enteredValue.trimStart().replace(regex, "");
-
-		setEnteredPassword(trimmedValue.trim());
-	};
-
-	const validateEnteredPasswordHandler = (inputPassword: string) => {
-		const isValidPassword = (input: string): boolean => {
-			const validPasswordRegex = /^(?=.*[a-zA-Z0-9])(?=[^.]*\.?[^.]*$).{6,}$/;
-			return validPasswordRegex.test(input);
-		};
-		const isPasswordValid = isValidPassword(inputPassword);
-
-		if (!isPasswordValid) {
-			setPasswordError(true);
-		}
-		return isPasswordValid;
-	};
-
-	const validateEnteredEmailHandler = (inputEmail: string) => {
-		const isValidEmail = (input: string): boolean => {
-			const validEmailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-			return validEmailRegex.test(input);
-		};
-		const isEmailValid = isValidEmail(inputEmail);
-
-		return isEmailValid;
-	};
 
 	const submitLoginFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -111,6 +68,7 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 	if (isAuthenticated) {
 		Router.replace("/t");
 	}
+
 	return (
 		<section className='my-8  w-3/4'>
 			<form onSubmit={submitLoginFormHandler}>
