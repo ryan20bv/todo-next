@@ -35,20 +35,6 @@ export const getRawDataAction =
 				}
 				return;
 			}
-			// let initialCategory: ICategory = currentCategory;
-			// if (
-			// 	!currentCategory ||
-			// 	(Object.keys(currentCategory).length === 0 && data.length > 0)
-			// ) {
-			// 	initialCategory = {
-			// 		_id: data[0]._id,
-			// 		categoryName: data[0].categoryName,
-			// 		creator_id: data[0].category_id,
-			// 	};
-			// }
-			// if (data.length === 0) {
-			// 	initialCategory = {} as ICategory;
-			// }
 
 			await dispatch(getRawDataRed({ rawData: data }));
 
@@ -89,28 +75,6 @@ export const setCurrentCategoryAction =
 			return;
 		}
 		const currentMainTaskList: IMainTask[] = [...foundCategoryItems.mainTaskList];
-		/* const currentMainTaskList = foundCategoryItems.mainTaskList.map(
-			(item: any) => {
-				const formattedSubTaskList: ISubTask[] = item.subTaskList.map(
-					(subItem: any) => {
-						return {
-							mainTaskId: subItem.mainTask_id,
-							subTaskId: subItem._id,
-							subTaskName: subItem.subTaskName,
-							isDone: subItem.isDone,
-						};
-					}
-				);
-
-				return {
-					categoryId: category.categoryId,
-					mainTaskId: item._id,
-					mainTaskName: item.mainTaskName,
-					isAllSubTaskDone: item.isAllSubTaskDone,
-					subTaskList: formattedSubTaskList,
-				};
-			}
-		); */
 
 		await dispatch(setCurrentCategoryRed({ currentCategory: category }));
 		dispatch(setMainTaskListAction(currentMainTaskList));

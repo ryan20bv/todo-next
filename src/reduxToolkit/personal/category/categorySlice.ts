@@ -28,6 +28,12 @@ const categoryTodoSlice = createSlice({
 		resetCategorySliceRed(state, action) {
 			state.categoryToDelete = {} as ICategory;
 			state.isDeletingCategory = false;
+
+			state.isUpdatingCategory = false;
+			state.categoryMessage = "";
+			state.isCategorySendingData = false;
+			state.isEditingCategory = false;
+			state.categoryToEdit = {} as ICategory;
 		},
 		updateCategoryIsSendingDataRed(state, action) {
 			state.isCategorySendingData = action.payload.isSendingData;
