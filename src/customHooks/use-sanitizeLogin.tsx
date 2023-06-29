@@ -7,7 +7,7 @@ const useSanitizeLoginHook = () => {
 	const [passwordError, setPasswordError] = useState<boolean>(false);
 	const changeInputEmailHandler = (e: React.FormEvent<HTMLInputElement>) => {
 		setEmailError(false);
-		const enteredValue = e.currentTarget.value.trim();
+		const enteredValue = e.currentTarget.value.trim().toLowerCase();
 
 		const regex = /^[-_=]+|[^a-zA-Z0-9@.]+$/;
 		const trimmedValue = enteredValue.trimStart().replace(regex, "");

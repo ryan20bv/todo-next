@@ -118,12 +118,6 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 			return;
 		}
 
-		console.log("emailError", emailError);
-		console.log("passwordError", passwordError);
-		console.log("firstNameError", firstNameError);
-		console.log("lastNameError", lastNameError);
-		console.log("isDataValid", isDataValid);
-
 		const isAllDataIsValid: boolean =
 			!emailError &&
 			!passwordError &&

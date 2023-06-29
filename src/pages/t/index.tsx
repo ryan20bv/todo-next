@@ -20,10 +20,6 @@ const Index = () => {
 	const dispatch = useAppDispatch();
 	const [isFetchingData, setIsFetchingData] = useState<boolean>(true);
 
-	const { currentCategory, categoryList } = useAppSelector(
-		(state: RootState) => state.personalTodoReducer
-	);
-
 	useEffect(() => {
 		const checkForSession = async () => {
 			const session = await getSession();
@@ -49,13 +45,6 @@ const Index = () => {
 		checkForSession();
 	}, [dispatch, router]);
 
-	// if (!isFetchingData && categoryList.length > 0) {
-	// 	if (Object.keys(currentCategory).length !== 0) {
-	// 		let str = currentCategory.categoryName;
-	// 		str = str.replace(/\s+/g, "-").toLowerCase();
-	// 		router.push(`/t/${str}`);
-	// 	}
-	// }
 	if (isFetchingData) {
 		return <LoadingPage status='Loading...' />;
 	}
