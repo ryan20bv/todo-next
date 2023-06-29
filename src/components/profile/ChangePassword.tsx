@@ -21,6 +21,8 @@ import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
 import Modal from "../ui/Modal";
 import LoadingPage from "../ui/LoadingPage";
+
+import useSanitizeLoginHook from "@/customHooks/use-sanitizeLogin";
 const ChangePasswordPage = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
