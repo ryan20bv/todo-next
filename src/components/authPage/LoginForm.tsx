@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 import { useRouter } from "next/router";
 
@@ -30,14 +30,26 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 		setEmailError,
 		changeInputEmailHandler,
 		validateEnteredEmailHandler,
-		enteredPassword,
+
 		passwordError,
 		setPasswordError,
-		changeInputPasswordHandler,
+
 		validateEnteredPasswordHandler,
+		handlerInputPassword,
 	} = useSanitizeLoginHook();
 
+	const passwordInputRef = useRef<HTMLInputElement>(null);
 	const [showPassword, setShowPassword] = useState<boolean>(false);
+
+	const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+		const { value } = e.currentTarget;
+		const validatedValue = handlerInputPassword(value);
+		setPasswordError(false);
+		if (!passwordInputRef.current) {
+			return;
+		}
+		passwordInputRef.current.value = validatedValue;
+	};
 
 	const submitLoginFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -47,14 +59,18 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 		if (!isEmailValid) {
 			setEmailError(true);
 		}
-		const isPasswordValid = validateEnteredPasswordHandler(enteredPassword);
 
+		const enteredPassword = passwordInputRef.current?.value!;
+		console.log(enteredPassword);
+		const isPasswordValid = validateEnteredPasswordHandler(enteredPassword);
+		console.log(isPasswordValid);
 		if (!isPasswordValid) {
 			setPasswordError(true);
 		}
 
-		const inputAreValid: boolean = isEmailValid && isPasswordValid;
-
+		let inputAreValid: boolean = false;
+		inputAreValid = isEmailValid && isPasswordValid;
+		console.log(inputAreValid);
 		if (!inputAreValid) {
 			return;
 		}
@@ -108,11 +124,10 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 									// required
 									autoComplete='off'
 									min={6}
-									// ref={passwordInputRef}
+									ref={passwordInputRef}
 									className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 									placeholder='Password'
-									value={enteredPassword}
-									onChange={changeInputPasswordHandler}
+									onChange={handleInput}
 								/>
 
 								<label

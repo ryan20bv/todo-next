@@ -30,7 +30,7 @@ const ChangePasswordPage = () => {
 	const { isSendingData, authError, authData, isShowingModal } = useAppSelector(
 		(state: RootState) => state.authReducer
 	);
-	const currPassInputRef = useRef<HTMLInputElement>(null)!;
+	const currPassInputRef = useRef<HTMLInputElement>(null);
 	const newPassInputRef = useRef<HTMLInputElement>(null);
 	const confPassInputRef = useRef<HTMLInputElement>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
