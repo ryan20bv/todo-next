@@ -6,9 +6,12 @@ import CardHeader from "../ui/CardHeader";
 import LoginForm from "./LoginForm";
 import SignUpForm from "./SignupForm";
 import LoadingPage from "../ui/LoadingPage";
+import { useAppDispatch } from "@/reduxToolkit/indexStore/indexStore";
+import { authErrorAction } from "@/reduxToolkit/auth/auth-action/authAction";
 
 const Login = () => {
 	const router = useRouter();
+	const dispatch = useAppDispatch();
 	const [isLoggingIn, setIsLoggingIn] = useState<boolean>(true);
 
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -30,10 +33,12 @@ const Login = () => {
 		return <LoadingPage status='Loading...' />;
 	}
 	const iconFunctionHandler = () => {
+		dispatch(authErrorAction(""));
 		router.push("/n");
 	};
 
 	const toggleLoginState = () => {
+		dispatch(authErrorAction(""));
 		setIsLoggingIn((prevState) => !prevState);
 	};
 	let title: string = "LogIn";

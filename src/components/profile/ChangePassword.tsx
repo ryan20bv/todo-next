@@ -21,9 +21,12 @@ import Card from "../ui/Card";
 import CardHeader from "../ui/CardHeader";
 import Modal from "../ui/Modal";
 import LoadingPage from "../ui/LoadingPage";
+
+import useSanitizeLoginHook from "@/customHooks/use-sanitizeLogin";
 const ChangePasswordPage = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
+
 	const { isSendingData, authError, authData, isShowingModal } = useAppSelector(
 		(state: RootState) => state.authReducer
 	);
@@ -31,16 +34,27 @@ const ChangePasswordPage = () => {
 	const newPassInputRef = useRef<HTMLInputElement>(null);
 	const confPassInputRef = useRef<HTMLInputElement>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
-	const [isDataValid, setIsDataValid] = useState<boolean>(true);
+
 	const [authMessage, setAuthMessage] = useState<string>("");
 	const [showCurrentPassword, setShowCurrentPassword] = useState<boolean>(false);
 	const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+	// current
+	const [currHasError, setCurrHasError] = useState<boolean>(false);
+	const [newHasError, setNewHasError] = useState<boolean>(false);
+	const [conHasError, setConHasError] = useState<boolean>(false);
+	const [generalError, setGeneralError] = useState<{
+		status: boolean;
+		errorMessage: string;
+	}>({ status: false, errorMessage: "" });
+
+	const { handlerInputPassword } = useSanitizeLoginHook();
 
 	useEffect(() => {
 		const checkForSession = async () => {
 			const session = await getSession();
+			dispatch(toggleSendingDataAction(false));
+			dispatch(clearErrorAction());
 			// console.log(session);
 			if (!session) {
 				dispatch(clearAuthDataAction());
@@ -55,6 +69,7 @@ const ChangePasswordPage = () => {
 					apiToken: data.token,
 					expires: session.expires,
 				};
+
 				dispatch(authDataAction(newData));
 				setIsLoading(false);
 			}
@@ -62,50 +77,108 @@ const ChangePasswordPage = () => {
 		checkForSession();
 	}, [dispatch, router]);
 
+	const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+		const { value, id } = e.currentTarget;
+
+		if (id === "current") {
+			const validatedValue = handlerInputPassword(value);
+			if (!currPassInputRef.current) {
+				return;
+			}
+			setCurrHasError(false);
+			currPassInputRef.current.value = validatedValue;
+		} else if (id === "new") {
+			const validatedValue = handlerInputPassword(value);
+			if (!newPassInputRef.current) {
+				return;
+			}
+			setNewHasError(false);
+
+			newPassInputRef.current.value = validatedValue;
+		} else if (id === "confirm") {
+			setConHasError(false);
+			const validatedValue = handlerInputPassword(value);
+			if (!confPassInputRef.current) {
+				return;
+			}
+
+			confPassInputRef.current.value = validatedValue;
+		}
+	};
+
 	const submitNewPasswordHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		setIsDataValid(true);
-		setIsSigningUp(true);
+
 		dispatch(clearErrorAction());
-		dispatch(toggleSendingDataAction(true));
+		setGeneralError({
+			status: false,
+			errorMessage: "",
+		});
 
 		const enteredCurrPassword = currPassInputRef.current?.value;
 		const enteredNewPassword = newPassInputRef.current?.value;
 		const enteredConfPassword = confPassInputRef.current?.value;
-		// console.log(enteredNewPassword, enteredConfPassword);
+
+		if (
+			(!enteredCurrPassword || enteredCurrPassword.trim().length === 0) &&
+			(!enteredNewPassword || enteredNewPassword.trim().length === 0) &&
+			(!enteredConfPassword || enteredConfPassword.trim().length === 0)
+		) {
+			setGeneralError({
+				status: true,
+				errorMessage: "Password should be min of 6 characters!",
+			});
+
+			return;
+		}
 
 		if (
 			!enteredCurrPassword ||
-			enteredCurrPassword.trim() === "" ||
-			enteredCurrPassword.length < 6 ||
+			enteredCurrPassword.trim().length === 0 ||
+			enteredCurrPassword.length < 6
+		) {
+			setCurrHasError(true);
+		}
+		if (
 			!enteredNewPassword ||
-			enteredNewPassword.trim() === "" ||
-			enteredNewPassword.length < 6 ||
+			enteredNewPassword.trim().length === 0 ||
+			enteredNewPassword.length < 6
+		) {
+			setNewHasError(true);
+		}
+		if (
 			!enteredConfPassword ||
-			enteredConfPassword.trim() === "" ||
+			enteredConfPassword.trim().length === 0 ||
 			enteredConfPassword.length < 6
 		) {
-			dispatch(authErrorAction("Password should be min of 6 characters!"));
-			// setIsSigningUp(false);
-			dispatch(toggleSendingDataAction(false));
-			return;
+			setConHasError(true);
 		}
-		if (enteredCurrPassword.trim() === enteredNewPassword.trim()) {
-			dispatch(
-				authErrorAction("Current and new Password should not be the same!")
-			);
-			// setIsSigningUp(false);
-			dispatch(toggleSendingDataAction(false));
+
+		if (enteredCurrPassword?.trim() === enteredNewPassword?.trim()) {
+			setGeneralError({
+				status: true,
+				errorMessage: "Current and new Password should not be the same!",
+			});
+
 			return;
 		}
 
-		if (enteredNewPassword.trim() !== enteredConfPassword.trim()) {
-			dispatch(authErrorAction("New and confirm password does not match!"));
-			// setIsSigningUp(false);
-			dispatch(toggleSendingDataAction(false));
+		if (enteredNewPassword?.trim() !== enteredConfPassword?.trim()) {
+			setGeneralError({
+				status: true,
+				errorMessage: "New and confirm password does not match!",
+			});
+
 			return;
 		}
-		// console.log(authData);
+		let noError: boolean = false;
+		noError = !currHasError && !newHasError && !conHasError;
+
+		if (!noError) {
+			return;
+		}
+		dispatch(toggleSendingDataAction(true));
+
 		const { userId, userEmail, apiToken } = authData;
 
 		const submitToApi = async () => {
@@ -118,7 +191,7 @@ const ChangePasswordPage = () => {
 				},
 				token: apiToken,
 			};
-			// console.log(inputData);
+
 			const url = `/api/auth/changePassword`;
 			const options = {
 				method: "PATCH",
@@ -130,19 +203,15 @@ const ChangePasswordPage = () => {
 			try {
 				const response = await fetch(url, options);
 				const data = await response.json();
-				// console.log(response);
+
 				if (!response.ok) {
-					// console.log("here");
-					// console.log(data);
 					throw new Error(data.message || "Something went wrong!");
 				}
 				console.log("data", data);
 				setAuthMessage(data.message);
 				dispatch(toggleShowModalAction(true));
 			} catch (err: any) {
-				// console.log("ERR", err.message);
 				dispatch(authErrorAction(err.message));
-				// setIsSigningUp(false);
 			}
 			dispatch(toggleSendingDataAction(false));
 		};
@@ -190,21 +259,25 @@ const ChangePasswordPage = () => {
 								<div>
 									<input
 										type={showCurrentPassword ? "text" : "password"}
-										name='currentpassword'
-										id='currentpassword'
-										required
+										name='current'
+										id='current'
+										// required
 										autoComplete='off'
 										min={6}
 										ref={currPassInputRef}
 										className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 										placeholder='	Current Password'
+										onInput={handleInput}
 									/>
 									<label
-										htmlFor='currentpassword'
+										htmlFor='current'
 										className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
 									>
 										Current Password
 									</label>
+									{currHasError && (
+										<p className='text-red-500 text-xs '>*Min 6 characters</p>
+									)}
 								</div>
 								<div
 									className=' h-10 flex items-end pb-2'
@@ -218,21 +291,25 @@ const ChangePasswordPage = () => {
 								<div>
 									<input
 										type={showNewPassword ? "text" : "password"}
-										name='newpassword'
-										id='newpassword'
-										required
+										name='new'
+										id='new'
+										// required
 										autoComplete='off'
 										min={6}
 										ref={newPassInputRef}
 										className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 										placeholder='New Password'
+										onInput={handleInput}
 									/>
 									<label
-										htmlFor='newpassword'
+										htmlFor='new'
 										className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
 									>
 										New Password
 									</label>
+									{newHasError && (
+										<p className='text-red-500 text-xs '>*Min 6 characters</p>
+									)}
 								</div>
 								<div
 									className=' h-10 flex items-end pb-2'
@@ -246,21 +323,25 @@ const ChangePasswordPage = () => {
 								<div>
 									<input
 										type={showConfirmPassword ? "text" : "password"}
-										name='confirmpassword'
-										id='confirmpassword'
-										required
+										name='confirm'
+										id='confirm'
+										// required
 										autoComplete='off'
 										min={6}
 										ref={confPassInputRef}
 										className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 										placeholder='Confirm Password'
+										onInput={handleInput}
 									/>
 									<label
-										htmlFor='confirmpassword'
+										htmlFor='confirm'
 										className='absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm'
 									>
 										Confirm Password
 									</label>
+									{conHasError && (
+										<p className='text-red-500 text-xs '>*Min 6 characters</p>
+									)}
 								</div>
 								<div
 									className=' h-10 flex items-end pb-2'
@@ -270,12 +351,16 @@ const ChangePasswordPage = () => {
 									{!showConfirmPassword && <EyeSlashIcon className='h-5' />}
 								</div>
 							</div>
+
+							{generalError.status && (
+								<p className='text-red-500 text-xs text-center'>
+									{generalError.errorMessage}
+								</p>
+							)}
 							{authError && authError.trim().length > 0 && (
 								<p className='text-red-500 text-xs text-center'>{authError}</p>
 							)}
-							{/* {!isDataValid && (
-								<p className='text-red-500'>Fill up the form properly!</p>
-							)} */}
+
 							<div className='flex justify-end'>
 								{isSendingData && (
 									<button
@@ -308,7 +393,6 @@ const ChangePasswordPage = () => {
 					onConfirm={confirmModalHandler}
 				/>
 			)}
-			{/* <Notification message={authMessage} /> */}
 		</Card>
 	);
 };

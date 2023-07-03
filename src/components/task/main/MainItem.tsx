@@ -30,8 +30,8 @@ const MainItem: React.FC<propsType> = ({
 	};
 
 	let summaryName = mainTask.mainTaskName;
-	if (mainTask.mainTaskName.length > 10) {
-		summaryName = mainTask.mainTaskName.substring(0, 10) + "...";
+	if (mainTask.mainTaskName.length > 14) {
+		summaryName = mainTask.mainTaskName.substring(0, 14) + " ...";
 	}
 	let subTaskThatIsDoneTotal: number = 0;
 	mainTask.subTaskList.forEach((subTask: ISubTask) => {
@@ -49,20 +49,19 @@ const MainItem: React.FC<propsType> = ({
 	return (
 		<li
 			key={mainTask._id}
-			className='flex px-1 w-full justify-between items-center '
+			className='flex  w-full justify-between items-center '
 		>
 			<section className='flex items-center w-4/5'>
 				<h3
-					className={`${setDone} pl-2 pr-1 cursor-pointer  w-full`}
+					className={`${setDone}  cursor-pointer  w-full`}
 					onClick={() => seeSubTaskHandler(mainTask)}
 					data-testid={`task_${mainTask.mainTaskName}`}
 				>
-					{/* <span className='w-4/5 border border-red-300'>
-						{index + 1 + "."} {summaryName}
-					</span> */}
-					{index + 1 + "."} {summaryName}
+					<span className='mr-1'>{index + 1 + "."}</span>
+
+					{summaryName}
 				</h3>
-				<span className='text-red-600 ml-2 '>{taskDataToShow}</span>
+				<span className='text-red-600 ml-2 text-xs'>{taskDataToShow}</span>
 			</section>
 			<section>
 				{!mainTask.isAllSubTaskDone && (
