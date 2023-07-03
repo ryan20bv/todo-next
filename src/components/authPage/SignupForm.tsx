@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
@@ -19,12 +19,14 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 		setEmailError,
 		changeInputEmailHandler,
 		validateEnteredEmailHandler,
-		enteredPassword,
+		// enteredPassword,
 		passwordError,
 		setPasswordError,
-		changeInputPasswordHandler,
+
 		validateEnteredPasswordHandler,
+		handlerInputPassword,
 	} = useSanitizeLoginHook();
+	const passwordInputRef = useRef<HTMLInputElement>(null);
 
 	const [isDataValid, setIsDataValid] = useState<boolean>(true);
 
@@ -78,7 +80,16 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 		setLastNameError(isInValid);
 		setInputLastName(cleanedStr);
 	};
-	// email validation
+	// password validation
+	const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+		const { value } = e.currentTarget;
+		const validatedValue = handlerInputPassword(value);
+		setPasswordError(false);
+		if (!passwordInputRef.current) {
+			return;
+		}
+		passwordInputRef.current.value = validatedValue;
+	};
 
 	const submitSignUpFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -90,9 +101,11 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 		if (!isEmailValid && enteredEmail.length > 0) {
 			setEmailError(true);
 		}
+		const enteredPassword = passwordInputRef.current?.value!;
+
 		const isPasswordValid = validateEnteredPasswordHandler(enteredPassword);
 
-		if (!isPasswordValid && enteredPassword.length > 0) {
+		if (!isPasswordValid) {
 			setPasswordError(true);
 		}
 		if (!inputFirstName || inputFirstName.trim().length === 0) {
@@ -118,13 +131,14 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 			return;
 		}
 
-		const isAllDataIsValid: boolean =
+		let isAllDataIsValid: boolean = false;
+		isAllDataIsValid =
 			!emailError &&
 			!passwordError &&
 			!firstNameError &&
 			!lastNameError &&
 			isDataValid;
-		console.log(isAllDataIsValid);
+
 		if (!isAllDataIsValid) {
 			return;
 		}
@@ -256,11 +270,10 @@ const SignUpForm: React.FC<propsTypes> = ({ onToggle }) => {
 									// required
 									autoComplete='off'
 									min={6}
-									// ref={passwordInputRef}
+									ref={passwordInputRef}
 									className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 									placeholder='Password'
-									value={enteredPassword}
-									onChange={changeInputPasswordHandler}
+									onChange={handleInput}
 								/>
 								<label
 									htmlFor='password'

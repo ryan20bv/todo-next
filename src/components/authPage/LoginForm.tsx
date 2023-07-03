@@ -61,16 +61,16 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 		}
 
 		const enteredPassword = passwordInputRef.current?.value!;
-		console.log(enteredPassword);
+
 		const isPasswordValid = validateEnteredPasswordHandler(enteredPassword);
-		console.log(isPasswordValid);
+
 		if (!isPasswordValid) {
 			setPasswordError(true);
 		}
 
 		let inputAreValid: boolean = false;
 		inputAreValid = isEmailValid && isPasswordValid;
-		console.log(inputAreValid);
+
 		if (!inputAreValid) {
 			return;
 		}
