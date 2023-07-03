@@ -37,6 +37,14 @@ const useSanitizeLoginHook = () => {
 
 		setEnteredPassword(trimmedValue.trim());
 	};
+
+	const handlerInputPassword = (value: string): string => {
+		const regex = /[^a-zA-Z0-9]/g;
+
+		const validatedValue = value.trim().replace(regex, "");
+		return validatedValue;
+	};
+
 	const validateEnteredPasswordHandler = (inputPassword: string) => {
 		const isValidPassword = (input: string): boolean => {
 			const validPasswordRegex = /^(?=.*[a-zA-Z0-9])(?=[^.]*\.?[^.]*$).{6,}$/;
@@ -56,6 +64,7 @@ const useSanitizeLoginHook = () => {
 		setPasswordError,
 		changeInputPasswordHandler,
 		validateEnteredPasswordHandler,
+		handlerInputPassword,
 	};
 };
 

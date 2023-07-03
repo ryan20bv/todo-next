@@ -37,12 +37,12 @@ const Modal: React.FC<propsTypes> = ({
 								>
 									OK
 								</button>
-								<button
+								{/* <button
 									className='bg-red-400 px-4 py-1 rounded-md mt-4'
 									onClick={confirmHandler}
 								>
-									OK
-								</button>
+									No
+								</button> */}
 							</div>
 						</div>
 					</section>,
