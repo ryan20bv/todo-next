@@ -74,7 +74,7 @@ const TaskDetail = () => {
 	return (
 		<Card>
 			<CardHeader
-				title={selectedTodo.mainTaskName}
+				title={`Main Task: ${selectedTodo.mainTaskName}`}
 				iconFunction={backArrowHandler}
 				from='generalSubtask'
 			/>

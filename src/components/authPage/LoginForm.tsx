@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState, useRef } from "react";
 
 import { useRouter } from "next/router";
 
@@ -12,6 +12,7 @@ import {
 	logInAction,
 	authErrorAction,
 } from "@/reduxToolkit/auth/auth-action/authAction";
+import useSanitizeLoginHook from "@/customHooks/use-sanitizeLogin";
 
 interface propsTypes {
 	onToggle: () => void;
@@ -23,34 +24,56 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 		(state: RootState) => state.authReducer
 	);
 	const Router = useRouter();
+	const {
+		enteredEmail,
+		emailError,
+		setEmailError,
+		changeInputEmailHandler,
+		validateEnteredEmailHandler,
 
-	const emailInputRef = useRef<HTMLInputElement>(null);
+		passwordError,
+		setPasswordError,
+
+		validateEnteredPasswordHandler,
+		handlerInputPassword,
+	} = useSanitizeLoginHook();
+
 	const passwordInputRef = useRef<HTMLInputElement>(null);
-
 	const [showPassword, setShowPassword] = useState<boolean>(false);
+
+	const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+		const { value } = e.currentTarget;
+		const validatedValue = handlerInputPassword(value);
+		setPasswordError(false);
+		if (!passwordInputRef.current) {
+			return;
+		}
+		passwordInputRef.current.value = validatedValue;
+	};
+
 	const submitLoginFormHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		const enteredEmail = emailInputRef.current?.value;
-		const enteredPassword = passwordInputRef.current?.value;
+		const isEmailValid = validateEnteredEmailHandler(enteredEmail);
 
-		if (
-			!enteredEmail ||
-			enteredEmail.trim() === "" ||
-			!enteredEmail.includes("@")
-		) {
-			dispatch(authErrorAction("Invalid email!"));
-			return;
-		}
-		if (
-			!enteredPassword ||
-			enteredPassword.trim() === "" ||
-			enteredPassword.length < 6
-		) {
-			dispatch(authErrorAction("Invalid password. Min of 6 characters required!"));
-			return;
+		if (!isEmailValid) {
+			setEmailError(true);
 		}
 
+		const enteredPassword = passwordInputRef.current?.value!;
+
+		const isPasswordValid = validateEnteredPasswordHandler(enteredPassword);
+
+		if (!isPasswordValid) {
+			setPasswordError(true);
+		}
+
+		let inputAreValid: boolean = false;
+		inputAreValid = isEmailValid && isPasswordValid;
+
+		if (!inputAreValid) {
+			return;
+		}
 		dispatch(logInAction(enteredEmail, enteredPassword));
 	};
 
@@ -61,6 +84,7 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 	if (isAuthenticated) {
 		Router.replace("/t");
 	}
+
 	return (
 		<section className='my-8  w-3/4'>
 			<form onSubmit={submitLoginFormHandler}>
@@ -68,14 +92,17 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 					<div className=' text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7'>
 						<div className='relative mb-6'>
 							<input
-								type='email'
+								type='text'
 								name='email'
 								id='email'
-								required
+								// required
 								autoComplete='off'
-								ref={emailInputRef}
+								// ref={emailInputRef}
 								className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 								placeholder='Email address'
+								value={enteredEmail}
+								onBlur={() => validateEnteredEmailHandler(enteredEmail)}
+								onChange={changeInputEmailHandler}
 							/>
 
 							<label
@@ -84,6 +111,9 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 							>
 								Email Address
 							</label>
+							{emailError && (
+								<p className='text-red-500 text-xs '>*Enter a valid Email address</p>
+							)}
 						</div>
 						<div className='relative mb-6 flex items-center'>
 							<div>
@@ -91,12 +121,13 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 									type={showPassword ? "text" : "password"}
 									name='password'
 									id='password'
-									required
+									// required
 									autoComplete='off'
 									min={6}
 									ref={passwordInputRef}
 									className='peer placeholder-transparent h-10 w-full border-b-2 border-black text-gray-900 focus:outline-none focus:borer-rose-600 px-4 bg-transparent focus:border-[#AF7EEB]'
 									placeholder='Password'
+									onChange={handleInput}
 								/>
 
 								<label
@@ -105,6 +136,9 @@ const LoginForm: React.FC<propsTypes> = ({ onToggle }) => {
 								>
 									Password
 								</label>
+								{passwordError && (
+									<p className='text-red-500 text-xs '>*Min 6 characters</p>
+								)}
 							</div>
 							<div
 								className=' h-10 flex items-end pb-2'
